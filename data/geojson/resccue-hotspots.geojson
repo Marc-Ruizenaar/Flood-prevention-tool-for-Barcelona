@@ -1,0 +1,243 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.1445,
+          41.39274
+        ]
+      },
+      "properties": {
+        "id": "hotspot-macia",
+        "name": "Diagonal – Plaça de Francesc Macià",
+        "layer": "resccue-hotspots",
+        "tappable": true,
+        "priority": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.1585,
+          41.3812
+        ]
+      },
+      "properties": {
+        "id": "hotspot-urgell-roma",
+        "name": "Urgell / Casanova / Avinguda de Roma",
+        "layer": "resccue-hotspots",
+        "tappable": true,
+        "priority": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.16508,
+          41.3759
+        ]
+      },
+      "properties": {
+        "id": "hotspot-parallel",
+        "name": "Ronda de Sant Pau – Avinguda del Paral·lel",
+        "layer": "resccue-hotspots",
+        "tappable": true,
+        "priority": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.1727,
+          41.37981
+        ]
+      },
+      "properties": {
+        "id": "hotspot-sant-pau",
+        "name": "Around Carrer de Sant Pau",
+        "layer": "resccue-hotspots",
+        "tappable": true,
+        "priority": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.1705,
+          41.4003
+        ]
+      },
+      "properties": {
+        "id": "hotspot-diagonal-bruc",
+        "name": "Diagonal (Bruc – Roger de Flor)",
+        "layer": "resccue-hotspots",
+        "tappable": true,
+        "priority": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.1866,
+          41.4155
+        ]
+      },
+      "properties": {
+        "id": "hotspot-clot-navas",
+        "name": "Clot – Navas",
+        "layer": "resccue-hotspots",
+        "tappable": true,
+        "priority": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.15302,
+          41.39916
+        ]
+      },
+      "properties": {
+        "id": "hotspot-via-augusta",
+        "name": "Via Augusta – Príncep d’Astúries – Rambla del Prat",
+        "layer": "resccue-hotspots",
+        "tappable": true,
+        "priority": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.19816,
+          41.42756
+        ]
+      },
+      "properties": {
+        "id": "hotspot-rambla-prim",
+        "name": "Around Rambla de Prim",
+        "layer": "resccue-hotspots",
+        "tappable": true,
+        "priority": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.17465,
+          41.43818
+        ]
+      },
+      "properties": {
+        "id": "hotspot-llucmajor",
+        "name": "Plaça de Llucmajor",
+        "layer": "resccue-hotspots",
+        "tappable": true,
+        "priority": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.1635,
+          41.4312
+        ]
+      },
+      "properties": {
+        "id": "hotspot-tajo-cartella",
+        "name": "Tajo – Cartellà",
+        "layer": "resccue-hotspots",
+        "tappable": true,
+        "priority": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.13586,
+          41.36726
+        ]
+      },
+      "properties": {
+        "id": "hotspot-parcerisa",
+        "name": "Carrer de Parcerisa",
+        "layer": "resccue-hotspots",
+        "tappable": true,
+        "priority": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.12175,
+          41.37585
+        ]
+      },
+      "properties": {
+        "id": "hotspot-riera-blanca",
+        "name": "Carrer de la Riera Blanca",
+        "layer": "resccue-hotspots",
+        "tappable": true,
+        "priority": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.138,
+          41.345
+        ]
+      },
+      "properties": {
+        "id": "hotspot-seat",
+        "name": "Around SEAT (Zona Franca)",
+        "layer": "resccue-hotspots",
+        "tappable": true,
+        "priority": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.16371,
+          41.37208
+        ]
+      },
+      "properties": {
+        "id": "hotspot-tapioles",
+        "name": "Torrent de Tapioles",
+        "layer": "resccue-hotspots",
+        "tappable": true,
+        "priority": 2
+      }
+    }
+  ]
+}

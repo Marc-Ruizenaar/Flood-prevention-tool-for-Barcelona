@@ -1,0 +1,43 @@
+{
+  "sewer-t10-stress": {
+    "label": "Sewer stress, T10",
+    "primary": "https://coneixement-eu.bcn.cat/widget/atles-resiliencia/en_index_inundabilitat.html",
+    "secondary": "https://bcnroc.ajuntament.barcelona.cat/jspui/handle/11703/119275",
+    "note": "Diagnosis layer from the Resilience Atlas (PICBA’06 / BCASA). Traces in this repo are simplified corridors, not the plan drawings. PDISBA on BCNROC is CC-BY-NC-ND — cited, not republished."
+  },
+  "resccue-hotspots": {
+    "label": "14 urban flood hotspots",
+    "primary": "https://coneixement-eu.bcn.cat/widget/atles-resiliencia/index_resccue_inun_urbana.html",
+    "secondary": "https://toolkit.resccue.eu/city/barcelona/",
+    "note": "Names follow the Resilience Atlas list of 14 critical points (PDISBA’19 / RESCCUE)."
+  },
+  "buried-streams": {
+    "label": "Buried streams and rieres",
+    "primary": "https://maps.icgc.cat/vector02/rest/services/icgc_geotecnicbcn25m/MapServer/1",
+    "secondary": "https://coneixement-eu.bcn.cat/widget/atles-resiliencia/index_resccue_inun_urbana.html",
+    "note": "Hairlines are ICGC RIER_LN. Named avenues are simplified traces of streets the RESCCUE list calls out."
+  },
+  "retention-tanks": {
+    "label": "Stormwater tanks",
+    "primary": "https://ajuntament.barcelona.cat/premsa/2025/07/15/aprovacio-definitiva-del-projecte-del-diposit-de-regulacio-daigues-pluvials-de-la-rambla-de-prim/",
+    "secondary": "https://www.bcasa.cat/cat/DipositsBCN_Mapa.asp",
+    "note": "Rambla de Prim capacity (94,000 m³) and the count of 15 existing tanks come from the July 2025 city press note. Points are placed on the named places, not surveyed chambers."
+  },
+  "slopes-torrents": {
+    "label": "Slopes and torrents",
+    "primary": "https://pcivil.icgc.cat/pcivil/v2/index.html",
+    "secondary": "https://dsp.interior.gencat.cat/handle/20.500.14007/6024",
+    "note": "Outlines are simplified neighborhood boundaries for Collserola-facing areas, not INUNCAT flood contours."
+  },
+  "proof-oct2026": {
+    "label": "October 2026 observed impacts",
+    "primary": "https://ajuntament.barcelona.cat/premsa/2026/10/07/lajuntament-desplega-un-operatiu-especial-per-recuperar-les-zones-afectades-per-les-pluges-a-torre-baro/",
+    "secondary": "https://beteve.cat/societat/810-abonats-sense-llum-pluja-filtracions-aigua-xarxa-electrica/",
+    "note": "Observed only. Not mixed into the atlas layers."
+  },
+  "rainfall-observed": {
+    "label": "Rainfall, observed mention only",
+    "primary": "https://ajuntament.barcelona.cat/gracia/es/noticias/activada-la-emergencia-por-riesgo-de-inundaciones-41745",
+    "note": "Quoted in About as an observation from 3 October 2026. Not a layer and not a forecast."
+  }
+}

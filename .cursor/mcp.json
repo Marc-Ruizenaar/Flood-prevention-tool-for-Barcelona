@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "reliquary": {
+      "url": "https://mcp.reliquary.redmage.cc/mcp",
+      "headers": {
+        "Authorization": "Bearer ${env:RELIQUARY_TOKEN}"
+      }
+    }
+  }
+}

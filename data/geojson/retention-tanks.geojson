@@ -1,0 +1,41 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.2008,
+          41.4254
+        ]
+      },
+      "properties": {
+        "id": "tank-rambla-prim",
+        "name": "Rambla de Prim stormwater tank",
+        "layer": "retention-tanks",
+        "tappable": true,
+        "priority": 1,
+        "status": "planned"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.11169,
+          41.38424
+        ]
+      },
+      "properties": {
+        "id": "tank-zona-universitaria",
+        "name": "Zona Universitària stormwater tank",
+        "layer": "retention-tanks",
+        "tappable": true,
+        "priority": 2,
+        "status": "operating"
+      }
+    }
+  ]
+}

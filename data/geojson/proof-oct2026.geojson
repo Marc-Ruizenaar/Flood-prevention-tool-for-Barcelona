@@ -1,0 +1,105 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.18092,
+          41.46001
+        ]
+      },
+      "properties": {
+        "id": "proof-torre-baro-2026-10",
+        "name": "Torre Baró — cleanup after the rains",
+        "layer": "proof-oct2026",
+        "tappable": true,
+        "priority": 1,
+        "date": "2026-10-07",
+        "headline": "City cleanup after slope and mud damage",
+        "mediaUrl": "https://beteve.cat/societat/barcelona-activa-operacio-emergencia-torre-baro-aiguats/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.19103,
+          41.436
+        ]
+      },
+      "properties": {
+        "id": "proof-sant-andreu-2026-10",
+        "name": "Sant Andreu — power cuts",
+        "layer": "proof-oct2026",
+        "tappable": true,
+        "priority": 1,
+        "date": "2026-10-07",
+        "headline": "Water in transformer rooms, Sant Andreu cluster",
+        "mediaUrl": "https://beteve.cat/societat/810-abonats-sense-llum-pluja-filtracions-aigua-xarxa-electrica/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.1514,
+          41.4018
+        ]
+      },
+      "properties": {
+        "id": "proof-gracia-2026-10",
+        "name": "Gràcia — power cuts",
+        "layer": "proof-oct2026",
+        "tappable": true,
+        "priority": 1,
+        "date": "2026-10-07",
+        "headline": "Water in transformer rooms, Gràcia cluster",
+        "mediaUrl": "https://beteve.cat/societat/810-abonats-sense-llum-pluja-filtracions-aigua-xarxa-electrica/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.136,
+          41.385
+        ]
+      },
+      "properties": {
+        "id": "proof-les-corts-2026-10",
+        "name": "Les Corts — power cuts",
+        "layer": "proof-oct2026",
+        "tappable": true,
+        "priority": 2,
+        "date": "2026-10-07",
+        "headline": "Water in transformer rooms, Les Corts cluster",
+        "mediaUrl": "https://beteve.cat/societat/810-abonats-sense-llum-pluja-filtracions-aigua-xarxa-electrica/"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.13021,
+          41.42775
+        ]
+      },
+      "properties": {
+        "id": "proof-sant-genis-2026-10",
+        "name": "Sant Genís — landslide on Cànoves",
+        "layer": "proof-oct2026",
+        "tappable": true,
+        "priority": 1,
+        "date": "2026-10-04",
+        "headline": "Landslide blocked Carrer de Cànoves",
+        "mediaUrl": "https://beteve.cat/societat/pluja-barris-muntanya-esllavissades-rescat-barca/"
+      }
+    }
+  ]
+}
