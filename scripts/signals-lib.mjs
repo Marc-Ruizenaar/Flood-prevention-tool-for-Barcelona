@@ -12,8 +12,10 @@ const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 export const HEALTH = /\b(ferit|ferid|herid|lesionat|lesionad|mort|muert|falleci|ofegat|ofegad|ahogad|desaparegu|desapareci|atrapat|atrapad|rescat|hospitalitz|hospitaliz|ambulanc)/;
 export const isHealth = (text) => HEALTH.test(norm(text));
 
-// Relevance gate: decides only whether a person sees the item. ASSUMPTION: not measured on real articles.
-export const RELEVANT = /\b(inund|pluj|pluvi|lluvi|aiguat|riuad|embass|tempest|tormenta|temporal de|dana\b|claveguer|alcantarill|esllavissad|desprendiment|insuficiencia drenant|inuncat|riera|torrent)/;
+// Relevance flag: orders the review list, never drops an item (signals.mjs writes misses as relevant: false).
+// Golden set (vault data/golden_set.csv, 52 snippets): see design section 9 for the measured pass rates.
+// "agua" needs a word end so "aguantar" does not match; "negat" too so "negatiu" does not.
+export const RELEVANT = /\b(inund|pluj|pluge|plou|pluvi|lluvi|aiguat|aigua|aigues|aguas?\b|aguacero|a?negad|negats?\b|fang|riuad|riad|embass|tempest|tormenta|temporal\b|dana\b|claveguer|alcantarill|esllavissad|desprendiment|insuficiencia drenant|inuncat|riera|torrent)/;
 export const isRelevant = (text) => RELEVANT.test(norm(text));
 
 // Keyword mechanism suggestion (vault work/rules_v2.py, first match wins). Measured 0.44 accuracy on the golden set,
@@ -36,6 +38,15 @@ export const PREVENTIVE = {
   slope_runoff: "Clear debris and inspect slopes and walls before the next intense rainfall.",
 };
 const MECH_PHRASE = { street_overflow: "water overflowing onto streets", basement: "water in basements or ground floors", transformer_room: "water in electrical rooms", slope_runoff: "slope runoff" };
+
+// Same page, same key: drop fragment and query, add a trailing slash. A bare "/?p=123" keeps its query (WordPress ids).
+export function normUrl(url) {
+  try {
+    const u = new URL(url);
+    const path = u.pathname.endsWith("/") ? u.pathname : `${u.pathname}/`;
+    return `${u.protocol}//${u.host.toLowerCase()}${path}${u.pathname === "/" ? u.search : ""}`;
+  } catch { return String(url); }
+}
 
 export const sha = (s) => createHash("sha256").update(s).digest("hex");
 export const signalId = (platform, postIdOrUrl) => sha(postIdOrUrl.startsWith("https://") ? postIdOrUrl : `${platform}:${postIdOrUrl}`).slice(0, 16);
@@ -77,18 +88,23 @@ export function makeResolver(gaz) {
   names.sort((a, b) => b[0].length - a[0].length);
   const dists = { ...DIST_EXTRA };
   for (const [code, n] of Object.entries(gaz.districts)) dists[bare(n)] = code;
+  // Hyphenated district names ("Horta-Guinardó") contain barri names; they are never a barri, so barri search skips them.
+  const compound = Object.values(gaz.districts).map(bare).filter((n) => n.includes("-")).map((n) => new RegExp(`\\b${esc(n)}\\b`, "g"));
   return function resolve(raw) {
     const t = norm(raw), cased = stripCase(raw);
+    const tb = compound.reduce((s, re) => s.replace(re, " | "), t);
     if (VETO.some((v) => new RegExp(`\\b${esc(v)}\\b`).test(t))) return { level: "veto", barris: [], districts: [] };
     const ds = [...new Set(Object.entries(dists).filter(([a]) => new RegExp(`\\b${esc(a)}\\b`).test(t)).map(([, d]) => d))].sort();
-    if (ds.length >= 2) return { level: "district", barris: [], districts: ds }; // a list of districts is district precision
     const found = new Set();
     for (const [n, code] of names) {
-      if (!new RegExp(`\\b${esc(n)}\\b`).test(t)) continue;
+      if (!new RegExp(`\\b${esc(n)}\\b`).test(tb)) continue;
       if (RIVERS.has(n) && !new RegExp(`barri (de |del )?(l'|el |la )?${n}`).test(t)) continue;
       if (COMMON.has(n) && !new RegExp(`\\b${n[0].toUpperCase()}${n.slice(1)}\\b`).test(cased)) continue;
       found.add(code);
     }
+    // A list of districts is district precision; barri names in it stay as candidates for the reviewer (live 2026-10-07:
+    // a Torre Baró headline whose excerpt lists two other districts).
+    if (ds.length >= 2) return { level: "district", barris: [...found].sort(), districts: ds };
     if (found.size === 1) return { level: "barri", barris: [...found], districts: ds };
     if (found.size > 1) return { level: "barri_multi", barris: [...found].sort(), districts: ds };
     if (ds.length) return { level: "district", barris: [], districts: ds };
@@ -186,17 +202,23 @@ export function buildPublished({ rows, gaz, allowlist, zones, now, windowDays, m
   const proofByUrl = new Map();
   for (const card of Object.values(zones)) {
     if (card.layerType !== "proof") continue;
-    for (const url of [card.sourceUrl, ...(card.sources ?? []).map((s) => s.url)]) proofByUrl.set(url, card.id);
+    for (const url of [card.sourceUrl, ...(card.sources ?? []).map((s) => s.url)]) proofByUrl.set(normUrl(url), card.id);
   }
   const since = now - windowDays * 86400e3;
-  const byBarri = new Map(), proofLinks = new Map();
+  const byBarri = new Map(), proofLinks = new Map(), ids = new Set(), urls = new Set();
   for (const row of rows) {
+    // A merge that appends the same row twice must not double a card's count: fail loudly, a person deletes one line.
     const mech = validateRow(row, { allowlist, gaz });
+    if (ids.has(row.signal_id)) throw new Error(`inbox row ${row.signal_id}: duplicate signal_id, keep one line`);
+    ids.add(row.signal_id);
     if (!mech || Date.parse(row.published_at) < since || Date.parse(row.published_at) > now) continue;
+    const url = normUrl(row.source_url);
+    if (urls.has(url)) continue; // same page under two ids (e.g. with a query string): one report
+    urls.add(url);
     const b = row.place.barri;
-    if (proofByUrl.has(row.source_url)) { // already a hand-curated proof dot: link it, do not duplicate it
+    if (proofByUrl.has(url)) { // already a hand-curated proof dot: link it, do not duplicate it
       if (!proofLinks.has(b)) proofLinks.set(b, new Set());
-      proofLinks.get(b).add(proofByUrl.get(row.source_url));
+      proofLinks.get(b).add(proofByUrl.get(url));
       continue;
     }
     if (!byBarri.has(b)) byBarri.set(b, []);

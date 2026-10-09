@@ -6,7 +6,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { cpSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { cadence, compose, isHealth, isRelevant, keywordMechanism, makeResolver, parseRss, signalId } from "./signals-lib.mjs";
+import { cadence, compose, isHealth, isRelevant, keywordMechanism, makeResolver, normUrl, parseRss, signalId } from "./signals-lib.mjs";
 
 const gaz = JSON.parse(readFileSync("signals/gazetteer.json", "utf8"));
 const code = (name) => Object.entries(gaz.barris).find(([, b]) => b.name === name)[0];
@@ -18,12 +18,22 @@ test("health content is dropped, flood content passes", () => {
   assert.ok(!isHealth("Carrers inundats a Sant Andreu després de la pluja"));
   assert.ok(isRelevant("Aiguat a Barcelona: carrers inundats"));
   assert.ok(!isRelevant("La ciudadana presenta el nuevo mercado")); // "dana" inside a word is not a storm
+  for (const t of ["El carrer ha quedat negat", "Calle anegada en Sants", "Carrers plens de fang", "La riada de la nit", "L'aigua entra a l'escola", "El agua acumulada en el andén"])
+    assert.ok(isRelevant(t), t);
+  for (const t of ["Cal aguantar fins dilluns", "Un resultat negatiu a les enquestes"]) assert.ok(!isRelevant(t), t);
+});
+
+test("one page, one key", () => {
+  assert.equal(normUrl("https://Beteve.cat/a/b?utm_source=x#top"), "https://beteve.cat/a/b/");
+  assert.equal(normUrl("https://beteve.cat/a/b/"), "https://beteve.cat/a/b/");
+  assert.notEqual(normUrl("https://beteve.cat/?p=1"), normUrl("https://beteve.cat/?p=2"), "a bare WordPress id keeps its query");
 });
 
 test("gazetteer: barri, alias, district precision, veto, common words", () => {
   assert.deepEqual(resolve("Esllavissada al carrer de Cànoves, a Sant Genís dels Agudells").barris, [code("Sant Genís dels Agudells")]);
   assert.deepEqual(resolve("Problemes a Sant Genís Agudells").barris, [code("Sant Genís dels Agudells")], "Atlas alias");
   assert.equal(resolve("Talls de llum a Gràcia, Sant Andreu i les Corts").level, "district", "a list of districts is district precision");
+  assert.deepEqual(resolve("Pluges a Torre Baró. Treballs a Horta-Guinardó i a Sarrià-Sant Gervasi.").barris, [code("Torre Baró")], "a named barri stays a candidate");
   assert.equal(resolve("Inundacions a Badalona i a Sant Andreu").level, "veto");
   assert.equal(resolve("l'aigua va entrar per la porta del garatge").level, "none", "common word, not capitalised");
   assert.equal(resolve("el riu Besòs baixa ple").level, "none", "a river is not a place");
@@ -67,7 +77,7 @@ function sandbox(rows) {
   writeFileSync(join(dir, "signals/inbox.jsonl"), rows.map((r) => JSON.stringify(r)).join("\n") + "\n");
   return dir;
 }
-const run = (dir, script) => spawnSync(process.execPath, [script], { cwd: dir, encoding: "utf8", env: { ...process.env, SIGNALS_NOW: "2026-10-08T12:00:00Z" } });
+const run = (dir, script, ...args) => spawnSync(process.execPath, [script, ...args], { cwd: dir, encoding: "utf8", env: { ...process.env, SIGNALS_NOW: "2026-10-08T12:00:00Z" } });
 const row = (over) => ({
   signal_id: "0000000000000001", platform: "manual", source_kind: "press", source_url: "https://beteve.cat/fixture-written-for-the-test/",
   source_label: "Betevé", published_at: "2026-10-04T09:12Z", fetched_at: "2026-10-04T09:30Z", summary: "Fixture.",
@@ -84,6 +94,7 @@ test("build + qa: approved rows publish, pending and proof duplicates do not", (
     row({ signal_id: "0000000000000004", place: { level: "barri", barri: code("Sant Andreu") }, review: { status: "pending", by: null, at: null, reason: null, mechanism: null } }),
     row({ signal_id: "0000000000000005", published_at: "2026-09-01T08:00Z", place: { level: "barri", barri: code("el Raval") } }), // outside the window
     { signal_id: "0000000000000006", review: { status: "rejected", by: "R0", at: "2026-10-05T10:00Z", reason: "not Barcelona" } },
+    row({ signal_id: "0000000000000007", source_url: "https://beteve.cat/fixture-written-for-the-test?utm_source=x#a" }), // same page as row 1
   ]);
   const build = run(dir, "scripts/signals-build.mjs");
   assert.equal(build.status, 0, build.stderr);
@@ -98,10 +109,25 @@ test("build + qa: approved rows publish, pending and proof duplicates do not", (
   assert.equal(qa.status, 0, qa.stderr + qa.stdout);
 });
 
-test("build fails on a host off the allowlist and on stored post text", () => {
-  for (const bad of [row({ source_url: "https://www.reddit.com/r/barcelona/x" }), row({ text: "copied post text" })]) {
-    assert.equal(run(sandbox([bad]), "scripts/signals-build.mjs").status, 1);
+test("build fails on a host off the allowlist, on stored post text and on a duplicate signal_id", () => {
+  for (const bad of [[row({ source_url: "https://www.reddit.com/r/barcelona/x" })], [row({ text: "copied post text" })], [row({}), row({})]]) {
+    assert.equal(run(sandbox(bad), "scripts/signals-build.mjs").status, 1, JSON.stringify(bad).slice(0, 80));
   }
+});
+
+test("approve refuses an expired stub; --add publishes it instead and the build stays green", () => {
+  const url = "https://beteve.cat/fixture-written-for-the-test/";
+  const dir = sandbox([{ signal_id: signalId("press", url), review: { status: "expired", by: null, at: "2026-10-07T10:00Z", reason: "not reviewed in time" } }]);
+  const before = readFileSync(join(dir, "signals/inbox.jsonl"), "utf8");
+  const ok = run(dir, "scripts/signals.mjs", "--approve", signalId("press", url), "--mechanism", "slope_runoff", "--barri", "Sant Genís dels Agudells", "--by", "R0");
+  assert.equal(ok.status, 1);
+  assert.match(ok.stderr, /--add/);
+  assert.equal(readFileSync(join(dir, "signals/inbox.jsonl"), "utf8"), before, "inbox untouched");
+  const added = run(dir, "scripts/signals.mjs", "--add", url, "--barri", "Sant Genís dels Agudells", "--mechanism", "slope_runoff", "--date", "2026-10-04T09:12Z", "--by", "R0");
+  assert.equal(added.status, 0, added.stderr);
+  assert.equal(readFileSync(join(dir, "signals/inbox.jsonl"), "utf8").trim().split("\n").length, 1, "the stub is replaced, not duplicated");
+  assert.equal(run(dir, "scripts/signals-build.mjs").status, 0);
+  assert.equal(run(dir, "scripts/signals.mjs", "--add", `${url}?utm_source=x`, "--barri", "Sant Genís dels Agudells", "--mechanism", "slope_runoff", "--date", "2026-10-04T09:12Z", "--by", "R0").status, 1, "same page twice");
 });
 
 test("qa passes with an empty inbox", () => {

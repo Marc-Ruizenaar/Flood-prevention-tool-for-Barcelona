@@ -3,7 +3,7 @@
 //
 //   npm run signals                         read the feeds once, write pending rows, print priority
 //   npm run signals -- --scheduled          same, but honour calm-mode cadence (for a twice-hourly timer)
-//   npm run signals -- --list               pending rows, highest-priority barri first
+//   npm run signals -- --list               pending rows, highest-priority barri first; rows with no flood term last
 //   npm run signals -- --priority           refresh priority per barri (live XEMA rain)
 //   npm run signals -- --approve <id> --mechanism <m> [--barri <code|name>] --by R1
 //   npm run signals -- --reject <id> --reason "<why>" --by R1
@@ -15,7 +15,7 @@
 // Optional: TYPESAFE_API_KEY enables Jev Template A v2 (select only). Without it a keyword hint goes to the reviewer.
 import { readFileSync, renameSync, writeFileSync } from "node:fs";
 import {
-  PUBLISH_MECH, allowEntry, cadence, compose, isHealth, isRelevant, keywordMechanism, makeResolver, norm, parseRss, rainFromRows, sha, signalId, stripHtml,
+  PUBLISH_MECH, allowEntry, cadence, compose, isHealth, isRelevant, keywordMechanism, makeResolver, norm, normUrl, parseRss, rainFromRows, sha, signalId, stripHtml,
 } from "./signals-lib.mjs";
 
 const read = (p) => JSON.parse(readFileSync(p, "utf8"));
@@ -116,7 +116,7 @@ async function warningNow(rain3h) {
 function signalTerms(rows) {
   const s6 = {}, stale = {};
   for (const r of rows) {
-    if (!r.place?.barri || !["pending", "approved"].includes(r.review.status)) continue;
+    if (!r.place?.barri || r.relevant === false || !["pending", "approved"].includes(r.review.status)) continue;
     if (now - Date.parse(r.published_at) <= 6 * 3600e3) s6[r.place.barri] = (s6[r.place.barri] ?? 0) + 1;
   }
   for (const [b, t] of Object.entries(counts.last_signal_at ?? {})) stale[b] = (now - Date.parse(t)) / 3600e3;
@@ -189,14 +189,16 @@ async function ingest() {
       for (const item of res.value.items) {
         if (!maxPub || item.published_at > maxPub) maxPub = item.published_at;
         if (isHealth(item.text)) { report.dropped_health++; continue; } // dropped before any write or outside call
-        if (!isRelevant(item.text)) continue;
-        relevant++;
+        // The watermark moves past every item read, so an item the regex misses is still written (relevant: false,
+        // listed last) instead of being lost for good. The regex only orders the review list.
+        const rel = isRelevant(item.text);
+        if (rel) relevant++;
         const entry = allowEntry(item.url, allowlist);
         if (!entry) continue; // a link off the allowlist never becomes a row
         const id = signalId(item.platform, item.url);
         if (seen.has(id)) continue;
         const place = resolve(item.text);
-        const j = await jev(item.text, place.barris);
+        const j = rel ? await jev(item.text, place.barris) : null; // no outside call for items with no flood term
         let barri = place.barris.length === 1 && place.level === "barri" ? place.barris[0] : null;
         if (!barri && j?.place && j.placeConf >= config.autoAcceptConfidence) barri = j.place;
         const cls = j
@@ -206,7 +208,8 @@ async function ingest() {
         rows.push({
           signal_id: id, platform: item.platform, source_kind: entry.kind, source_url: item.url, source_label: entry.label,
           published_at: iso(item.published_at), fetched_at: iso(now),
-          summary: `${entry.label} published an item matching flood terms${where ? ` that names ${where}` : ""}.`,
+          summary: `${entry.label} published an item ${rel ? "matching" : "with no"} flood terms${where ? ` that names ${where}` : ""}.`,
+          relevant: rel,
           place: { level: barri ? "barri" : place.level, barri, district: barri ? gaz.barris[barri].district : place.districts[0] ?? null,
             candidates: place.barris, zone_ids: barri ? gaz.barris[barri].zone_ids : [], hotspot_fid: null, gaz: gazTag },
           cls,
@@ -214,7 +217,7 @@ async function ingest() {
         });
         seen.add(id);
         added++;
-        if (barri) counts.last_signal_at[barri] = iso(item.published_at) > (counts.last_signal_at[barri] ?? "") ? iso(item.published_at) : counts.last_signal_at[barri];
+        if (barri && rel) counts.last_signal_at[barri] = iso(item.published_at) > (counts.last_signal_at[barri] ?? "") ? iso(item.published_at) : counts.last_signal_at[barri];
       }
       if (maxPub) counts.watermarks[name] = maxPub;
       Object.assign(status, { last_ok: iso(now), fails: 0 });
@@ -237,7 +240,7 @@ function prune(rows) {
   const stub = (r, status, reason) => ({ signal_id: r.signal_id, review: { ...r.review, status, at: r.review.at ?? iso(now), reason } });
   return rows.flatMap((r) => {
     const s = r.review.status;
-    if (s === "pending" && now - Date.parse(r.fetched_at) > config.pendingExpiryHours * 3600e3) return [stub(r, "expired", "not reviewed in time")];
+    if (s === "pending" && now - Date.parse(r.fetched_at) > config.pendingExpiryHours * 3600e3) return r.relevant === false ? [] : [stub(r, "expired", "not reviewed in time")];
     if (s === "approved" && now - Date.parse(r.published_at) > (config.windowDays + config.keepApprovedDaysAfterWindow) * 86400e3) return [];
     if ((s === "rejected" || s === "expired") && now - Date.parse(r.review.at) > config.keepStubDays * 86400e3) return [];
     if ((s === "rejected" || s === "expired") && r.source_url) return [stub(r, s, r.review.reason)];
@@ -252,8 +255,10 @@ async function list() {
   const rank = Object.fromEntries(compose({ priors, rain3h, signals6h: s6, staleH: stale, weights: config.weights, knobs: config.knobs }).map((p) => [p.c_barri, p.score]));
   const flagged = Object.entries(counts.sources ?? {}).filter(([, s]) => s.fails >= 3).map(([n]) => n);
   console.log(`${rows.length} pending${flagged.length ? `; FLAG 3+ failures: ${flagged.join(", ")}` : ""}`);
-  rows.sort((a, b) => (rank[b.place.barri] ?? -1) - (rank[a.place.barri] ?? -1) || b.published_at.localeCompare(a.published_at));
-  for (const r of rows) {
+  rows.sort((a, b) => (a.relevant === false) - (b.relevant === false) || (rank[b.place.barri] ?? -1) - (rank[a.place.barri] ?? -1) || b.published_at.localeCompare(a.published_at));
+  const firstMiss = rows.findIndex((r) => r.relevant === false);
+  for (const [i, r] of rows.entries()) {
+    if (i === firstMiss) console.log(`--- ${rows.length - i} row(s) with no flood term: skim the links, most are off-topic ---`);
     const where = r.place.barri ? gaz.barris[r.place.barri].name : r.place.candidates?.length ? `one of ${r.place.candidates.map((c) => `${c} ${gaz.barris[c].name}`).join("; ")}`
       : r.place.level === "none" ? "no named place (pass --barri to approve)" : `${r.place.level} ${r.place.district ? gaz.districts[r.place.district] ?? "" : ""}`.trim();
     const hint = `${r.cls?.mechanism ?? "?"}${r.cls?.p_mechanism != null ? ` (${r.cls.model} ${r.cls.p_mechanism})` : ` (${r.cls?.model} hint)`}`;
@@ -272,6 +277,9 @@ function updateRow(id, fn) {
 function approve(id) {
   const by = reviewer();
   updateRow(id, (row) => {
+    // An expired or rejected stub keeps only signal_id and review: approving it would break signals-build, dev and qa.
+    if (!["pending", "approved"].includes(row.review?.status) || !row.source_url)
+      fail(`row ${id} is ${row.review?.status ?? "malformed"} and has no link left; to publish it, use --add <url> --barri <b> --mechanism <m> --date <ISO>`);
     const auto = row.cls?.p_mechanism != null && row.cls.p_mechanism >= config.autoAcceptConfidence ? row.cls.mechanism : null;
     const mech = opt("mechanism") ?? auto;
     if (!PUBLISH_MECH[mech]) fail(`--mechanism must be one of ${Object.keys(PUBLISH_MECH).join(", ")}${row.cls ? ` (hint: ${row.cls.mechanism})` : ""}`);
@@ -296,7 +304,9 @@ function add(url) {
   const date = opt("date") && !Number.isNaN(Date.parse(opt("date"))) ? opt("date") : fail("--date <ISO> is required: the item's own publication date, as shown on the linked page");
   const rows = loadInbox();
   const id = signalId("manual", url);
-  if (rows.some((r) => r.signal_id === id)) fail(`already in the inbox: ${id}`);
+  // A stub (expired or rejected, no link left) is replaced: --add is how an expired item gets published.
+  const dup = rows.find((r) => r.source_url && normUrl(r.source_url) === normUrl(url));
+  if (dup) fail(`already in the inbox as ${dup.signal_id} (${dup.review.status})${dup.review.status === "pending" ? ": use --approve" : ""}`);
   const row = {
     signal_id: id, platform: "manual", source_kind: entry.kind, source_url: url, source_label: entry.label,
     published_at: iso(date), fetched_at: iso(now),
@@ -305,7 +315,7 @@ function add(url) {
     cls: null,
     review: { status: "approved", by, at: iso(now), reason: null, mechanism: mech },
   };
-  saveInbox([...rows, row]);
+  saveInbox([...rows.filter((r) => r.signal_id !== id), row]);
   console.log(JSON.stringify(row));
 }
 
