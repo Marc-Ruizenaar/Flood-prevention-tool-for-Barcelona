@@ -33,7 +33,7 @@ Canonical data lives in `data/`. The npm scripts copy it to `public/data` so the
 
 1. Open the map. **Next rain — sewers** is on. Pan to Diagonal or Poblenou and tap. The card names the mechanism, one action, and the atlas source.
 2. Turn on **Slopes & torrents**. Go to Torre Baró. The sewer hotspots do not explain it.
-3. Turn on **Oct 2026 proof**. Sant Andreu and Gràcia sit on places the atlas already marked. Torre Baró was hit with no sewer hotspot.
+3. Turn on **Reported impacts**. Sant Andreu and Gràcia sit on places the atlas already marked. Torre Baró was hit with no sewer hotspot.
 4. Close on one line: support these zones before the next storm, using data the city already publishes.
 
 **Blind spot** hides the sewers and flies to Torre Baró with slopes and proof on. Share a card with `?zone=sewer-diagonal` (or any id).

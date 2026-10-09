@@ -153,7 +153,10 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       add("streams", collections["buried-streams"]);
       add("tanks", collections["retention-tanks"]);
       add("hotspots", collections["resccue-hotspots"]);
-      add("proof", collections["proof-oct2026"]);
+      add("proof", {
+        type: "FeatureCollection",
+        features: [...(collections["proof-oct2026"]?.features ?? []), ...(collections.signals?.features ?? [])],
+      });
       map.addSource("highlight", { type: "geojson", data: empty });
 
       map.addLayer({

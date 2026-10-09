@@ -5,14 +5,18 @@
   "type": "module",
   "engines": { "node": ">=20" },
   "scripts": {
-    "predev": "node scripts/copy-data.mjs",
-    "prebuild": "node scripts/copy-data.mjs",
-    "prepreview": "node scripts/copy-data.mjs",
+    "predev": "node scripts/signals-build.mjs && node scripts/copy-data.mjs",
+    "prebuild": "node scripts/signals-build.mjs && node scripts/copy-data.mjs",
+    "prepreview": "node scripts/signals-build.mjs && node scripts/copy-data.mjs",
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173",
     "qa": "node scripts/qa.mjs",
-    "qa:urls": "node scripts/qa.mjs --urls"
+    "qa:urls": "node scripts/qa.mjs --urls",
+    "preqa": "node scripts/signals-build.mjs",
+    "signals": "node scripts/signals.mjs",
+    "signals:build": "node scripts/signals-build.mjs",
+    "signals:check": "node --test scripts/signals.test.mjs"
   },
   "dependencies": {
     "@fontsource/fraunces": "^5.2.9",

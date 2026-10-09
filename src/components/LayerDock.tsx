@@ -6,7 +6,7 @@ const GROUP_FILES: Record<GroupId, GeoFile[]> = {
   sewers: ["sewer-t10-stress", "resccue-hotspots"],
   streams: ["buried-streams", "retention-tanks"],
   slopes: ["slopes-torrents"],
-  proof: ["proof-oct2026"],
+  proof: ["proof-oct2026", "signals"],
 };
 
 type Props = {

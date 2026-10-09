@@ -124,7 +124,7 @@ Execute on **production build** on **primary phone**.
 
 - [ ] App loads without console errors blocking map.
 - [ ] Map centers on Barcelona; basemap/tiles visible (static/bundled tiles if used).
-- [ ] **“Oct 2026 proof”** toggle is **OFF** on first load.
+- [ ] **“Reported impacts”** toggle (Oct 2026 proof plus reviewed signals) is **OFF** on first load.
 - [ ] Default ON layers match demo script (at minimum **“Next rain — sewers”** / combined sewer+hotspots as designed).
 
 ### 2.2 Layer toggles
@@ -160,7 +160,7 @@ For each toggle label in the UI:
 | 1 | Open map; **Next rain — sewers** ON | Hotspots/stress visible |
 | 1b | Pan to Diagonal or Poblenou; tap | Fact card: mechanism + preventive action + Resilience/RESCCUE source |
 | 2 | Toggle **Slopes & torrents** ON; go to Torre Baró | Slope/torrent risk visible; card states sewer map alone is incomplete |
-| 3 | Toggle **Oct 2026 proof** ON | Dots appear; Sant Andreu/Gràcia overlap with known stress; Torre Baró hit **without** sewer point at same location |
+| 3 | Toggle **Reported impacts** ON | Dots appear; Sant Andreu/Gràcia overlap with known stress; Torre Baró hit **without** sewer point at same location |
 | 4 | Closing line (manual) | “Support these zones before the next storm” — no weather API claims |
 
 **Pass:** All four steps complete without workaround (no devtools, no reloading mid-script).
