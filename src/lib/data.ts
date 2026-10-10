@@ -2,14 +2,7 @@ import { useEffect, useState } from "react";
 import type { FeatureCollection } from "geojson";
 import type { ReliefFile, ZoneMap } from "../types";
 
-export const GEOJSON_FILES = [
-  "sewer-t10-stress",
-  "resccue-hotspots",
-  "buried-streams",
-  "retention-tanks",
-  "slopes-torrents",
-  "proof-oct2026",
-] as const;
+export const GEOJSON_FILES = ["proof-oct2026"] as const;
 
 export type GeoFile = (typeof GEOJSON_FILES)[number];
 

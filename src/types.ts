@@ -60,41 +60,16 @@ export const GROUPS: LayerGroup[] = [
     swatches: [{ color: "#8d877c", shape: "square" }],
   },
   {
-    id: "sewers",
-    label: "Next rain — sewers",
-    legend: "T10 atlas baseline and the 14 published hotspots. Not a live forecast.",
-    swatches: [
-      { color: "#e07a2f", shape: "square" },
-      { color: "#b42318", shape: "dot" },
-    ],
-  },
-  {
-    id: "streams",
-    label: "Buried streams",
-    legend: "Red dots are critical points on a stream, not October. Green tanks are in service; amber is approved.",
-    swatches: [
-      { color: "#0f5f73", shape: "line" },
-      { color: "#b42318", shape: "dot" },
-      { color: "#0f766e", shape: "dot" },
-    ],
-  },
-  {
-    id: "slopes",
-    label: "Slopes & torrents",
-    legend: "Collserola-facing neighborhoods the sewer hotspots do not cover.",
-    swatches: [{ color: "#6d28d9", shape: "square" }],
-  },
-  {
     id: "proof",
     label: "Oct 2026 proof",
-    legend: "What was reported after the rains. Off until you compare.",
+    legend: "What was reported after the rains.",
     swatches: [{ color: "#1c1917", shape: "dot" }],
   },
 ];
 
 export const DEFAULT_VISIBILITY: Record<GroupId, boolean> = {
   relief: true,
-  sewers: true,
+  sewers: false,
   streams: false,
   slopes: false,
   proof: false,

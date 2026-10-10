@@ -11,16 +11,11 @@ export const RAIN_SOURCE_URL =
 
 export const LAYER_MM = {
   sewers: 10,
-  slopes: 40,
-  streams: 100,
 } as const;
 
 export const RAIN_SNAPSHOT: Record<string, Gauge> = {
+  "2026-10-02": { raval: 15.5, fabra: 15.8, universitaria: 15.6 },
   "2026-10-03": { raval: 190.8, fabra: 140, universitaria: 170.3 },
-  "2026-10-04": { raval: 2, fabra: 8.9, universitaria: 3.6 },
-  "2026-10-05": { raval: 43.8, fabra: 74.8, universitaria: 28.1 },
-  "2026-10-06": { raval: 28.3, fabra: 15.4, universitaria: 26 },
-  "2026-10-07": { raval: 0, fabra: 0, universitaria: 0.1 },
 };
 
 const STATIONS = [
@@ -44,21 +39,10 @@ export function peakOf(gauge: Gauge | undefined): { name: string; mm: number } |
 }
 
 export function layersForRain(
-  mm: number | null,
   reports: boolean,
   current: Record<GroupId, boolean>,
 ): Record<GroupId, boolean> {
-  const next = { ...current, sewers: false, streams: false, slopes: false, proof: reports };
-  if (mm == null || mm < LAYER_MM.sewers) return next;
-  next.sewers = true;
-  if (mm >= LAYER_MM.slopes) next.slopes = true;
-  if (mm >= LAYER_MM.streams) next.streams = true;
-  return next;
-}
-
-export function rainStrength(mm: number | null): number {
-  if (mm == null || mm < LAYER_MM.sewers) return 0;
-  return Math.min(1, mm / LAYER_MM.streams);
+  return { ...current, sewers: false, streams: false, slopes: false, proof: reports };
 }
 
 export function atlasLocked(mm: number | null): boolean {
@@ -77,7 +61,7 @@ export async function fetchGauges(): Promise<Record<string, Gauge>> {
   const params = new URLSearchParams({
     $select: "codi_estacio,data_lectura,valor",
     $where:
-      "codi_variable='1300' AND codi_estacio in('X4','D5','X8') AND data_lectura >= '2026-10-03T00:00:00.000' AND data_lectura <= '2026-10-11T00:00:00.000'",
+      "codi_variable='1300' AND codi_estacio in('X4','D5','X8') AND data_lectura >= '2026-10-02T00:00:00.000' AND data_lectura <= '2026-10-03T00:00:00.000'",
     $limit: "40",
   });
   const response = await fetch(

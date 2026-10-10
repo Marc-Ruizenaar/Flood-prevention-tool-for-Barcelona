@@ -6,6 +6,7 @@ from datetime import UTC, date, datetime
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 
 from bcnflood import __version__
@@ -27,6 +28,13 @@ ERR = {c: {"model": ErrorBody} for c in (404, 409, 501)}
 
 app = FastAPI(title="Barcelona Flood Physics Engine", version=__version__,
               summary=f"API contract v{CONTRACT_VERSION}")
+# Browser map reads this API from another origin (NEXT_PUBLIC_API_URL).
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 
 @app.exception_handler(HTTPException)

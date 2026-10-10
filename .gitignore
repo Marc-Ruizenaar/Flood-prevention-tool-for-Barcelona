@@ -4,6 +4,17 @@ public/data
 .env
 .env.*
 !.env.example
+!**/.env.example
 .DS_Store
 *.local
 dev-dist
+.next
+
+# Python
+.venv/
+backend/.venv/
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+backend/outputs/
+*.tsbuildinfo
