@@ -61,7 +61,7 @@ const allowed = (url) => {
 };
 // Signals carry only template fields. Anything else (a count of individuals, a handle, post text) fails.
 const SIG_CARD_KEYS = new Set(["id", "name", "layerIds", "layerType", "mechanisms", "whatCouldFail", "preventiveAction", "sourceLabel", "sourceUrl", "sources", "relatedZoneIds", "geometryNote"]);
-const SIG_FEATURE_KEYS = new Set(["id", "name", "layer", "tappable"]);
+const SIG_FEATURE_KEYS = new Set(["id", "name", "layer", "tappable", "days"]);
 const files = readdirSync("data/geojson").filter((name) => name.endsWith(".geojson"));
 let bytes = 0;
 const seenGlobal = new Set();

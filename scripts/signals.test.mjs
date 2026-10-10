@@ -107,6 +107,7 @@ test("build + qa: approved rows publish, pending and proof duplicates do not", (
   const gj = JSON.parse(readFileSync(join(dir, "data/geojson/signals.geojson"), "utf8"));
   const cards = JSON.parse(readFileSync(join(dir, "data/signals-cards.json"), "utf8"));
   assert.equal(gj.features.length, 1);
+  assert.deepEqual(gj.features[0].properties.days, ["2026-10-04", "2026-10-05"], "local publication days of the approved rows, sorted");
   const card = cards[`sig-${code("Sant Genís dels Agudells")}`];
   assert.deepEqual(card.mechanisms, ["observed_impact", "slope_runoff"]);
   assert.match(card.whatCouldFail, /^On 4 and 5 October 2026, 2 reviewed reports from Ajuntament de Barcelona and Betevé described slope runoff in Sant Genís dels Agudells\./);

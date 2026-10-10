@@ -237,7 +237,8 @@ export function buildPublished({ rows, gaz, allowlist, zones, now, windowDays, m
     const id = `sig-${code}`;
     const name = `${g.name}: reviewed reports, ${shortRange(days)}`;
     const related = [...new Set([...g.zone_ids, ...(proofLinks.get(code) ?? [])])].filter((z) => zones[z]);
-    features.push({ type: "Feature", geometry: { type: "Point", coordinates: g.label }, properties: { id, name, layer: "signals", tappable: true } });
+    // days: Barcelona-local publication dates of the approved rows behind this dot, for the app's day filter.
+    features.push({ type: "Feature", geometry: { type: "Point", coordinates: g.label }, properties: { id, name, layer: "signals", tappable: true, days } });
     cards[id] = {
       id,
       name,
