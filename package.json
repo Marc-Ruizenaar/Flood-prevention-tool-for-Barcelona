@@ -11,6 +11,8 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173",
+    "sync:flood": "node scripts/sync-flood-fixtures.mjs",
+    "test:city-actions": "node scripts/test-city-actions.mjs",
     "qa": "node scripts/qa.mjs",
     "qa:urls": "node scripts/qa.mjs --urls",
     "preqa": "node scripts/signals-build.mjs",
@@ -18,7 +20,9 @@
     "signals:build": "node scripts/signals-build.mjs",
     "signals:check": "node --test scripts/signals.test.mjs",
     "pulse": "node scripts/pulse.mjs",
-    "attention": "node scripts/attention.mjs"
+    "attention": "node scripts/attention.mjs",
+    "dev:flood": "npm run dev --prefix web",
+    "build:flood": "npm run build --prefix web"
   },
   "dependencies": {
     "@fontsource/fraunces": "^5.2.9",

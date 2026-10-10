@@ -1,13 +1,18 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
+import { createRoot, type Root } from "react-dom/client";
 import maplibregl, { type GeoJSONSource, type Map } from "maplibre-gl";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
+import { HotspotCard } from "./HotspotCard";
 import type { GeoFile } from "../lib/data";
+import { floodColorExpression } from "../lib/modelStyle";
+import type { HotspotProps, HotspotsCollection, StreetsCollection } from "../lib/sim";
 import { dayByDate } from "../lib/weather";
 import type { GroupId, ReliefFile } from "../types";
 
 export type MapHandle = {
   focus: (id: string) => void;
   reset: () => void;
+  focusSimulation: (coordinates: [number, number], cellId?: string | null) => void;
 };
 
 type Props = {
@@ -16,9 +21,10 @@ type Props = {
   visibility: Record<GroupId, boolean>;
   selectedId: string | null;
   day: string;
-  strength: number;
   focusNonce: number;
   onSelect: (id: string) => void;
+  modelStreets?: StreetsCollection | null;
+  modelHotspots?: HotspotsCollection | null;
 };
 
 const CITY_BOUNDS: [[number, number], [number, number]] = [
@@ -28,30 +34,13 @@ const CITY_BOUNDS: [[number, number], [number, number]] = [
 
 const LAYER_GROUPS: { group: GroupId; ids: string[] }[] = [
   { group: "relief", ids: ["relief-shade"] },
-  { group: "slopes", ids: ["slope-fill", "slope-line", "slope-label"] },
-  { group: "sewers", ids: ["sewer-fill", "sewer-line", "sewer-label", "hotspot-circle", "hotspot-label"] },
-  { group: "streams", ids: ["stream-line", "stream-label", "stream-critical", "stream-critical-label", "tank-circle", "tank-label"] },
   { group: "proof", ids: ["proof-halo", "proof-circle", "proof-label"] },
 ];
 
-const HIT_LAYERS = [
-  "proof-circle",
-  "stream-critical",
-  "tank-circle",
-  "hotspot-circle",
-  "stream-line",
-  "slope-fill",
-  "sewer-fill",
-];
+const HIT_LAYERS = ["proof-circle"];
 
 const HIT_RANK: Record<string, number> = {
   "proof-circle": 7,
-  "stream-critical": 6,
-  "tank-circle": 5,
-  "hotspot-circle": 4,
-  "stream-line": 3,
-  "slope-fill": 2,
-  "sewer-fill": 1,
 };
 
 function proofForDay(
@@ -119,7 +108,7 @@ function boundsOf(geometry: Geometry): [[number, number], [number, number]] | nu
 }
 
 export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
-  { collections, relief, visibility, selectedId, day, strength, focusNonce, onSelect },
+  { collections, relief, visibility, selectedId, day, focusNonce, onSelect, modelStreets = null, modelHotspots = null },
   ref,
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -131,8 +120,12 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
   visibilityRef.current = visibility;
   const dayRef = useRef(day);
   dayRef.current = day;
-  const strengthRef = useRef(strength);
-  strengthRef.current = strength;
+  const modelStreetsRef = useRef(modelStreets);
+  modelStreetsRef.current = modelStreets;
+  const modelHotspotsRef = useRef(modelHotspots);
+  modelHotspotsRef.current = modelHotspots;
+  const applyModelDataRef = useRef<() => void>(() => {});
+  const openHotspotPopupRef = useRef<(feature: Feature) => void>(() => {});
 
   useImperativeHandle(ref, () => ({
     focus(id: string) {
@@ -163,6 +156,20 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
     },
     reset() {
       mapRef.current?.fitBounds(CITY_BOUNDS, { padding: pad(), duration: 500 });
+    },
+    focusSimulation(coordinates, cellId) {
+      const map = mapRef.current;
+      if (!map) return;
+      map.flyTo({
+        center: coordinates,
+        zoom: Math.max(map.getZoom(), 15.2),
+        duration: 650,
+      });
+      if (!cellId) return;
+      const feature = modelHotspotsRef.current?.features.find(
+        (item) => item.properties.cell_id === cellId,
+      );
+      if (feature) openHotspotPopupRef.current(feature);
     },
   }));
 
@@ -211,11 +218,6 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
         }
       };
 
-      add("slopes", collections["slopes-torrents"]);
-      add("sewers", collections["sewer-t10-stress"]);
-      add("streams", collections["buried-streams"]);
-      add("tanks", collections["retention-tanks"]);
-      add("hotspots", collections["resccue-hotspots"]);
       add("proof", proofForDay(collections["proof-oct2026"], dayRef.current, collections.signals));
       for (const feature of [...(collections["proof-oct2026"]?.features ?? []), ...(collections.signals?.features ?? [])]) {
         const fid = feature.properties?.id;
@@ -225,74 +227,6 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       }
       map.addSource("highlight", { type: "geojson", data: empty });
 
-      map.addLayer({
-        id: "slope-fill",
-        type: "fill",
-        source: "slopes",
-        paint: { "fill-color": "#6d28d9", "fill-opacity": 0.22 },
-      });
-      map.addLayer({
-        id: "slope-line",
-        type: "line",
-        source: "slopes",
-        paint: { "line-color": "#5b21b6", "line-width": 1.6 },
-      });
-      map.addLayer({
-        id: "sewer-fill",
-        type: "fill",
-        source: "sewers",
-        paint: { "fill-color": "#e07a2f", "fill-opacity": 0.32 },
-      });
-      map.addLayer({
-        id: "sewer-line",
-        type: "line",
-        source: "sewers",
-        paint: { "line-color": "#9a3412", "line-width": 1.5 },
-      });
-      map.addLayer({
-        id: "stream-line",
-        type: "line",
-        source: "streams",
-        paint: {
-          "line-color": ["case", ["==", ["get", "highlight"], true], "#0f5f73", "#5eead4"],
-          "line-width": ["case", ["==", ["get", "highlight"], true], 4, 1.3],
-          "line-opacity": ["case", ["==", ["get", "highlight"], true], 0.95, 0.75],
-        },
-      });
-      map.addLayer({
-        id: "stream-critical",
-        type: "circle",
-        source: "streams",
-        filter: ["==", ["get", "kind"], "critical"],
-        paint: {
-          "circle-radius": 7,
-          "circle-color": "#b42318",
-          "circle-stroke-width": 2,
-          "circle-stroke-color": "#fff7ed",
-        },
-      });
-      map.addLayer({
-        id: "tank-circle",
-        type: "circle",
-        source: "tanks",
-        paint: {
-          "circle-radius": 8,
-          "circle-color": ["match", ["get", "status"], "planned", "#b45309", "#0f766e"],
-          "circle-stroke-width": 2,
-          "circle-stroke-color": "#f8fafc",
-        },
-      });
-      map.addLayer({
-        id: "hotspot-circle",
-        type: "circle",
-        source: "hotspots",
-        paint: {
-          "circle-radius": 8,
-          "circle-color": "#b42318",
-          "circle-stroke-width": 2,
-          "circle-stroke-color": "#fff7ed",
-        },
-      });
       map.addLayer({
         id: "proof-halo",
         type: "circle",
@@ -337,45 +271,6 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
         },
       });
 
-      map.addLayer(label("slope-label", "slopes", 12));
-      map.addLayer(label("sewer-label", "sewers", 12));
-      map.addLayer(
-        label("stream-label", "streams", 13, [
-          "all",
-          ["==", ["get", "highlight"], true],
-          ["!=", ["get", "quietLabel"], true],
-        ]),
-      );
-      map.addLayer({
-        id: "stream-critical-label",
-        type: "symbol",
-        source: "streams",
-        minzoom: 9,
-        filter: ["==", ["get", "kind"], "critical"],
-        layout: {
-          "text-field": ["get", "name"],
-          "text-font": ["Noto Sans Regular"],
-          "text-size": 12,
-          "text-line-height": 1.1,
-          "text-max-width": 12,
-          "text-anchor": ["get", "anchor"],
-          "text-offset": [
-            "match",
-            ["get", "anchor"],
-            "right",
-            ["literal", [-0.7, 0]],
-            ["literal", [0.7, 0]],
-          ],
-          "text-allow-overlap": true,
-        },
-        paint: {
-          "text-color": "#9f1239",
-          "text-halo-color": "#fff7ed",
-          "text-halo-width": 1.6,
-        },
-      });
-      map.addLayer(label("tank-label", "tanks", 13));
-      map.addLayer(label("hotspot-label", "hotspots", 13.4));
       map.addLayer(label("proof-label", "proof", 13));
 
       map.addLayer({
@@ -403,6 +298,49 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
         },
       });
 
+      const floodColor = floodColorExpression();
+      map.addSource("model-streets", { type: "geojson", data: empty });
+      map.addSource("model-hotspots", { type: "geojson", data: empty });
+      map.addLayer({
+        id: "model-streets",
+        type: "line",
+        source: "model-streets",
+        paint: {
+          "line-color": floodColor,
+          "line-width": [
+            "interpolate",
+            ["linear"],
+            ["coalesce", ["to-number", ["get", "max_depth_m"]], 0],
+            0,
+            4,
+            0.5,
+            16,
+          ],
+          "line-opacity": ["case", ["==", ["get", "flood_class"], "dry"], 0.75, 0.95],
+        },
+      });
+      map.addLayer({
+        id: "model-hotspot",
+        type: "circle",
+        source: "model-hotspots",
+        paint: {
+          "circle-radius": [
+            "interpolate",
+            ["linear"],
+            ["coalesce", ["to-number", ["get", "peak_depth_m"]], 0],
+            0,
+            8,
+            0.5,
+            18,
+          ],
+          "circle-color": floodColor,
+          "circle-stroke-width": 2,
+          "circle-stroke-color": "#fff7ed",
+        },
+      });
+
+      applyModelDataRef.current();
+
       for (const entry of LAYER_GROUPS) {
         const visible = visibilityRef.current[entry.group] ? "visible" : "none";
         for (const id of entry.ids) {
@@ -410,7 +348,37 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
         }
       }
 
+      let activePopup: maplibregl.Popup | null = null;
+      let activeRoot: Root | null = null;
+      const openHotspotPopup = (feature: Feature) => {
+        if (feature.geometry.type !== "Point") return;
+        const [lon, lat] = feature.geometry.coordinates;
+        const node = document.createElement("div");
+        activePopup?.remove();
+        activeRoot?.unmount();
+        activeRoot = createRoot(node);
+        activeRoot.render(<HotspotCard properties={feature.properties as HotspotProps} />);
+        activePopup = new maplibregl.Popup({ maxWidth: "340px", className: "model-popup" })
+          .setLngLat([lon, lat])
+          .setDOMContent(node)
+          .addTo(map);
+        activePopup.on("close", () => {
+          activeRoot?.unmount();
+          activeRoot = null;
+        });
+      };
+      openHotspotPopupRef.current = openHotspotPopup;
+
       map.on("click", (event) => {
+        if (map.getLayer("model-hotspot")) {
+          const modelHits = map.queryRenderedFeatures(event.point, { layers: ["model-hotspot"] });
+          const cellId = modelHits[0]?.properties?.cell_id;
+          const feature = modelHotspotsRef.current?.features.find((item) => item.properties.cell_id === cellId);
+          if (feature && feature.geometry.type === "Point") {
+            openHotspotPopup(feature);
+            return;
+          }
+        }
         const hits = map.queryRenderedFeatures(
           [
             [event.point.x - 22, event.point.y - 22],
@@ -428,10 +396,12 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       });
 
       map.on("mousemove", (event) => {
-        const hits = map.queryRenderedFeatures(event.point, {
-          layers: HIT_LAYERS.filter((id) => map.getLayer(id)),
-        });
-        const tappable = hits.some((feature) => zoneIdOf(feature) !== null);
+        const layers = HIT_LAYERS.filter((id) => map.getLayer(id));
+        if (map.getLayer("model-hotspot")) layers.push("model-hotspot");
+        const hits = map.queryRenderedFeatures(event.point, { layers });
+        const tappable = hits.some(
+          (feature) => feature.layer.id === "model-hotspot" || zoneIdOf(feature) !== null,
+        );
         map.getCanvas().style.cursor = tappable ? "pointer" : "";
       });
     });
@@ -443,22 +413,6 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
     // Map is created once, after data is ready. Visibility is applied on load and updated below.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collections]);
-
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
-    const apply = () => {
-      if (!map.getLayer("sewer-fill")) return;
-      const weight = strengthRef.current;
-      map.setPaintProperty("sewer-fill", "fill-opacity", 0.12 + 0.28 * weight);
-      map.setPaintProperty("sewer-line", "line-width", 0.8 + 1.6 * weight);
-      map.setPaintProperty("hotspot-circle", "circle-radius", 5 + 4 * weight);
-      map.setPaintProperty("slope-fill", "fill-opacity", 0.08 + 0.22 * weight);
-      map.setPaintProperty("slope-line", "line-width", 1 + weight);
-    };
-    if (map.getLayer("sewer-fill")) apply();
-    else map.once("idle", apply);
-  }, [strength]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -484,7 +438,7 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
         }
       }
     };
-    if (map.getLayer("sewer-fill")) apply();
+    if (map.getLayer("proof-circle")) apply();
     else map.once("idle", apply);
   }, [visibility]);
 
@@ -504,6 +458,33 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
     if (map.getSource("highlight")) apply();
     else map.once("idle", apply);
   }, [selectedId, visibility]);
+
+  useEffect(() => {
+    applyModelDataRef.current = () => {
+      const map = mapRef.current;
+      if (!map) return;
+      const streetsSource = map.getSource("model-streets") as GeoJSONSource | undefined;
+      const hotspotsSource = map.getSource("model-hotspots") as GeoJSONSource | undefined;
+      if (!streetsSource || !hotspotsSource) return;
+      const streets = modelStreetsRef.current ?? { type: "FeatureCollection" as const, features: [] };
+      const hotspots = modelHotspotsRef.current ?? { type: "FeatureCollection" as const, features: [] };
+      streetsSource.setData(streets);
+      hotspotsSource.setData(hotspots);
+      if (!streets.features.length) return;
+      const bounds = new maplibregl.LngLatBounds();
+      for (const feature of streets.features) {
+        if (feature.geometry.type !== "LineString") continue;
+        for (const coord of feature.geometry.coordinates) bounds.extend(coord as [number, number]);
+      }
+      if (bounds.isEmpty()) return;
+      const padding = pad();
+      padding.top = Math.max(padding.top ?? 0, 96);
+      padding.bottom = Math.max(padding.bottom ?? 0, 240);
+      if (window.innerWidth >= 860) padding.right = Math.max(padding.right ?? 0, 380);
+      map.fitBounds(bounds, { padding, maxZoom: 17, duration: 700 });
+    };
+    applyModelDataRef.current();
+  }, [modelStreets, modelHotspots]);
 
   useEffect(() => {
     if (!selectedId || focusNonce === 0) return;
