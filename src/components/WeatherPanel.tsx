@@ -157,6 +157,7 @@ function isPulse(value: unknown): value is Pulse {
   );
 }
 
+const shortDayOf = (date: string) => new Date(`${date}T12:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
 const madridDate = (iso: string) => new Date(iso).toLocaleDateString("en-CA", { timeZone: "Europe/Madrid" });
 
 // Sum of shown hours; hidden hours (under min_count) make it a lower bound.
@@ -192,8 +193,15 @@ function RainPulse({ day }: { day: string }) {
   const ofDay = pulse.hours.filter((entry) => madridDate(entry.hour) === day);
   const hours = ofDay.length > 0 ? ofDay : pulse.hours.slice(-24);
   const rainDay = daySum(ofDay.map((entry) => entry.rain));
-  const floodDay = daySum(ofDay.map((entry) => entry.flood ?? 0));
-  const says = (sum: { total: number; partial: boolean }) => (sum.partial ? `at least ${sum.total}` : `${sum.total}`);
+  const floodDay = daySum(ofDay.map((entry) => (entry.flood === undefined ? 0 : entry.flood)));
+  // Hidden hours hold 1 to 4 posts each, so a day with only hidden hours had "a few", not 0.
+  const says = (sum: { total: number; partial: boolean }) =>
+    sum.partial ? (sum.total === 0 ? "a few" : `at least ${sum.total}`) : `${sum.total}`;
+  const byDay = new Map<string, PulseCount[]>();
+  for (const entry of pulse.hours) byDay.set(madridDate(entry.hour), [...(byDay.get(madridDate(entry.hour)) ?? []), entry.rain]);
+  const weekLine = [...byDay]
+    .map(([d, values]) => `${shortDayOf(d)} ${says(daySum(values))}`)
+    .join(", ");
   const peak = Math.max(1, ...hours.map((entry) => entry.rain ?? 0));
   const hidden = hours.filter((entry) => entry.rain === null).length;
   const cellLabel = (entry: { hour: string; rain: PulseCount }) => {
@@ -204,6 +212,7 @@ function RainPulse({ day }: { day: string }) {
   return (
     <section className="pulse">
       <h3>Rain chatter on Bluesky</h3>
+      {pulse.replay ? <p className="geometry-note">Rain posts per day in the replay: {weekLine}.</p> : null}
       {ofDay.length > 0 ? (
         <p>
           <strong>{pulse.replay ? "Replay" : "This day"}:</strong> {says(rainDay)} posts mentioning rain and{" "}
@@ -278,7 +287,9 @@ function Attention({ day }: { day: string }) {
     const others = [...byDay].filter(([k]) => k !== day).map(([, v]) => v).sort((a, b) => a - b);
     const median = others.length ? others[Math.floor(others.length / 2)] : 0;
     const ratio = median > 0 ? ` (${(value / median).toFixed(1)}x a normal day)` : "";
-    return [{ s, text: `${value.toLocaleString("en-GB")}${ratio}` }];
+    const [peakDay, peakValue] = [...byDay].sort((a, b) => b[1] - a[1])[0];
+    const peak = peakDay === day ? "" : `; peak ${shortDayOf(peakDay)}, ${peakValue.toLocaleString("en-GB")}`;
+    return [{ s, text: `${value.toLocaleString("en-GB")}${ratio}${peak}` }];
   });
   if (lines.length === 0) return null;
 
