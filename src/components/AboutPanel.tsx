@@ -45,7 +45,7 @@ export function AboutPanel({ sources, onClose }: Props) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Distrito de Gràcia, Ajuntament de Barcelona
+                {t("Gràcia district, Ajuntament de Barcelona")}
               </a>
             </p>
           </section>

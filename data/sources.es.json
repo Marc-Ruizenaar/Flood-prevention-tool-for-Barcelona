@@ -1,0 +1,22 @@
+{
+  "proof-oct2026": {
+    "label": "Impactos observados, octubre de 2026",
+    "note": "Solo observaciones. No se mezclan con las capas del atlas."
+  },
+  "relief": {
+    "label": "Altura del terreno, ICGC",
+    "note": "La altura de cada ficha es el modelo del terreno lidar del AMB de 2022, leído en el lugar marcado. Las curvas del mapa se trazan a partir del modelo de terreno de 5 m del ICGC, más grueso. El desnivel es la caída hasta el terreno más bajo a 250 m. No es una profundidad de inundación."
+  },
+  "rainfall-observed": {
+    "label": "Lluvia, solo mención observada",
+    "note": "Citada en Acerca de como una observación del 3 de octubre de 2026. No es una capa ni una previsión."
+  },
+  "weather-days": {
+    "label": "Lluvia diaria, XEMA de Meteocat",
+    "note": "Lluvia acumulada diaria en Barcelona – el Raval, Observatori Fabra y Zona Universitària. El mapa usa la más alta de las tres. El archivo se publica con unos dos días de retraso."
+  },
+  "terrain-pooling": {
+    "label": "Dónde el terreno acumula agua",
+    "note": "Diagnóstico del terreno a partir del modelo de 5 m del ICGC, leído como teselas terrain-RGB en zoom 12 y agregado a celdas de unos 143 m. Solo profundidad de hondonada (priority-flood) y pendiente. Sin lluvia, sin sumideros, no es una simulación."
+  }
+}

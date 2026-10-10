@@ -60,7 +60,13 @@ export function useFloodData(): LoadState & { ready: boolean } {
           for (const [id, fields] of Object.entries(overlay)) if (zones[id]) Object.assign(zones[id], fields);
         }
         const [sourcesResult, reliefResult, ...layers] = await Promise.allSettled([
-          loadJson<Record<string, SourceEntry>>("/data/sources.json"),
+          loadJson<Record<string, SourceEntry>>("/data/sources.json").then(async (sources) => {
+            // Same overlay pattern as zones: data/sources.<lang>.json may replace label and note; English stays the fallback.
+            if (lang === "en") return sources;
+            const overlay = await loadJson<Record<string, Partial<SourceEntry>>>(`/data/sources.${lang}.json`).catch(() => ({}));
+            for (const [id, fields] of Object.entries(overlay)) if (sources[id]) Object.assign(sources[id], fields);
+            return sources;
+          }),
           loadJson<ReliefFile>("/data/relief.json"),
           ...GEOJSON_FILES.map((file) =>
             loadJson<FeatureCollection>(`/data/geojson/${file}.geojson`),

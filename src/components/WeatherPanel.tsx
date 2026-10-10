@@ -1,4 +1,4 @@
-import { t } from "../lib/i18n";
+import { locale, t } from "../lib/i18n";
 import { useEffect, useState } from "react";
 import { formatMm, peakOf, RAIN_SOURCE_URL, type Gauge } from "../lib/rain";
 import { formatDay, shortDay, type DayWeather } from "../lib/weather";
@@ -81,21 +81,20 @@ export function WeatherPanel({
                     <span className="day-summary">{entry.summary}</span>
                   </button>
                   <ul className="day-meta">
-                    {gauge ? (
-                      <li key="xema">
-                        <a href={RAIN_SOURCE_URL} target="_blank" rel="noopener noreferrer">
-                          {t("Meteocat XEMA daily rainfall")}
-                        </a>
-                      </li>
-                    ) : null}
-                    {entry.sources.map((source) => (
+                    {uniqueBy(
+                      [
+                        ...(gauge ? [{ label: t("Meteocat XEMA daily rainfall"), url: RAIN_SOURCE_URL }] : []),
+                        ...entry.sources,
+                      ],
+                      (source) => source.url,
+                    ).map((source) => (
                       <li key={source.url}>
                         <a href={source.url} target="_blank" rel="noopener noreferrer">
                           {source.label}
                         </a>
                       </li>
                     ))}
-                    {reports.map((id) => (
+                    {uniqueBy(reports, (id) => id).map((id) => (
                       <li key={id}>
                         <button type="button" className="day-report" onClick={() => onOpenReport(id)}>
                           {zones[id].name}
@@ -113,6 +112,12 @@ export function WeatherPanel({
   );
 }
 
+// Keeps the first item per key, so a source or report listed twice renders once.
+function uniqueBy<T>(items: T[], key: (item: T) => string): T[] {
+  const seen = new Set<string>();
+  return items.filter((item) => (seen.has(key(item)) ? false : (seen.add(key(item)), true)));
+}
+
 type PulseCount = number | null;
 
 type Pulse = {
@@ -128,7 +133,7 @@ type Pulse = {
 
 const PULSE_LEVELS: Record<Pulse["level"], string> = { quiet: "Quiet", normal: "Normal", high: "High" };
 
-const pulseTime = new Intl.DateTimeFormat("en-GB", {
+const pulseTime = new Intl.DateTimeFormat(locale, {
   timeZone: "Europe/Madrid",
   day: "numeric",
   month: "short",
@@ -136,7 +141,7 @@ const pulseTime = new Intl.DateTimeFormat("en-GB", {
   minute: "2-digit",
 });
 
-const pulseHour = new Intl.DateTimeFormat("en-GB", {
+const pulseHour = new Intl.DateTimeFormat(locale, {
   timeZone: "Europe/Madrid",
   hour: "2-digit",
   minute: "2-digit",
@@ -155,7 +160,7 @@ function isPulse(value: unknown): value is Pulse {
   );
 }
 
-const shortDayOf = (date: string) => new Date(`${date}T12:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
+const shortDayOf = (date: string) => new Date(`${date}T12:00:00Z`).toLocaleDateString(locale, { day: "numeric", month: "short", timeZone: "UTC" });
 const madridDate = (iso: string) => new Date(iso).toLocaleDateString("en-CA", { timeZone: "Europe/Madrid" });
 
 // Sum of shown hours; hidden hours (under min_count) make it a lower bound.
@@ -183,9 +188,8 @@ function RainPulse({ day }: { day: string }) {
 
   const min = pulse.min_count ?? 5;
   const rain = pulse.last3h.rain;
-  const atLeast = pulse.capped.includes("rain") ? " (at least)" : "";
-  const count = typeof rain === "number" ? `${rain}${atLeast}` : `fewer than ${min}`;
-  const noun = rain === 1 ? "post" : "posts";
+  const atLeast = pulse.capped.includes("rain") ? t(" (at least)") : "";
+  const count = typeof rain === "number" ? `${rain}${atLeast}` : t("fewer than {min}", { min });
   const generated = new Date(pulse.generated_at);
   // A file that covers the selected day (a replay) shows that day; otherwise the latest hours.
   const ofDay = pulse.hours.filter((entry) => madridDate(entry.hour) === day);
@@ -194,7 +198,7 @@ function RainPulse({ day }: { day: string }) {
   const floodDay = daySum(ofDay.map((entry) => (entry.flood === undefined ? 0 : entry.flood)));
   // Hidden hours hold 1 to 4 posts each, so a day with only hidden hours had "a few", not 0.
   const says = (sum: { total: number; partial: boolean }) =>
-    sum.partial ? (sum.total === 0 ? "a few" : `at least ${sum.total}`) : `${sum.total}`;
+    sum.partial ? (sum.total === 0 ? t("a few") : t("at least {n}", { n: sum.total })) : `${sum.total}`;
   const byDay = new Map<string, PulseCount[]>();
   for (const entry of pulse.hours) byDay.set(madridDate(entry.hour), [...(byDay.get(madridDate(entry.hour)) ?? []), entry.rain]);
   const weekLine = [...byDay]
@@ -204,31 +208,42 @@ function RainPulse({ day }: { day: string }) {
   const hidden = hours.filter((entry) => entry.rain === null).length;
   const cellLabel = (entry: { hour: string; rain: PulseCount }) => {
     const at = pulseHour.format(new Date(entry.hour));
-    return entry.rain === null ? `${at}: under ${min}` : `${at}: ${entry.rain}`;
+    return entry.rain === null ? t("{at}: under {min}", { at, min }) : `${at}: ${entry.rain}`;
   };
 
   return (
     <section className="pulse">
       <h3>{t("Rain chatter on Bluesky")}</h3>
-      {pulse.replay ? <p className="geometry-note">Rain posts per day in the replay: {weekLine}.</p> : null}
+      {pulse.replay ? (
+        <p className="geometry-note">{t("Rain posts per day in the replay: {days}.", { days: weekLine })}</p>
+      ) : null}
       {ofDay.length > 0 ? (
         <p>
-          <strong>{pulse.replay ? "Replay" : "This day"}:</strong> {says(rainDay)} posts mentioning rain and{" "}
-          {says(floodDay)} mentioning flooding in Barcelona, over {ofDay.length} hours.
+          <strong>{pulse.replay ? t("Replay") : t("This day")}:</strong>{" "}
+          {t("{rain} posts mentioning rain and {flood} mentioning flooding in Barcelona, over {hours} hours.", {
+            rain: says(rainDay),
+            flood: says(floodDay),
+            hours: ofDay.length,
+          })}
         </p>
       ) : (
         <p>
-          <strong>{PULSE_LEVELS[pulse.level]}:</strong> {count} {noun} mentioning rain in Barcelona in the last
-          3 hours.
+          <strong>{t(PULSE_LEVELS[pulse.level])}:</strong>{" "}
+          {rain === 1
+            ? t("{count} post mentioning rain in Barcelona in the last 3 hours.", { count })
+            : t("{count} posts mentioning rain in Barcelona in the last 3 hours.", { count })}
         </p>
       )}
       {hours.length > 0 ? (
         <div
           className="pulse-bars"
           role="img"
-          aria-label={`Rain posts per hour, last ${hours.length} hours. Highest ${peak}${atLeast}. ${hidden} ${
-            hidden === 1 ? "hour" : "hours"
-          } under ${min}, not shown.`}
+          aria-label={t("Rain posts per hour, last {hours} hours. Highest {peak}. {hidden} hours under {min}, not shown.", {
+            hours: hours.length,
+            peak: `${peak}${atLeast}`,
+            hidden,
+            min,
+          })}
         >
           {hours.map((entry) => (
             <span
@@ -244,9 +259,9 @@ function RainPulse({ day }: { day: string }) {
         </div>
       ) : null}
       <p className="geometry-note">
-        Citywide only. Counts, never posts or people. It says when, not where.
-        {Number.isNaN(generated.getTime()) ? "" : ` Updated ${pulseTime.format(generated)}.`}
-        {hours.length > 0 ? ` Bars: one per hour, hatched means under ${min}.` : ""}{" "}
+        {t("Citywide only. Counts, never posts or people. It says when, not where.")}
+        {Number.isNaN(generated.getTime()) ? "" : t(" Updated {time}.", { time: pulseTime.format(generated) })}
+        {hours.length > 0 ? t(" Bars: one per hour, hatched means under {min}.", { min }) : ""}{" "}
         <a href="/data-notice.html">{t("How this is counted")}</a>
       </p>
     </section>
@@ -284,10 +299,11 @@ function Attention({ day }: { day: string }) {
     if (value === undefined) return [];
     const others = [...byDay].filter(([k]) => k !== day).map(([, v]) => v).sort((a, b) => a - b);
     const median = others.length ? others[Math.floor(others.length / 2)] : 0;
-    const ratio = median > 0 ? ` (${(value / median).toFixed(1)}x a normal day)` : "";
+    const ratio = median > 0 ? t(" ({ratio}x a normal day)", { ratio: (value / median).toFixed(1) }) : "";
     const [peakDay, peakValue] = [...byDay].sort((a, b) => b[1] - a[1])[0];
-    const peak = peakDay === day ? "" : `; peak ${shortDayOf(peakDay)}, ${peakValue.toLocaleString("en-GB")}`;
-    return [{ s, text: `${value.toLocaleString("en-GB")}${ratio}${peak}` }];
+    const peak =
+      peakDay === day ? "" : t("; peak {day}, {value}", { day: shortDayOf(peakDay), value: peakValue.toLocaleString(locale) });
+    return [{ s, text: `${value.toLocaleString(locale)}${ratio}${peak}` }];
   });
   if (lines.length === 0) return null;
 
@@ -297,9 +313,9 @@ function Attention({ day }: { day: string }) {
       <ul className="day-meta">
         {lines.map(({ s, text }) => (
           <li key={s.id}>
-            {s.label}: {text}.{" "}
+            {t(s.label)}: {text}.{" "}
             <a href={s.source_url} target="_blank" rel="noreferrer">
-              {s.source}
+              {t(s.source)}
             </a>
           </li>
         ))}
