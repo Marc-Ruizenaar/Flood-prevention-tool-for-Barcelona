@@ -73,13 +73,14 @@ function zoneIdOf(feature: { properties?: Record<string, unknown> | null }): str
   return null;
 }
 
+// Mirrors the layout in styles.css: phone = top card + peeking sheet, desktop = 380px left rail.
 function pad(): maplibregl.PaddingOptions {
   const wide = window.innerWidth >= 960;
   return {
-    top: wide ? 96 : 128,
-    bottom: wide ? 56 : 248,
-    left: wide ? 332 : 28,
-    right: wide ? 48 : 28,
+    top: wide ? 32 : 120,
+    bottom: wide ? 32 : 200,
+    left: wide ? 428 : 24,
+    right: wide ? 80 : 24,
   };
 }
 
@@ -161,6 +162,8 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
         center: coordinates,
         zoom: Math.max(map.getZoom(), 15.2),
         duration: 650,
+        // On a phone, drop the point lower so its popup opens in the clear space above it.
+        offset: window.innerWidth < 960 ? [0, 110] : [0, 0],
       });
       if (!cellId) return;
       const feature = modelHotspotsRef.current?.features.find(
@@ -358,7 +361,7 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
         activeRoot?.unmount();
         activeRoot = createRoot(node);
         activeRoot.render(<HotspotCard properties={feature.properties as HotspotProps} />);
-        activePopup = new maplibregl.Popup({ maxWidth: "340px", className: "model-popup" })
+        activePopup = new maplibregl.Popup({ maxWidth: "min(340px, calc(100vw - 80px))", className: "model-popup" })
           .setLngLat([lon, lat])
           .setDOMContent(node)
           .addTo(map);
@@ -477,11 +480,7 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
         for (const coord of feature.geometry.coordinates) bounds.extend(coord as [number, number]);
       }
       if (bounds.isEmpty()) return;
-      const padding = pad();
-      padding.top = Math.max(padding.top ?? 0, 96);
-      padding.bottom = Math.max(padding.bottom ?? 0, 240);
-      if (window.innerWidth >= 860) padding.right = Math.max(padding.right ?? 0, 380);
-      map.fitBounds(bounds, { padding, maxZoom: 17, duration: 700 });
+      map.fitBounds(bounds, { padding: pad(), maxZoom: 17, duration: 700 });
     };
     applyModelDataRef.current();
   }, [modelStreets, modelHotspots]);
