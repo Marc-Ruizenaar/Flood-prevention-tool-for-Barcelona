@@ -17,7 +17,8 @@
     "signals": "node scripts/signals.mjs",
     "signals:build": "node scripts/signals-build.mjs",
     "signals:check": "node --test scripts/signals.test.mjs",
-    "pulse": "node scripts/pulse.mjs"
+    "pulse": "node scripts/pulse.mjs",
+    "attention": "node scripts/attention.mjs"
   },
   "dependencies": {
     "@fontsource/fraunces": "^5.2.9",

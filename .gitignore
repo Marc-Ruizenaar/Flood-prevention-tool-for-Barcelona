@@ -17,3 +17,6 @@ signals/*.tmp
 signals/pending.local.jsonl
 signals/counts.json
 data/pulse.json
+
+# written by scripts/attention.mjs: public daily counts, rebuilt with npm run attention
+data/attention.json

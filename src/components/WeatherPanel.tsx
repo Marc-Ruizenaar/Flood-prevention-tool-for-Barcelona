@@ -90,6 +90,7 @@ export function WeatherPanel({
             </section>
           ) : null}
           <RainPulse day={day} />
+          <Attention day={day} />
           <ol className="day-list">
             {days.map((entry) => {
               const reports = entry.reportIds.filter((id) => zones[id]);
@@ -286,6 +287,60 @@ function RainPulse({ day }: { day: string }) {
         {hours.length > 0 ? ` Bars: one per hour, hatched means under ${min}.` : ""}{" "}
         <a href="/data-notice.html">How this is counted</a>
       </p>
+    </section>
+  );
+}
+
+type AttentionSeries = { id: string; label: string; unit: string; source: string; source_url: string; points: { t: string; v: number }[] };
+
+// Open, anonymous-by-design attention signals (scripts/attention.mjs): one line per series for the selected day.
+function Attention({ day }: { day: string }) {
+  const [series, setSeries] = useState<AttentionSeries[]>([]);
+
+  useEffect(() => {
+    let live = true;
+    fetch("/data/attention.json")
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data: { schema?: string; series?: AttentionSeries[] } | null) => {
+        if (live && data?.schema === "attention-v1" && Array.isArray(data.series)) setSeries(data.series);
+      })
+      .catch(() => undefined);
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  // Totals only (ids without a colon); per-article series stay in the file for anyone checking the sum.
+  const lines = series.filter((s) => !s.id.includes(":")).flatMap((s) => {
+    // Hourly points are summed per local day so every series compares days.
+    const byDay = new Map<string, number>();
+    for (const p of s.points) {
+      const key = p.t.length > 10 ? madridDate(p.t) : p.t;
+      byDay.set(key, (byDay.get(key) ?? 0) + p.v);
+    }
+    const value = byDay.get(day);
+    if (value === undefined) return [];
+    const others = [...byDay].filter(([k]) => k !== day).map(([, v]) => v).sort((a, b) => a - b);
+    const median = others.length ? others[Math.floor(others.length / 2)] : 0;
+    const ratio = median > 0 ? ` (${(value / median).toFixed(1)}x a normal day)` : "";
+    return [{ s, text: `${value.toLocaleString("en-GB")}${ratio}` }];
+  });
+  if (lines.length === 0) return null;
+
+  return (
+    <section className="pulse">
+      <h3>Public attention</h3>
+      <ul className="day-meta">
+        {lines.map(({ s, text }) => (
+          <li key={s.id}>
+            {s.label}: {text}.{" "}
+            <a href={s.source_url} target="_blank" rel="noreferrer">
+              {s.source}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p className="geometry-note">Counts of page views and uploads. No person is counted.</p>
     </section>
   );
 }
