@@ -321,7 +321,7 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
         type: "symbol",
         source,
         minzoom,
-        filter,
+        ...(filter ? { filter } : {}),
         layout: {
           "text-field": ["get", "name"],
           "text-font": ["Noto Sans Regular"],
