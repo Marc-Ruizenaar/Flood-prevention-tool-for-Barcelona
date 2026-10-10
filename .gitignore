@@ -31,3 +31,6 @@ backend/.venv/
 *.egg-info/
 backend/outputs/
 *.tsbuildinfo
+
+# Local Netlify folder
+.netlify

@@ -1,0 +1,9 @@
+# Node version comes from .nvmrc. prebuild (signals-build, copy-data) runs as part of npm run build.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Pins the reports' 7-day publish window to the demo, so a later rebuild keeps the same dots
+# (see signals/README.md). Remove it to let reports age out on their own.
+[build.environment]
+  SIGNALS_NOW = "2026-10-10T16:00Z"
