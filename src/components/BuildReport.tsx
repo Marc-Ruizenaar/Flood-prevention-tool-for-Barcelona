@@ -66,8 +66,8 @@ export function BuildReport() {
       .then((data) => {
         if (!cancelled) setReport(data);
       })
-      .catch((reason: unknown) => {
-        if (!cancelled) setError(reason instanceof Error ? reason.message : "Could not load bcn_30m.");
+      .catch(() => {
+        if (!cancelled) setError("No build report on this machine. The backend writes it to backend/outputs/.");
       });
     return () => {
       cancelled = true;

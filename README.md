@@ -1,8 +1,8 @@
 # Next rain — Barcelona
 
-A phone map of **published** flood geography for Barcelona: sewer stress on a T10 storm, buried streams and tanks, and Collserola-facing slopes. October 2026 is a proof layer you turn on, not the opening screen.
+A phone map of the 2–3 October 2026 storm in Barcelona. A 30 m street simulation shows where water collected in the centre and ranks where to act first. Reported impacts from the press and the city show what happened outside the simulated area, and published atlas cards explain the ground under each place.
 
-It does not forecast rainfall, depth, or damage. Every tappable card has a source link.
+It does not forecast the next storm. Simulated numbers are labelled as simulated, and every fact card has a source link.
 
 ## Run
 
@@ -29,14 +29,22 @@ npm run qa:urls
 
 Canonical data lives in `data/`. The npm scripts copy it to `public/data` so the static build serves the same paths.
 
+A fresh checkout builds without the backend. Two things fill in only when you generate them locally:
+
+- `npm run pulse` and `npm run attention` add the Bluesky and Wikipedia blocks to the Weather panel (needs network).
+- The build report under "How the model ran" needs the backend to write `backend/outputs/inputs/bcn_30m.report.json`. Without it the panel says so and the rest of the app is unaffected.
+
 ## Demo, about 60 seconds
 
-1. Open the map. **Next rain — sewers** is on. Pan to Diagonal or Poblenou and tap. The card names the mechanism, one action, and the atlas source.
-2. Turn on **Slopes & torrents**. Go to Torre Baró. The sewer hotspots do not explain it.
-3. Turn on **Reported impacts**. Sant Andreu and Gràcia sit on places the atlas already marked. Torre Baró was hit with no sewer hotspot.
-4. Close on one line: support these zones before the next storm, using data the city already publishes.
+On a phone, production build.
 
-**Blind spot** hides the sewers and flies to Torre Baró with slopes and proof on. Share a card with `?zone=sewer-diagonal` (or any id).
+1. Open the map. Saturday 3 October, 190.8 mm at el Raval. The coloured streets inside the dashed **Simulated area** are the model's water depth for that day.
+2. Tap **See list**. "Where to act first" ranks spots from the simulation. Tap #1, La Rambla: the sheet drops and the popup says why water collects there.
+3. Back in the sheet, tap **Show them** on "4 of 6 reported places fall outside the simulated area". The map zooms out to the city: Torre Baró and Sant Genís up in the hills and Sant Andreu to the northeast, all far from the box.
+4. Tap the Torre Baró dot. The card is an observed impact with its source, and the ground reading shows why slope water hits there.
+5. Close on one line: most of the places that got hit sit outside anything modelled. Run the model where the reports are, before the next storm.
+
+The round rain button opens the storm week (station totals, Bluesky chatter, Wikipedia attention). Share any card with `?zone=<id>`, for example `?zone=proof-torre-baro-2026-10`.
 
 ## Offline
 
