@@ -46,7 +46,7 @@ button, a { font: inherit; }
 
 /* Phone first: map full-bleed, one top card, round map buttons, one peeking sheet.
    At 960px the card and sheet stack into a left rail. pad() in MapCanvas mirrors these sizes. */
-:root { --peek: 200px; }
+:root { --peek: 220px; }
 
 .rail { display: contents; }
 
@@ -125,6 +125,13 @@ h1 {
   font-size: 13px;
   font-weight: 600;
   color: var(--vermilion);
+}
+
+.purpose {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--ink-soft);
 }
 
 .close, .related-btn, .layer-toggle, .round, .panel-handle {
@@ -249,16 +256,20 @@ h1 {
 
 .panel-hint { font-size: 13px; font-weight: 600; color: var(--vermilion); }
 
+/* The demo's main finding: a tinted callout, not a footnote. */
 .panel-claim {
   flex: none;
-  width: 100%;
-  padding: 0 16px 8px;
+  width: calc(100% - 32px);
+  margin: 0 16px 8px;
+  padding: 8px 10px;
   border: 0;
-  background: transparent;
+  border-left: 3px solid var(--vermilion);
+  border-radius: 8px;
+  background: rgba(194, 65, 12, 0.08);
   text-align: left;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.35;
-  color: var(--ink-soft);
+  color: var(--ink);
   cursor: pointer;
 }
 

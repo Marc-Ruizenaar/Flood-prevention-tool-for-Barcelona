@@ -114,7 +114,7 @@ function pad(): maplibregl.PaddingOptions {
   const wide = window.innerWidth >= 960;
   return {
     top: wide ? 32 : 120,
-    bottom: wide ? 32 : 236,
+    bottom: wide ? 32 : 256,
     left: wide ? 428 : 24,
     right: wide ? 80 : 24,
   };

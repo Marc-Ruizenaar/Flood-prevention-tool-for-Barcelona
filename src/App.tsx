@@ -247,6 +247,7 @@ export function App() {
               <p className="kicker">Next rain · Barcelona</p>
               <h1>{formatDay(day)}</h1>
               <p className="rain-now">{rainCaption(gauges[day], rainLive)}</p>
+              <p className="purpose">Where water collected, and where to act before the next storm.</p>
             </div>
             <div className="when" role="group" aria-label="Which day">
               {APP_DAYS.map((date) => (
@@ -292,7 +293,7 @@ export function App() {
               <strong>
                 {blindSpot.outside} of {blindSpot.total}
               </strong>{" "}
-              reported places fall outside the simulated area. <span>Show them</span>
+              places that reported flooding are outside the simulated area. <span>Show them</span>
             </button>
           ) : null}
 
