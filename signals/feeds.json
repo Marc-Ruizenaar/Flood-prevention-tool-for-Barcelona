@@ -1,0 +1,12 @@
+{
+  "note": "Extra source feeds on top of the built-in Ajuntament press API and Betevé RSS. Apify is a transport: it reads the last successful run of an Apify task (or a dataset) that someone set up, and needs APIFY_TOKEN in the environment. Every item still has to pass allowlist.json (individuals' accounts are blocked in code), the health filter and a reviewer. maxConfidence caps what an item from this feed can carry: low, medium or high. fields maps the dataset's keys (dotted paths allowed) to url, title, text and date; omitted keys use common defaults.",
+  "apify": [
+    {
+      "name": "apify-example",
+      "enabled": false,
+      "task": "your-username~your-task-name",
+      "maxConfidence": "low",
+      "fields": { "url": "url", "title": "title", "text": "description", "date": "date" }
+    }
+  ]
+}

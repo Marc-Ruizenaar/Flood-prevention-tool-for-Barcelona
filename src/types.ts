@@ -61,8 +61,8 @@ export const GROUPS: LayerGroup[] = [
   },
   {
     id: "proof",
-    label: "Oct 2026 proof",
-    legend: "What was reported after the rains.",
+    label: "Reported impacts",
+    legend: "Oct 2026 proof and reviewed official and press reports. Off until you compare.",
     swatches: [{ color: "#1c1917", shape: "dot" }],
   },
 ];
@@ -92,6 +92,7 @@ const FILE_GROUP: Record<string, GroupId> = {
   "retention-tanks": "streams",
   "slopes-torrents": "slopes",
   "proof-oct2026": "proof",
+  signals: "proof",
 };
 
 export function groupForZone(zone: ZoneCard): GroupId {

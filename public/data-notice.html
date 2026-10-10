@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the rain chatter count works</title>
+<style>
+  :root { color-scheme: light dark; --ink: #142028; --paper: #f6f1e7; --muted: #5c5348; --line: rgba(20, 32, 40, 0.12); }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink: #ece6da; --paper: #142028; --muted: #b8ae9f; --line: rgba(236, 230, 218, 0.16); }
+  }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.55 "Avenir Next", "Segoe UI", system-ui, sans-serif; }
+  main { max-width: 640px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font-size: 24px; line-height: 1.2; margin: 0 0 8px; }
+  h2 { font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 28px 0 4px; }
+  p, ul { margin: 0 0 10px; }
+  ul { padding-left: 20px; }
+  a { color: inherit; }
+  .lang { border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 20px; color: var(--muted); font-size: 14px; }
+  .lang p { margin: 0 0 4px; }
+  .meta { color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="lang">
+    <p lang="ca">Català: aquest avís és en anglès, a continuació. Explica com comptem publicacions públiques de Bluesky sobre la pluja.</p>
+    <p lang="es">Castellano: este aviso está en inglés, a continuación. Explica cómo contamos publicaciones públicas de Bluesky sobre la lluvia.</p>
+  </div>
+
+  <h1>How the rain chatter count works</h1>
+
+  <h2>What</h2>
+  <p>The app counts public Bluesky posts that match a few rain and flood words together with "Barcelona". It counts them per hour, for the whole city.</p>
+
+  <h2>What is kept</h2>
+  <p>Hourly counts per word group, and nothing else. Counts under 5 are not shown.</p>
+  <p>Not kept: post text, links, authors, handles, images or location.</p>
+  <p>Posts that mention injury or health are dropped before counting.</p>
+
+  <h2>Why</h2>
+  <p>To notice heavy rain sooner, and to check official and press flood reports more often. It is not used to locate floods or to judge anyone.</p>
+
+  <h2>Legal basis</h2>
+  <p>We claim legitimate interest (GDPR Art. 6(1)(f)). A balancing test is being drafted. This is a hackathon prototype and has not been reviewed by a lawyer.</p>
+
+  <h2>Opting out</h2>
+  <p>Your account can be excluded from the count. To do that, the team stores only a one-way hash of your account id.</p>
+  <p>Contact details will be added before this runs outside the hackathon.</p>
+
+  <h2>Source</h2>
+  <p>Bluesky public search API.</p>
+  <p class="meta">Date: 10 October 2026.</p>
+</main>
+</body>
+</html>

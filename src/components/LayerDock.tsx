@@ -4,7 +4,7 @@ import { GROUPS } from "../types";
 
 const GROUP_FILES: Partial<Record<GroupId, string[]>> = {
   relief: ["relief"],
-  proof: ["proof-oct2026"],
+  proof: ["proof-oct2026", "signals"],
 };
 
 type Props = {

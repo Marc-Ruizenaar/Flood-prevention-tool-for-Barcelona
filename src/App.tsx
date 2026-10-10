@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import type { FeatureCollection } from "geojson";
 import { AboutPanel } from "./components/AboutPanel";
 import { FloodLegend } from "./components/FloodLegend";
 import { FactSheet } from "./components/FactSheet";
@@ -9,7 +10,7 @@ import { CityFocusPanel } from "./components/CityFocusPanel";
 import { ModelPanel } from "./components/ModelPanel";
 import type { CityAction } from "./lib/cityActions";
 import { WeatherPanel } from "./components/WeatherPanel";
-import { useFloodData } from "./lib/data";
+import { reportShowsOn, useFloodData } from "./lib/data";
 import {
   dayKey,
   isAbortError,
@@ -42,6 +43,12 @@ import {
   shortDay,
 } from "./lib/weather";
 import { DEFAULT_VISIBILITY, groupForZone, type GroupId } from "./types";
+
+// A reviewed signal dot dated this day counts as a report, so it unlocks the layer like a proof dot.
+function hasReportsOn(date: string, signals?: FeatureCollection): boolean {
+  if (dayByDate(date).reportIds.length > 0) return true;
+  return (signals?.features ?? []).some((f) => Array.isArray(f.properties?.days) && reportShowsOn(f.properties?.days, date));
+}
 
 export function App() {
   const data = useFloodData();
@@ -169,7 +176,7 @@ export function App() {
   }
 
   function visibilityFor(date: string, current: Record<GroupId, boolean>) {
-    return layersForRain(dayByDate(date).reportIds.length > 0, current);
+    return layersForRain(hasReportsOn(date, data.collections.signals), current);
   }
 
   function applyDay(date: string) {
@@ -301,10 +308,14 @@ export function App() {
         failed={data.failed}
         dayLabel={formatDay(day)}
         mm={peakOf(gauges[day])?.mm ?? null}
-        hasReports={dayByDate(day).reportIds.length > 0}
+        hasReports={hasReportsOn(day, data.collections.signals)}
         proofLegend={dayByDate(day).proofLegend}
         onToggle={(id: GroupId) => {
-          if (id === "proof" && !dayByDate(day).reportIds.length && atlasLocked(peakOf(gauges[day])?.mm ?? null)) {
+          if (
+            id === "proof" &&
+            !hasReportsOn(day, data.collections.signals) &&
+            atlasLocked(peakOf(gauges[day])?.mm ?? null)
+          ) {
             return;
           }
           setVisibility((current) => ({ ...current, [id]: !current[id] }));

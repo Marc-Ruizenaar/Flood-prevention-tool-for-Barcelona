@@ -1,0 +1,17 @@
+{
+  "note": "Editable knobs. Weights are unsupported defaults (ASSUMPTION): in the 2024-2025 backtest no priority term beat population. Priority orders refreshes and review; it is not a risk score.",
+  "weights": { "rain": 0.45, "exposure": 0.25, "signals": 0.2, "staleness": 0.1 },
+  "knobs": { "rainCapMm3h": 30, "slots3h": 6, "maxSlotAgeMin": 90, "signalCap6h": 3, "staleCapH": 6, "calmEveryNthTick": 4 },
+  "stations": ["X4", "X8", "D5"],
+  "windowDays": 7,
+  "firstRunLookbackDays": 7,
+  "pendingExpiryHours": 72,
+  "keepApprovedDaysAfterWindow": 30,
+  "keepStubDays": 30,
+  "autoAcceptConfidence": 0.95,
+  "minPublishConfidence": "low",
+  "minPublishConfidenceNote": "low, medium or high. Approved rows below this level stay in reviewed.jsonl but are not drawn. Raise to medium to hide items that reached us through a third-party scraper.",
+  "sendTextToJev": false,
+  "sendTextToJevNote": "Leave false until the lawyer answers on sending Ajuntament and Betevé titles and excerpts to TypeSafe. True also needs TYPESAFE_API_KEY.",
+  "userAgent": "next-rain-hackathon/0.1"
+}

@@ -25,5 +25,5 @@ export function floodColorExpression(): ExpressionSpecification {
     ["get", "flood_class"],
     ...FLOOD_CLASSES.flatMap((floodClass) => [floodClass, FLOOD_COLORS[floodClass]]),
     FLOOD_COLORS.dry,
-  ];
+  ] as unknown as ExpressionSpecification;
 }
