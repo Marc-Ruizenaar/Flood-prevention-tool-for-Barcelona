@@ -46,6 +46,14 @@ const dem = new mlcontour.DemSource({
 });
 dem.setupMaplibre(maplibregl);
 
+// Depth sets width, zoom scales it, so the city view stays readable instead of one red mass.
+// `extra` widens it for the dark casing drawn underneath.
+function streetWidth(extra = 0): maplibregl.ExpressionSpecification {
+  const depth = ["coalesce", ["to-number", ["get", "max_depth_m"]], 0];
+  const at = (shallow: number, deep: number) => ["interpolate", ["linear"], depth, 0, shallow + extra, 0.5, deep + extra];
+  return ["interpolate", ["linear"], ["zoom"], 12, at(0.75, 3), 15, at(2, 8), 17, at(4, 16)] as unknown as maplibregl.ExpressionSpecification;
+}
+
 // Square footprint around each simulated hotspot, so it can stand up as a column in 3D.
 function hotspotColumns(collection: HotspotsCollection | null): FeatureCollection {
   const d = 0.00016;
@@ -106,7 +114,7 @@ function pad(): maplibregl.PaddingOptions {
   const wide = window.innerWidth >= 960;
   return {
     top: wide ? 32 : 120,
-    bottom: wide ? 32 : 236,
+    bottom: wide ? 32 : 256,
     left: wide ? 428 : 24,
     right: wide ? 80 : 24,
   };
@@ -417,25 +425,22 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       });
       map.addSource("model-streets", { type: "geojson", data: empty });
       map.addSource("model-hotspots", { type: "geojson", data: empty });
+      const dry: maplibregl.ExpressionSpecification = ["==", ["get", "flood_class"], "dry"];
+      // A thin dark edge keeps light classes (yellow "low") visible on the pale basemap.
+      map.addLayer({
+        id: "model-streets-casing",
+        type: "line",
+        source: "model-streets",
+        paint: { "line-color": "#1c1917", "line-width": streetWidth(1.5), "line-opacity": ["case", dry, 0.1, 0.35] },
+      }, "buildings-3d");
       map.addLayer({
         id: "model-streets",
         type: "line",
         source: "model-streets",
         paint: {
           "line-color": floodColor,
-          // Depth sets width, zoom scales it, so the city view stays readable instead of one red mass.
-          "line-width": [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            12,
-            ["interpolate", ["linear"], ["coalesce", ["to-number", ["get", "max_depth_m"]], 0], 0, 0.75, 0.5, 3],
-            15,
-            ["interpolate", ["linear"], ["coalesce", ["to-number", ["get", "max_depth_m"]], 0], 0, 2, 0.5, 8],
-            17,
-            ["interpolate", ["linear"], ["coalesce", ["to-number", ["get", "max_depth_m"]], 0], 0, 4, 0.5, 16],
-          ],
-          "line-opacity": ["case", ["==", ["get", "flood_class"], "dry"], 0.3, 0.9],
+          "line-width": streetWidth(),
+          "line-opacity": ["case", dry, 0.3, 0.9],
         },
       }, "buildings-3d");
       map.addSource("model-hotspot-columns", { type: "geojson", data: empty });
@@ -480,6 +485,21 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
           "circle-stroke-width": 2,
           "circle-stroke-color": "#fff7ed",
         },
+      });
+      // The rank on the dot ties it to "Rank: #n" in the list and "Hotspot n" in the popup without relying on colour.
+      map.addLayer({
+        id: "model-hotspot-rank",
+        type: "symbol",
+        source: "model-hotspots",
+        minzoom: 13,
+        layout: {
+          "text-field": ["to-string", ["get", "rank"]],
+          "text-font": ["Noto Sans Bold"],
+          "text-size": 11,
+          "text-allow-overlap": true,
+          "text-ignore-placement": true,
+        },
+        paint: { "text-color": "#1c1917", "text-halo-color": "#fff7ed", "text-halo-width": 1.5 },
       });
 
       applyModelDataRef.current();

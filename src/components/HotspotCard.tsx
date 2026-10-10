@@ -1,4 +1,5 @@
 import { explainHotspotProblem } from "../lib/hotspotStory";
+import { FLOOD_LABELS } from "../lib/modelStyle";
 import { formatDepth, formatMinutes, formatQuantity, formatWhen, hasToken, type Explanation, type HotspotProps } from "../lib/sim";
 
 type BudgetKey =
@@ -42,7 +43,10 @@ export function HotspotCard({ properties }: { properties: HotspotProps }) {
 
   return (
     <article className="hotspot-card" data-testid="hotspot-popup">
-      <p className="kicker">Hotspot {properties.rank}</p>
+      <p className="kicker">
+        Hotspot {properties.rank}
+        {FLOOD_LABELS[properties.flood_class] ? ` · ${FLOOD_LABELS[properties.flood_class]}` : ""}
+      </p>
       <h2>{street}</h2>
 
       <section className="hotspot-story" aria-label="Why this is a problem">
