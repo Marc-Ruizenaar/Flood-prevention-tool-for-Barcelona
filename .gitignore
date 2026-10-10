@@ -12,3 +12,7 @@ dev-dist
 data/geojson/signals.geojson
 data/signals-cards.json
 signals/*.tmp
+
+# written by scripts/signals.mjs: unreviewed rows and run state stay on the reviewer's machine
+signals/pending.local.jsonl
+signals/counts.json

@@ -3,7 +3,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { cpSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { cadence, compose, isHealth, isRelevant, keywordMechanism, makeResolver, normUrl, parseRss, signalId } from "./signals-lib.mjs";
@@ -70,14 +70,20 @@ test("RSS parsing keeps fields in memory, ids are stable", () => {
   assert.equal(signalId("press", "https://beteve.cat/x/"), signalId("manual", "https://beteve.cat/x/"), "web pages hash the URL");
 });
 
-// End to end: fixture inbox -> build -> qa, in a temp copy of the repo files qa reads.
+// End to end: fixture rows -> build -> qa, in a temp copy of the repo files qa reads.
+// Reviewer decisions go to the committed signals/reviewed.jsonl, everything else to the gitignored pending file.
+const jsonl = (rows) => rows.map((r) => JSON.stringify(r)).join("\n") + (rows.length ? "\n" : "");
+const decided = (r) => ["approved", "rejected"].includes(r.review?.status);
 function sandbox(rows) {
   const dir = mkdtempSync(join(tmpdir(), "signals-check-"));
   for (const p of ["data", "signals", "scripts", "src/types.ts", "src/App.tsx"]) cpSync(p, join(dir, p), { recursive: true });
-  writeFileSync(join(dir, "signals/inbox.jsonl"), rows.map((r) => JSON.stringify(r)).join("\n") + "\n");
+  rmSync(join(dir, "signals/counts.json"), { force: true }); // a reviewer's local run state must not leak into the test
+  writeFileSync(join(dir, "signals/reviewed.jsonl"), jsonl(rows.filter(decided)));
+  writeFileSync(join(dir, "signals/pending.local.jsonl"), jsonl(rows.filter((r) => !decided(r))));
   return dir;
 }
 const run = (dir, script, ...args) => spawnSync(process.execPath, [script, ...args], { cwd: dir, encoding: "utf8", env: { ...process.env, SIGNALS_NOW: "2026-10-08T12:00:00Z" } });
+const lines = (dir, p) => { try { return readFileSync(join(dir, p), "utf8").split("\n").filter((l) => l.trim()).map((l) => JSON.parse(l)); } catch { return null; } };
 const row = (over) => ({
   signal_id: "0000000000000001", platform: "manual", source_kind: "press", source_url: "https://beteve.cat/fixture-written-for-the-test/",
   source_label: "Betevé", published_at: "2026-10-04T09:12Z", fetched_at: "2026-10-04T09:30Z", summary: "Fixture.",
@@ -118,14 +124,15 @@ test("build fails on a host off the allowlist, on stored post text and on a dupl
 test("approve refuses an expired stub; --add publishes it instead and the build stays green", () => {
   const url = "https://beteve.cat/fixture-written-for-the-test/";
   const dir = sandbox([{ signal_id: signalId("press", url), review: { status: "expired", by: null, at: "2026-10-07T10:00Z", reason: "not reviewed in time" } }]);
-  const before = readFileSync(join(dir, "signals/inbox.jsonl"), "utf8");
+  const before = readFileSync(join(dir, "signals/pending.local.jsonl"), "utf8");
   const ok = run(dir, "scripts/signals.mjs", "--approve", signalId("press", url), "--mechanism", "slope_runoff", "--barri", "Sant Genís dels Agudells", "--by", "R0");
   assert.equal(ok.status, 1);
   assert.match(ok.stderr, /--add/);
-  assert.equal(readFileSync(join(dir, "signals/inbox.jsonl"), "utf8"), before, "inbox untouched");
+  assert.equal(readFileSync(join(dir, "signals/pending.local.jsonl"), "utf8"), before, "pending file untouched");
   const added = run(dir, "scripts/signals.mjs", "--add", url, "--barri", "Sant Genís dels Agudells", "--mechanism", "slope_runoff", "--date", "2026-10-04T09:12Z", "--by", "R0");
   assert.equal(added.status, 0, added.stderr);
-  assert.equal(readFileSync(join(dir, "signals/inbox.jsonl"), "utf8").trim().split("\n").length, 1, "the stub is replaced, not duplicated");
+  assert.equal(lines(dir, "signals/reviewed.jsonl").length, 1, "the approved row is committed");
+  assert.equal(lines(dir, "signals/pending.local.jsonl").length, 0, "the stub is replaced, not duplicated");
   assert.equal(run(dir, "scripts/signals-build.mjs").status, 0);
   assert.equal(run(dir, "scripts/signals.mjs", "--add", `${url}?utm_source=x`, "--barri", "Sant Genís dels Agudells", "--mechanism", "slope_runoff", "--date", "2026-10-04T09:12Z", "--by", "R0").status, 1, "same page twice");
 });
@@ -134,4 +141,48 @@ test("qa passes with an empty inbox", () => {
   const dir = sandbox([]);
   execFileSync(process.execPath, ["scripts/signals-build.mjs"], { cwd: dir });
   assert.equal(run(dir, "scripts/qa.mjs").status, 0);
+});
+
+// Offline ingest: fetch is stubbed before signals.mjs loads. Fixture items are written for this test, never fetched.
+// Every URL the script asks for is logged, so a test can prove what would have left the machine.
+const FETCH_STUB = `import { appendFileSync } from "node:fs";
+globalThis.fetch = async (url) => {
+  url = String(url);
+  appendFileSync(process.env.FETCH_LOG, url + "\\n");
+  if (url.startsWith("https://ajuntament.barcelona.cat/premsa/wp-json/")) return Response.json([{ id: 1, date_gmt: "2026-10-08T08:00:00",
+    link: "https://ajuntament.barcelona.cat/premsa/fixture-written-for-the-test/",
+    title: { rendered: "Fixture: carrers inundats a Sant Andreu" }, excerpt: { rendered: "<p>Fixture text written for this test.</p>" } }], { headers: { "x-wp-totalpages": "1" } });
+  if (url.startsWith("https://beteve.cat/")) return new Response("<rss><channel></channel></rss>");
+  if (url.startsWith("https://api.typesafe.ai/")) return Response.json({ answers: { mechanism: { choice: "street_overflow", confidence: 0.5 } } });
+  return new Response("", { status: 404 }); // rain and warning feeds: offline, the script falls back
+};
+`;
+function ingest(dir, env = {}) {
+  writeFileSync(join(dir, "fetch-stub.mjs"), FETCH_STUB);
+  const log = join(dir, "fetch.log");
+  writeFileSync(log, "");
+  const res = spawnSync(process.execPath, ["--import", "./fetch-stub.mjs", "scripts/signals.mjs"], { cwd: dir, encoding: "utf8", env: { ...process.env, FETCH_LOG: log, ...env } });
+  assert.equal(res.status, 0, res.stderr);
+  return readFileSync(log, "utf8").split("\n").filter(Boolean);
+}
+
+test("storage split: unreviewed rows stay in a gitignored file, only decisions are committed", () => {
+  const dir = sandbox([]);
+  const inboxBefore = readFileSync(join(dir, "signals/inbox.jsonl"), "utf8");
+  ingest(dir);
+  const pending = lines(dir, "signals/pending.local.jsonl");
+  assert.equal(pending?.length, 1, "the fixture item is a pending row in the local file");
+  assert.equal(pending[0].review.status, "pending");
+  assert.ok(!JSON.stringify(pending[0]).includes("Fixture text"), "no title or excerpt text is stored");
+  assert.deepEqual(lines(dir, "signals/reviewed.jsonl"), [], "nothing unreviewed reaches the committed file");
+  assert.equal(readFileSync(join(dir, "signals/inbox.jsonl"), "utf8"), inboxBefore, "the retired inbox is not written");
+  const rej = run(dir, "scripts/signals.mjs", "--reject", pending[0].signal_id, "--reason", "Not about flooding.", "--by", "R0");
+  assert.equal(rej.status, 0, rej.stderr);
+  assert.deepEqual(lines(dir, "signals/pending.local.jsonl"), []);
+  const [stub] = lines(dir, "signals/reviewed.jsonl");
+  assert.deepEqual(Object.keys(stub).sort(), ["review", "signal_id"], "a rejection is committed without its link");
+  assert.equal(stub.review.reason, "Not about flooding.");
+  for (const p of ["signals/pending.local.jsonl", "signals/counts.json"])
+    assert.equal(spawnSync("git", ["check-ignore", "-q", p]).status, 0, `${p} is gitignored`);
+  assert.equal(spawnSync("git", ["check-ignore", "-q", "signals/reviewed.jsonl"]).status, 1, "reviewed.jsonl is committed");
 });

@@ -12,6 +12,7 @@
 // Live feeds (legal: official and press only): Ajuntament press WP REST API, Betevé RSS.
 // Priority inputs: Meteocat XEMA (rain), MeteoAlarm ES181 and INUNCAT (cadence only).
 // Post text lives in memory for one run. Rows never hold text, titles, handles or media.
+// Unreviewed rows go to signals/pending.local.jsonl (gitignored); only reviewer decisions go to signals/reviewed.jsonl (committed).
 // Optional: TYPESAFE_API_KEY enables Jev Template A v2 (select only). Without it a keyword hint goes to the reviewer.
 import { readFileSync, renameSync, writeFileSync } from "node:fs";
 import {
@@ -33,12 +34,20 @@ const opt = (name) => { const i = args.indexOf(`--${name}`); return i >= 0 ? arg
 const has = (name) => args.includes(`--${name}`);
 
 // ---------- store ----------
-const INBOX = "signals/inbox.jsonl", COUNTS = "signals/counts.json";
-const loadInbox = () => readFileSync(INBOX, "utf8").split("\n").filter((l) => l.trim()).map((l) => JSON.parse(l));
+// PENDING (gitignored): unreviewed rows and expired stubs. REVIEWED (committed): approved rows and rejected stubs only.
+// signals/inbox.jsonl is retired: nothing reads or writes it.
+const PENDING = "signals/pending.local.jsonl", REVIEWED = "signals/reviewed.jsonl", COUNTS = "signals/counts.json";
+const loadJsonl = (p) => {
+  try { return readFileSync(p, "utf8").split("\n").filter((l) => l.trim()).map((l) => JSON.parse(l)); }
+  catch (e) { if (e.code === "ENOENT") return []; throw e; }
+};
+const loadInbox = () => [...loadJsonl(PENDING), ...loadJsonl(REVIEWED)];
 let counts;
 try { counts = read(COUNTS); } catch { counts = { watermarks: {}, sources: {}, last_signal_at: {} }; }
 function atomic(path, text) { writeFileSync(`${path}.tmp`, text); renameSync(`${path}.tmp`, path); }
-const saveInbox = (rows) => atomic(INBOX, rows.map((r) => JSON.stringify(r)).join("\n") + (rows.length ? "\n" : ""));
+const isDecision = (r) => r.review?.status === "approved" || r.review?.status === "rejected";
+const writeJsonl = (path, rows) => atomic(path, rows.map((r) => JSON.stringify(r)).join("\n") + (rows.length ? "\n" : ""));
+const saveInbox = (rows) => { writeJsonl(PENDING, rows.filter((r) => !isDecision(r))); writeJsonl(REVIEWED, rows.filter(isDecision)); };
 const saveCounts = () => atomic(COUNTS, JSON.stringify(counts, null, 1) + "\n");
 
 function barriCode(value) {
@@ -268,7 +277,7 @@ async function list() {
 
 function updateRow(id, fn) {
   const rows = loadInbox();
-  const row = rows.find((r) => r.signal_id === id) ?? fail(`no inbox row ${id}`);
+  const row = rows.find((r) => r.signal_id === id) ?? fail(`no pending or reviewed row ${id}`);
   fn(row);
   saveInbox(rows);
   console.log(JSON.stringify(row));
@@ -306,7 +315,7 @@ function add(url) {
   const id = signalId("manual", url);
   // A stub (expired or rejected, no link left) is replaced: --add is how an expired item gets published.
   const dup = rows.find((r) => r.source_url && normUrl(r.source_url) === normUrl(url));
-  if (dup) fail(`already in the inbox as ${dup.signal_id} (${dup.review.status})${dup.review.status === "pending" ? ": use --approve" : ""}`);
+  if (dup) fail(`already stored as ${dup.signal_id} (${dup.review.status})${dup.review.status === "pending" ? ": use --approve" : ""}`);
   const row = {
     signal_id: id, platform: "manual", source_kind: entry.kind, source_url: url, source_label: entry.label,
     published_at: iso(date), fetched_at: iso(now),
@@ -330,7 +339,11 @@ if (opt("approve")) approve(opt("approve"));
 else if (opt("reject")) {
   const by = reviewer();
   const reason = opt("reason") ?? fail("--reason is required");
-  updateRow(opt("reject"), (row) => { row.review = { ...row.review, status: "rejected", by, at: iso(now), reason }; });
+  // Committed as a stub (id and review only): no link, because URL slugs can name people.
+  updateRow(opt("reject"), (row) => {
+    for (const k of Object.keys(row)) if (k !== "signal_id" && k !== "review") delete row[k];
+    row.review = { ...row.review, status: "rejected", by, at: iso(now), reason };
+  });
 } else if (opt("add")) add(opt("add"));
 else if (has("list")) await list();
 else if (has("priority")) await priority();
