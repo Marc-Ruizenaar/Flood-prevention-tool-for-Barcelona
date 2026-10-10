@@ -2,9 +2,10 @@
  * Smoke test for deriveCityActions on bundled urgell 2026-10-03 data.
  * Run: npm run test:city-actions
  */
-import { readFileSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { spawnSync } from "node:child_process";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -13,7 +14,7 @@ const hotspotsPath = join(root, "data/flood/urgell-2026-10-02_03/hotspots/2026-1
 
 const runner = `
 import { readFileSync } from "node:fs";
-import { deriveCityActions } from "./src/lib/cityActions.ts";
+import { deriveCityActions } from ${JSON.stringify(pathToFileURL(join(root, "src/lib/cityActions.ts")).href)};
 const streets = JSON.parse(readFileSync(${JSON.stringify(streetsPath)}, "utf8"));
 const hotspots = JSON.parse(readFileSync(${JSON.stringify(hotspotsPath)}, "utf8"));
 const actions = deriveCityActions(streets, hotspots, 10);
@@ -34,10 +35,19 @@ for (const [i, action] of actions.entries()) {
 }
 `;
 
-const result = spawnSync("npx", ["--yes", "tsx", "-e", runner], {
+// The runner goes in a temp file, not `-e`: on Windows npx is a .cmd shim that needs a shell,
+// and a shell would mangle a multi-line -e argument.
+const dir = mkdtempSync(join(tmpdir(), "city-actions-"));
+const file = join(dir, "run.mts");
+writeFileSync(file, runner);
+const win = process.platform === "win32";
+const result = spawnSync("npx", ["--yes", "tsx", win ? `"${file}"` : file], {
   cwd: root,
   encoding: "utf8",
   stdio: "inherit",
+  shell: win,
 });
+rmSync(dir, { recursive: true, force: true });
+if (result.error) console.error(`FAIL: could not start tsx (${result.error.message})`);
 
 process.exit(result.status ?? 1);

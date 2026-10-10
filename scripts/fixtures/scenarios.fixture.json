@@ -1,0 +1,429 @@
+{
+  "version": 2,
+  "kind": "ml_scenario",
+  "caveat": "Prototype trained on 2 simulated storms. Shows susceptibility under a what-if scenario, not a prediction of real weather.",
+  "generated_at": "2026-10-10T09:00:00Z",
+  "model": {
+    "type": "HistGradientBoostingClassifier",
+    "features": ["elev_m", "slope", "upstream_area", "sewer_stress"],
+    "feature_importance": [
+      {
+        "feature": "elev_m",
+        "importance": 0.41
+      },
+      {
+        "feature": "upstream_area",
+        "importance": 0.33
+      }
+    ],
+    "label_definition": "simulated max depth >= 0.15 m (moderate or worse)",
+    "trained_storms": 2,
+    "trained_rain_mm": [48, 120],
+    "secondary_labels": "not obtained: no MAPRI access in this fixture",
+    "excluded_rows": "edge-ponded segments on 2026-10-03 (n=12)",
+    "calibration": {
+      "method": "isotonic",
+      "fitted_on": "spatial out-of-fold predictions",
+      "n": 500,
+      "note": "Percentages mean: share of comparable streets that flooded in the physics simulation for that rain. Not yet checked against real floods.",
+      "bands": {
+        "medium": 0.3,
+        "high": 0.6
+      }
+    }
+  },
+  "metrics": {
+    "reliability": {
+      "bins": [
+        {
+          "from": 0,
+          "to": 0.2,
+          "predicted_mean": 0.04,
+          "observed_rate": 0.05,
+          "n": 300
+        },
+        {
+          "from": 0.2,
+          "to": 0.4,
+          "predicted_mean": 0.31,
+          "observed_rate": 0.3,
+          "n": 80
+        },
+        {
+          "from": 0.4,
+          "to": 0.6,
+          "predicted_mean": 0.5,
+          "observed_rate": 0.48,
+          "n": 60
+        },
+        {
+          "from": 0.6,
+          "to": 0.8,
+          "predicted_mean": 0.7,
+          "observed_rate": 0.65,
+          "n": 40
+        },
+        {
+          "from": 0.8,
+          "to": 1,
+          "predicted_mean": null,
+          "observed_rate": null,
+          "n": 0
+        }
+      ],
+      "bins_raw": [
+        {
+          "from": 0,
+          "to": 0.2,
+          "predicted_mean": 0.05,
+          "observed_rate": 0.08,
+          "n": 310
+        },
+        {
+          "from": 0.2,
+          "to": 0.4,
+          "predicted_mean": 0.3,
+          "observed_rate": 0.4,
+          "n": 70
+        },
+        {
+          "from": 0.4,
+          "to": 0.6,
+          "predicted_mean": 0.5,
+          "observed_rate": 0.55,
+          "n": 50
+        },
+        {
+          "from": 0.6,
+          "to": 0.8,
+          "predicted_mean": 0.7,
+          "observed_rate": 0.5,
+          "n": 50
+        },
+        {
+          "from": 0.8,
+          "to": 1,
+          "predicted_mean": 0.9,
+          "observed_rate": 0.5,
+          "n": 20
+        }
+      ],
+      "brier_before": 0.06,
+      "brier_after": 0.05,
+      "at_70": {
+        "from": 0.6,
+        "to": 0.8,
+        "predicted_mean": 0.7,
+        "observed_rate": 0.65,
+        "n": 40
+      },
+      "sentence": "When the model says 70%, the simulation flooded 65% of the time (40 streets)."
+    },
+    "calibrated_confusion": {
+      "n": 500,
+      "threshold": 0.5,
+      "confusion": {
+        "tp": 36,
+        "fp": 14,
+        "fn": 22,
+        "tn": 428
+      },
+      "accuracy": 0.928,
+      "baseline_accuracy": 0.884,
+      "balanced_accuracy": 0.795,
+      "precision": 0.72,
+      "recall": 0.621,
+      "f1": 0.667,
+      "roc_auc": 0.89,
+      "brier": 0.05,
+      "calibration": []
+    },
+    "spatial_cv": {
+      "n": 500,
+      "threshold": 0.5,
+      "confusion": {
+        "tp": 40,
+        "fp": 12,
+        "fn": 18,
+        "tn": 430
+      },
+      "accuracy": 0.94,
+      "baseline_accuracy": 0.884,
+      "balanced_accuracy": 0.831,
+      "precision": 0.769,
+      "recall": 0.69,
+      "f1": 0.727,
+      "roc_auc": 0.89,
+      "brier": 0.05,
+      "calibration": [
+        {
+          "bin": [0, 0.5],
+          "mean_predicted": 0.12,
+          "observed_rate": 0.08,
+          "n": 442
+        },
+        {
+          "bin": [0.5, 1],
+          "mean_predicted": 0.74,
+          "observed_rate": 0.77,
+          "n": 58
+        }
+      ]
+    },
+    "leave_one_storm_out": {
+      "train_2026_10_02_test_2026_10_03": {
+        "n": 250,
+        "threshold": 0.5,
+        "confusion": {
+          "tp": 14,
+          "fp": 9,
+          "fn": 15,
+          "tn": 212
+        },
+        "accuracy": 0.904,
+        "baseline_accuracy": 0.884,
+        "balanced_accuracy": 0.72,
+        "precision": 0.609,
+        "recall": 0.483,
+        "f1": 0.538,
+        "roc_auc": 0.81,
+        "brier": 0.08,
+        "calibration": []
+      },
+      "train_2026_10_03_test_2026_10_02": {
+        "n": 250,
+        "threshold": 0.5,
+        "confusion": {
+          "tp": 20,
+          "fp": 8,
+          "fn": 9,
+          "tn": 213
+        },
+        "accuracy": 0.932,
+        "baseline_accuracy": 0.884,
+        "balanced_accuracy": 0.8,
+        "precision": 0.714,
+        "recall": 0.69,
+        "f1": 0.702,
+        "roc_auc": null,
+        "brier": 0.06,
+        "calibration": []
+      }
+    },
+    "real_world": [
+      {
+        "n_points": 24,
+        "radius_m": 150,
+        "hits": 8,
+        "hit_rate": 0.333,
+        "random_rate": 0.12,
+        "lift": 2.78
+      },
+      {
+        "n_points": 24,
+        "radius_m": 300,
+        "hits": 14,
+        "hit_rate": 0.583,
+        "random_rate": 0.31,
+        "lift": 1.88
+      }
+    ]
+  },
+  "trust": {
+    "level": "low",
+    "rules": [
+      {
+        "rule": "At least 5 storms in training",
+        "passed": false,
+        "value": 2
+      },
+      {
+        "rule": "Beats the always-dry baseline by 10 points",
+        "passed": false,
+        "value": 0.056
+      }
+    ],
+    "reasons": ["It has only seen 2 simulated storms, so it cannot yet tell storms apart.", "Its accuracy is only a few points above simply guessing that every street stays dry."]
+  },
+  "improvements": ["Train on more storms, real and simulated, across different seasons.", "Add sewer capacity data for every street.", "Compare against more reported flood places."],
+  "segments": [
+    {
+      "id": "s0",
+      "name": "C. Urgell",
+      "lon": 2.155,
+      "lat": 41.388,
+      "elev_m": 8
+    },
+    {
+      "id": "s1",
+      "name": "C. Villarroel",
+      "lon": 2.156,
+      "lat": 41.3885,
+      "elev_m": 12
+    },
+    {
+      "id": "s2",
+      "name": "C. Rosselló",
+      "lon": 2.157,
+      "lat": 41.39,
+      "elev_m": 20
+    },
+    {
+      "id": "s3",
+      "name": "C. Muntaner",
+      "lon": 2.15,
+      "lat": 41.39,
+      "elev_m": 25
+    },
+    {
+      "id": "s4",
+      "name": "Av. Diagonal",
+      "lon": 2.17,
+      "lat": 41.395,
+      "elev_m": 30
+    },
+    {
+      "id": "s5",
+      "name": "C. Aribau",
+      "lon": 2.1548,
+      "lat": 41.3878,
+      "elev_m": 9
+    },
+    {
+      "id": "s6",
+      "name": "C. Balmes",
+      "lon": 2.1555,
+      "lat": 41.3895,
+      "elev_m": 15
+    },
+    {
+      "id": "s7",
+      "name": "C. Londres",
+      "lon": 2.1545,
+      "lat": 41.386,
+      "elev_m": 5
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "r50_d20",
+      "rain_mm": 50,
+      "drainage_mm_h": 20,
+      "extrapolated": false,
+      "risk_score": 4.2,
+      "share_flooded": 0.375,
+      "p": [0.82, 0.31, 0.22, 0.08, 0.02, 0.91, 0.12, 0.88],
+      "top": [
+        {
+          "rank": 1,
+          "segment_index": 5,
+          "name": "C. Aribau",
+          "lon": 2.1548,
+          "lat": 41.3878,
+          "p": 0.91
+        },
+        {
+          "rank": 2,
+          "segment_index": 7,
+          "name": "C. Londres",
+          "lon": 2.1545,
+          "lat": 41.386,
+          "p": 0.88
+        },
+        {
+          "rank": 3,
+          "segment_index": 0,
+          "name": "C. Urgell",
+          "lon": 2.155,
+          "lat": 41.388,
+          "p": 0.82
+        },
+        {
+          "rank": 4,
+          "segment_index": 1,
+          "name": "C. Villarroel",
+          "lon": 2.156,
+          "lat": 41.3885,
+          "p": 0.31
+        },
+        {
+          "rank": 5,
+          "segment_index": 2,
+          "name": "C. Rosselló",
+          "lon": 2.157,
+          "lat": 41.39,
+          "p": 0.22
+        },
+        {
+          "rank": 6,
+          "segment_index": 6,
+          "name": "C. Balmes",
+          "lon": 2.1555,
+          "lat": 41.3895,
+          "p": 0.12
+        }
+      ],
+      "expected_share": 0.42
+    },
+    {
+      "id": "r143_d10",
+      "rain_mm": 143,
+      "drainage_mm_h": 10,
+      "extrapolated": true,
+      "risk_score": 8.1,
+      "share_flooded": 0.625,
+      "p": [0.97, 0.6, 0.5, 0.2, 0.1, 0.98, 0.35, 0.99],
+      "top": [
+        {
+          "rank": 1,
+          "segment_index": 7,
+          "name": "C. Londres",
+          "lon": 2.1545,
+          "lat": 41.386,
+          "p": 0.99
+        },
+        {
+          "rank": 2,
+          "segment_index": 5,
+          "name": "C. Aribau",
+          "lon": 2.1548,
+          "lat": 41.3878,
+          "p": 0.98
+        },
+        {
+          "rank": 3,
+          "segment_index": 0,
+          "name": "C. Urgell",
+          "lon": 2.155,
+          "lat": 41.388,
+          "p": 0.97
+        },
+        {
+          "rank": 4,
+          "segment_index": 1,
+          "name": "C. Villarroel",
+          "lon": 2.156,
+          "lat": 41.3885,
+          "p": 0.6
+        },
+        {
+          "rank": 5,
+          "segment_index": 2,
+          "name": "C. Rosselló",
+          "lon": 2.157,
+          "lat": 41.39,
+          "p": 0.5
+        },
+        {
+          "rank": 6,
+          "segment_index": 6,
+          "name": "C. Balmes",
+          "lon": 2.1555,
+          "lat": 41.3895,
+          "p": 0.35
+        }
+      ],
+      "expected_share": 0.5863
+    }
+  ]
+}
