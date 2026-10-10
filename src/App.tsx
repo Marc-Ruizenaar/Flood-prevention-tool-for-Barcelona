@@ -10,7 +10,7 @@ import { CityFocusPanel } from "./components/CityFocusPanel";
 import { ModelPanel } from "./components/ModelPanel";
 import type { CityAction } from "./lib/cityActions";
 import { WeatherPanel } from "./components/WeatherPanel";
-import { useFloodData } from "./lib/data";
+import { reportShowsOn, useFloodData } from "./lib/data";
 import {
   dayKey,
   isAbortError,
@@ -47,7 +47,7 @@ import { DEFAULT_VISIBILITY, groupForZone, type GroupId } from "./types";
 // A reviewed signal dot dated this day counts as a report, so it unlocks the layer like a proof dot.
 function hasReportsOn(date: string, signals?: FeatureCollection): boolean {
   if (dayByDate(date).reportIds.length > 0) return true;
-  return (signals?.features ?? []).some((f) => (f.properties?.days as string[] | undefined)?.includes(date));
+  return (signals?.features ?? []).some((f) => Array.isArray(f.properties?.days) && reportShowsOn(f.properties?.days, date));
 }
 
 export function App() {

@@ -3,7 +3,7 @@ import { createRoot, type Root } from "react-dom/client";
 import maplibregl, { type GeoJSONSource, type Map } from "maplibre-gl";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import { HotspotCard } from "./HotspotCard";
-import type { GeoFile } from "../lib/data";
+import { reportShowsOn, type GeoFile } from "../lib/data";
 import { floodColorExpression } from "../lib/modelStyle";
 import type { HotspotProps, HotspotsCollection, StreetsCollection } from "../lib/sim";
 import { dayByDate } from "../lib/weather";
@@ -59,13 +59,10 @@ function proofForDay(
   };
 }
 
-// Reviewed reports (scripts/signals-build.mjs), one dot per barri. A feature with a `days`
-// list shows only on those days; one without it (current build output) shows on every day.
+// Reviewed reports (scripts/signals-build.mjs), one dot per barri, shown on their publication
+// days and the day before (reportShowsOn). A feature without `days` shows on every day.
 function signalsForDay(collection: FeatureCollection | undefined, day: string): Feature[] {
-  return (collection?.features ?? []).filter((feature) => {
-    const days = feature.properties?.days;
-    return !Array.isArray(days) || days.includes(day);
-  });
+  return (collection?.features ?? []).filter((feature) => reportShowsOn(feature.properties?.days, day));
 }
 
 function zoneIdOf(feature: { properties?: Record<string, unknown> | null }): string | null {

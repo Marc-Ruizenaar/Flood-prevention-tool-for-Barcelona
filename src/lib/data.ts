@@ -6,6 +6,14 @@ export const GEOJSON_FILES = ["proof-oct2026", "signals"] as const;
 
 export type GeoFile = (typeof GEOJSON_FILES)[number];
 
+// A reviewed report shows on its publication day and on the day before: reports come out after the rain
+// (the 3 Oct deluge was reported on 4 Oct). The card still states the publication date.
+export function reportShowsOn(days: unknown, day: string): boolean {
+  if (!Array.isArray(days)) return true;
+  const next = new Date(Date.parse(`${day}T12:00:00Z`) + 86400e3).toISOString().slice(0, 10);
+  return days.includes(day) || days.includes(next);
+}
+
 export type SourceEntry = {
   label: string;
   primary: string;
