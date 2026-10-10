@@ -14,7 +14,7 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>Next rain — Barcelona</title>
     <script>
-      // Same language pick as src/lib/i18n.ts, set before paint so the first frame already has the right lang.
+      // Same language pick as src/lib/i18n.ts, run before paint so the static start card below shows one language.
       try {
         var l = localStorage.getItem("lang") || navigator.language;
         document.documentElement.lang = /^ca/i.test(l) ? "ca" : /^es/i.test(l) ? "es" : "en";
@@ -22,7 +22,33 @@
     </script>
   </head>
   <body style="background:#142028">
-    <div id="root"></div>
+    <div id="root">
+      <!-- Static copy of the start card (App.tsx renders the live one over it): the headline paints with the CSS, before any script. -->
+      <div class="intro" aria-busy="true">
+        <div class="intro-card">
+          <span class="mark" aria-hidden="true"></span>
+          <div>
+            <p class="kicker"><span lang="en">Next rain · Barcelona</span><span lang="ca">Propera pluja · Barcelona</span><span lang="es">Próxima lluvia · Barcelona</span></p>
+            <h1 lang="en">Where water collected, and where to act before the next storm.</h1>
+            <h1 lang="ca">On es va acumular l’aigua, i on actuar abans de la propera tempesta.</h1>
+            <h1 lang="es">Dónde se acumuló el agua, y dónde actuar antes de la próxima tormenta.</h1>
+            <button type="button" class="intro-start" disabled><span lang="en">Start</span><span lang="ca">Comença</span><span lang="es">Empezar</span></button>
+            <p class="intro-status" role="status">
+              <span lang="en">Loading the map…</span><span lang="ca">Carregant el mapa…</span><span lang="es">Cargando el mapa…</span>
+              <span class="intro-bar is-busy" aria-hidden="true"></span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // The start card stays invisible until the preloaded fonts are in, so the headline never swaps mid-paint.
+      // Runs after the stylesheet (so the @font-face rules exist); 400 ms cap so a stalled font cannot hold the card.
+      Promise.race([
+        Promise.all(["500 1em Fraunces", "400 1em Outfit", "600 1em Outfit"].map(function (f) { return document.fonts.load(f); })),
+        new Promise(function (r) { setTimeout(r, 400); }),
+      ]).then(function () { document.documentElement.classList.add("fonts-ready"); });
+    </script>
     <script>
       // Offline support (see README). When a newer worker takes over, reload once so the open tab
       // shows the new build instead of the shell it loaded with. The flag stops a reload loop.

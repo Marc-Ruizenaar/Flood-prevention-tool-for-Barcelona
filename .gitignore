@@ -37,8 +37,3 @@ backend/outputs/
 
 # agent session checkouts, each with its own .git
 .claude/worktrees/
-
-# ML prototype: trained model and DEM tile cache stay local, the JSON outputs in data/ml are committed
-ml/.venv/
-ml/out/
-ml/notebooks/.ipynb_checkpoints/
