@@ -208,3 +208,16 @@ test("place guard: a barri the title and excerpt never named needs --place-on-pa
   assert.equal(rows[citywide.signal_id].place.checked_on_page_by, "R0", "the override records who read the page");
   assert.equal(rows[named.signal_id].place.checked_on_page_by, undefined);
 });
+
+test("Jev gate: with sendTextToJev false, a key alone sends nothing", () => {
+  const key = { TYPESAFE_API_KEY: "test-key-not-real" };
+  const off = ingest(sandbox([]), key);
+  assert.ok(off.some((u) => u.startsWith("https://ajuntament.barcelona.cat/")), "the stub saw the feed read");
+  assert.deepEqual(off.filter((u) => u.includes("typesafe")), [], "no call to TypeSafe");
+  assert.equal(JSON.parse(readFileSync("signals/config.json", "utf8")).sendTextToJev, false, "committed default is off");
+  const dir = sandbox([]);
+  const cfg = JSON.parse(readFileSync(join(dir, "signals/config.json"), "utf8"));
+  writeFileSync(join(dir, "signals/config.json"), JSON.stringify({ ...cfg, sendTextToJev: true }));
+  assert.ok(ingest(dir, key).some((u) => u.includes("typesafe")), "flag and key together do call it (the stub answers)");
+  assert.deepEqual(ingest(sandbox([]), { TYPESAFE_API_KEY: "" }).filter((u) => u.includes("typesafe")), []);
+});

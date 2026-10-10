@@ -13,7 +13,8 @@
 // Priority inputs: Meteocat XEMA (rain), MeteoAlarm ES181 and INUNCAT (cadence only).
 // Post text lives in memory for one run. Rows never hold text, titles, handles or media.
 // Unreviewed rows go to signals/pending.local.jsonl (gitignored); only reviewer decisions go to signals/reviewed.jsonl (committed).
-// Optional: TYPESAFE_API_KEY enables Jev Template A v2 (select only). Without it a keyword hint goes to the reviewer.
+// Optional: Jev Template A v2 (select only) needs "sendTextToJev": true in signals/config.json AND TYPESAFE_API_KEY.
+// Otherwise nothing is sent and a keyword hint goes to the reviewer.
 import { readFileSync, renameSync, writeFileSync } from "node:fs";
 import {
   PUBLISH_MECH, allowEntry, cadence, compose, isHealth, isRelevant, keywordMechanism, makeResolver, norm, normUrl, parseRss, rainFromRows, sha, signalId, stripHtml,
@@ -133,7 +134,8 @@ function signalTerms(rows) {
 }
 
 // ---------- Jev (optional, select only) ----------
-let jevOff = !process.env.TYPESAFE_API_KEY;
+// Legal gate: titles and excerpts leave the machine only when config opts in AND a key is set. Default: off.
+let jevOff = !(config.sendTextToJev === true && process.env.TYPESAFE_API_KEY);
 const MECH_CRITERIA = {
   street_overflow: "Rainwater or sewer water overflowing onto a street, avenue, square, park or road",
   basement_flooding: "Water entering basements, garages or ground-floor rooms of a building",

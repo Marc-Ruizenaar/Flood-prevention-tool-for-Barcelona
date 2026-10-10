@@ -27,10 +27,10 @@ Every allowlisted item is written, including ones the keyword regex misses (`"re
 | `allowlist.json` | hosts that may become a row or a card source; sets `source_kind` | yes |
 | `gazetteer.json` | 73 barris (Open Data BCN, CC BY 4.0), Atlas aliases, districts, repo zone ids; rebuild with `scripts/signals-gazetteer.mjs` | yes |
 | `barri_priors.json` | per-barri exposure, population, nearest XEMA station, from the backtest | yes |
-| `config.json` | priority weights, window, expiry, User-Agent | yes |
+| `config.json` | priority weights, window, expiry, User-Agent, `sendTextToJev` | yes |
 
 `inbox.jsonl` is retired and left empty: nothing reads or writes it. Generated and gitignored: `data/geojson/signals.geojson`, `data/signals-cards.json`.
 
-Rules: only allowlisted organisations become rows; individuals' posts are never read in this slice (Reddit, Instagram, TikTok, X, Telegram and YouTube RSS are ruled out). Health or injury items are dropped before any write. Places come from the gazetteer, never a model. With `TYPESAFE_API_KEY` set, Jev may pick a mechanism or one of the gazetteer's candidate places; it never writes text, coordinates or priority. Priority orders review and refresh only; it is not a risk score.
+Rules: only allowlisted organisations become rows; individuals' posts are never read in this slice (Reddit, Instagram, TikTok, X, Telegram and YouTube RSS are ruled out). Health or injury items are dropped before any write. Places come from the gazetteer, never a model. Jev (TypeSafe) is off: it runs only when `"sendTextToJev": true` in `config.json` and `TYPESAFE_API_KEY` is set, because it sends Ajuntament and Betevé titles and excerpts to a third party and the legal question is still open. With it on, Jev may pick a mechanism or one of the gazetteer's candidate places; it never writes text, coordinates or priority. Priority orders review and refresh only; it is not a risk score.
 
 Twice an hour (optional): `7,37 * * * * cd <repo> && npm run signals -- --scheduled`. Calm weather reads the feeds every 4th tick.

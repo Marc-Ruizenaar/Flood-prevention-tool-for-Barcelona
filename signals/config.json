@@ -9,5 +9,7 @@
   "keepApprovedDaysAfterWindow": 30,
   "keepStubDays": 30,
   "autoAcceptConfidence": 0.95,
+  "sendTextToJev": false,
+  "sendTextToJevNote": "Leave false until the lawyer answers on sending Ajuntament and Betevé titles and excerpts to TypeSafe. True also needs TYPESAFE_API_KEY.",
   "userAgent": "next-rain-hackathon/0.1"
 }
