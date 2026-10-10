@@ -32,6 +32,20 @@ const CITY_BOUNDS: [[number, number], [number, number]] = [
   [2.22, 41.47],
 ];
 
+// Square footprint around each simulated hotspot, so it can stand up as a column in 3D.
+function hotspotColumns(collection: HotspotsCollection | null): FeatureCollection {
+  const d = 0.00016;
+  return {
+    type: "FeatureCollection",
+    features: (collection?.features ?? []).flatMap((feature) => {
+      if (feature.geometry.type !== "Point") return [];
+      const [x, y] = feature.geometry.coordinates;
+      const ring = [[x - d, y - d], [x + d, y - d], [x + d, y + d], [x - d, y + d], [x - d, y - d]];
+      return [{ ...feature, geometry: { type: "Polygon" as const, coordinates: [ring] } }];
+    }),
+  };
+}
+
 const LAYER_GROUPS: { group: GroupId; ids: string[] }[] = [
   { group: "relief", ids: ["relief-shade"] },
   { group: "proof", ids: ["proof-halo", "proof-circle", "proof-label"] },
@@ -181,6 +195,8 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       bounds: CITY_BOUNDS,
       fitBoundsOptions: { padding: pad() },
       attributionControl: { compact: true },
+      pitch: 45,
+      maxPitch: 60,
       dragRotate: false,
       pitchWithRotate: false,
     });
@@ -208,6 +224,33 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
           paint: { "raster-opacity": 0.72, "raster-fade-duration": 0 },
         });
       }
+      // Buildings go under the basemap labels, so street names stay readable.
+      const firstLabel = map.getStyle().layers.find((layer) => layer.type === "symbol")?.id;
+      // Buildings carry the texture in the dense grid. Height grows in from z13 so the city view stays flat.
+      map.addLayer(
+        {
+          id: "buildings-3d",
+          type: "fill-extrusion",
+          source: "openmaptiles",
+          "source-layer": "building",
+          minzoom: 13,
+          paint: {
+            "fill-extrusion-color": "#f4f1ea",
+            "fill-extrusion-height": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              13,
+              0,
+              14.5,
+              ["coalesce", ["get", "render_height"], 12],
+            ],
+            "fill-extrusion-base": ["coalesce", ["get", "render_min_height"], 0],
+            "fill-extrusion-opacity": 0.92,
+          },
+        },
+        firstLabel,
+      );
       const add = (id: string, data: FeatureCollection | undefined) => {
         map.addSource(id, { type: "geojson", data: data ?? empty });
         for (const feature of data?.features ?? []) {
@@ -341,6 +384,30 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
             ["interpolate", ["linear"], ["coalesce", ["to-number", ["get", "max_depth_m"]], 0], 0, 4, 0.5, 16],
           ],
           "line-opacity": ["case", ["==", ["get", "flood_class"], "dry"], 0.3, 0.9],
+        },
+      }, "buildings-3d");
+      map.addSource("model-hotspot-columns", { type: "geojson", data: empty });
+      map.addLayer({
+        id: "model-hotspot-column",
+        type: "fill-extrusion",
+        source: "model-hotspot-columns",
+        paint: {
+          "fill-extrusion-color": floodColor,
+          // A visual cue, not to scale: deeper peaks stand taller so they read from across the city.
+          "fill-extrusion-height": [
+            "interpolate",
+            ["linear"],
+            ["coalesce", ["to-number", ["get", "peak_depth_m"]], 0],
+            0,
+            20,
+            0.5,
+            120,
+            2,
+            260,
+            5,
+            400,
+          ],
+          "fill-extrusion-opacity": 0.9,
         },
       });
       map.addLayer({
@@ -494,6 +561,7 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       const hotspots = modelHotspotsRef.current ?? { type: "FeatureCollection" as const, features: [] };
       streetsSource.setData(streets);
       hotspotsSource.setData(hotspots);
+      (map.getSource("model-hotspot-columns") as GeoJSONSource | undefined)?.setData(hotspotColumns(hotspots));
       const extent = streetsExtent(streets);
       const [w, s, e, n] = extent ?? [0, 0, 0, 0];
       (map.getSource("model-area") as GeoJSONSource | undefined)?.setData({
