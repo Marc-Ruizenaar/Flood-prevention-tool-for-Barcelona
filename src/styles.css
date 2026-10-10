@@ -1064,3 +1064,9 @@ a { color: var(--vermilion); }
 .lang button { min-height: 32px; padding: 0 10px; font-size: 11px; letter-spacing: 0.08em; }
 .citizen-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .citizen-head .kicker { min-width: 0; }
+
+/* The resident's own position: blue dot with a white ring and a slow pulse, distinct from the dark pin for tapped places. */
+.you-marker { width: 18px; height: 18px; border-radius: 50%; background: #1d4ed8; border: 3px solid #fff; box-shadow: 0 0 0 2px #1d4ed8, 0 2px 6px rgba(0,0,0,0.4); position: relative; }
+.you-marker::after { content: ""; position: absolute; inset: -14px; border-radius: 50%; border: 2px solid #1d4ed8; opacity: 0; animation: you-pulse 2s ease-out infinite; }
+@keyframes you-pulse { 0% { transform: scale(0.4); opacity: 0.8; } 100% { transform: scale(1.2); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .you-marker::after { animation: none; opacity: 0.5; transform: none; } }

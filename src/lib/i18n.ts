@@ -42,6 +42,18 @@ export function t(en: string, vars?: Record<string, string | number>): string {
 
 const DICT: Record<"ca" | "es", Record<string, string>> = {
   ca: {
+    // Resident view: where to go
+    "If it floods: where to go": "Si s’inunda: on anar",
+    "Nowhere, if you can help it. Barcelona has no evacuation routes for street flooding: the plan is to stay inside, go to an upper floor, and keep out of basements, garages and underpasses. Leave only if 112 or Protecció Civil tell you to.": "Enlloc, si pots evitar-ho. Barcelona no té rutes d’evacuació per a inundacions de carrer: el pla és quedar-se a dins, pujar a una planta alta i no baixar a soterranis, garatges ni passos inferiors. Surt només si el 112 o Protecció Civil t’ho diuen.",
+    "Streets to keep away from near here:": "Carrers d’on allunyar-te a prop d’aquí:",
+    "Shut during the October storm, within {km} km:": "Tancat durant el temporal d’octubre, a menys de {km} km:",
+    "Emergencies (rescue, people trapped, fire, injuries)": "Emergències (rescat, persones atrapades, foc, ferits)",
+    "CUESB, city social emergencies, 24 h: lost your home, need shelter or help for a vulnerable person": "CUESB, urgències socials de la ciutat, 24 h: has perdut l’habitatge, necessites allotjament o ajuda per a una persona vulnerable",
+    "City information line: closures, facilities, what is open": "Telèfon d’informació de la ciutat: talls, equipaments, què està obert",
+    "Protecció Civil, flood self-protection advice": "Protecció Civil, consells d’autoprotecció per inundacions",
+    "Meteocat warnings": "Avisos del Meteocat",
+    "TMB service status": "Estat del servei de TMB",
+    "Servei Català de Trànsit, road closures": "Servei Català de Trànsit, talls de carreteres",
     // City actions
     "Assumed drain capacity: {rate}. Nobody measured it.": "Capacitat de drenatge suposada: {rate}. Ningú l’ha mesurat.",
     "Data completeness is a placeholder until the rainfall quality checks land.": "La completesa de les dades és provisional fins que arribin els controls de qualitat de la pluja.",
@@ -338,6 +350,18 @@ const DICT: Record<"ca" | "es", Record<string, string>> = {
     "Gràcia district, Ajuntament de Barcelona": "Districte de Gràcia, Ajuntament de Barcelona",
   },
   es: {
+    // Resident view: where to go
+    "If it floods: where to go": "Si se inunda: adónde ir",
+    "Nowhere, if you can help it. Barcelona has no evacuation routes for street flooding: the plan is to stay inside, go to an upper floor, and keep out of basements, garages and underpasses. Leave only if 112 or Protecció Civil tell you to.": "A ningún sitio, si puedes evitarlo. Barcelona no tiene rutas de evacuación para inundaciones de calle: el plan es quedarse dentro, subir a una planta alta y no bajar a sótanos, garajes ni pasos inferiores. Sal solo si el 112 o Protecció Civil te lo indican.",
+    "Streets to keep away from near here:": "Calles de las que alejarte cerca de aquí:",
+    "Shut during the October storm, within {km} km:": "Cerrado durante el temporal de octubre, a menos de {km} km:",
+    "Emergencies (rescue, people trapped, fire, injuries)": "Emergencias (rescate, personas atrapadas, fuego, heridos)",
+    "CUESB, city social emergencies, 24 h: lost your home, need shelter or help for a vulnerable person": "CUESB, urgencias sociales de la ciudad, 24 h: has perdido la vivienda, necesitas alojamiento o ayuda para una persona vulnerable",
+    "City information line: closures, facilities, what is open": "Teléfono de información de la ciudad: cortes, equipamientos, qué está abierto",
+    "Protecció Civil, flood self-protection advice": "Protecció Civil, consejos de autoprotección por inundaciones",
+    "Meteocat warnings": "Avisos del Meteocat",
+    "TMB service status": "Estado del servicio de TMB",
+    "Servei Català de Trànsit, road closures": "Servei Català de Trànsit, cortes de carreteras",
     // City actions
     "Assumed drain capacity: {rate}. Nobody measured it.": "Capacidad de drenaje supuesta: {rate}. Nadie la ha medido.",
     "Data completeness is a placeholder until the rainfall quality checks land.": "La completitud de los datos es provisional hasta que lleguen los controles de calidad de la lluvia.",
