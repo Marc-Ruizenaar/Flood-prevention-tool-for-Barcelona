@@ -30,6 +30,14 @@ export default defineConfig({
               expiration: { maxEntries: 800, maxAgeSeconds: 60 * 60 * 24 * 14 },
             },
           },
+          {
+            urlPattern: /^https:\/\/geoserveis\.icgc\.cat\/servei\/catalunya\/contextmaps-terreny-5m-rgb\/.*/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "terrain",
+              expiration: { maxEntries: 300, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            },
+          },
         ],
       },
     }),

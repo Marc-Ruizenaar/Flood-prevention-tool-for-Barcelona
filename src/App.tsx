@@ -392,7 +392,6 @@ export function App() {
         <MapCanvas
           ref={mapRef}
           collections={data.collections}
-          relief={data.relief ? { image: data.relief.image, bounds: data.relief.bounds } : null}
           visibility={visibility}
           selectedId={selectedId}
           day={day}

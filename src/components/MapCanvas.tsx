@@ -1,13 +1,14 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import maplibregl, { type GeoJSONSource, type Map } from "maplibre-gl";
+import mlcontour from "maplibre-contour";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import { HotspotCard } from "./HotspotCard";
 import { reportShowsOn, type GeoFile } from "../lib/data";
 import { floodColorExpression } from "../lib/modelStyle";
 import { streetsExtent, type HotspotProps, type HotspotsCollection, type StreetsCollection } from "../lib/sim";
 import { dayByDate } from "../lib/weather";
-import type { GroupId, ReliefFile } from "../types";
+import type { GroupId } from "../types";
 
 export type MapHandle = {
   focus: (id: string) => void;
@@ -17,7 +18,6 @@ export type MapHandle = {
 
 type Props = {
   collections: Partial<Record<GeoFile, FeatureCollection>>;
-  relief: Pick<ReliefFile, "image" | "bounds"> | null;
   visibility: Record<GroupId, boolean>;
   selectedId: string | null;
   day: string;
@@ -31,6 +31,16 @@ const CITY_BOUNDS: [[number, number], [number, number]] = [
   [2.09, 41.332],
   [2.22, 41.47],
 ];
+
+// Topographic contours, traced in a web worker from the ICGC 5 m terrain model (terrain-RGB tiles,
+// Catalonia only, z14 max). Same agency as the height on each card.
+const dem = new mlcontour.DemSource({
+  url: "https://geoserveis.icgc.cat/servei/catalunya/contextmaps-terreny-5m-rgb/wmts/{z}/{x}/{y}.png",
+  encoding: "mapbox",
+  maxzoom: 14,
+  worker: true,
+});
+dem.setupMaplibre(maplibregl);
 
 // Square footprint around each simulated hotspot, so it can stand up as a column in 3D.
 function hotspotColumns(collection: HotspotsCollection | null): FeatureCollection {
@@ -47,7 +57,7 @@ function hotspotColumns(collection: HotspotsCollection | null): FeatureCollectio
 }
 
 const LAYER_GROUPS: { group: GroupId; ids: string[] }[] = [
-  { group: "relief", ids: ["relief-shade"] },
+  { group: "relief", ids: ["contour-line", "contour-label"] },
   { group: "proof", ids: ["proof-halo", "proof-circle", "proof-label"] },
 ];
 
@@ -120,7 +130,7 @@ function boundsOf(geometry: Geometry): [[number, number], [number, number]] | nu
 }
 
 export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
-  { collections, relief, visibility, selectedId, day, focusNonce, onSelect, modelStreets = null, modelHotspots = null },
+  { collections, visibility, selectedId, day, focusNonce, onSelect, modelStreets = null, modelHotspots = null },
   ref,
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -205,27 +215,56 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
 
     map.on("load", () => {
       const empty: FeatureCollection = { type: "FeatureCollection", features: [] };
-      if (relief) {
-        const [west, south, east, north] = relief.bounds;
-        map.addSource("relief", {
-          type: "image",
-          url: `/data/${relief.image}`,
-          coordinates: [
-            [west, north],
-            [east, north],
-            [east, south],
-            [west, south],
-          ],
-        });
-        map.addLayer({
-          id: "relief-shade",
-          type: "raster",
-          source: "relief",
-          paint: { "raster-opacity": 0.72, "raster-fade-duration": 0 },
-        });
-      }
-      // Buildings go under the basemap labels, so street names stay readable.
+      // Contours and buildings go under the basemap labels, so street names stay readable.
       const firstLabel = map.getStyle().layers.find((layer) => layer.type === "symbol")?.id;
+      map.addSource("contours", {
+        type: "vector",
+        tiles: [
+          dem.contourProtocolUrl({
+            // [minor, major] interval in metres per zoom. Majors are thicker and labelled.
+            thresholds: { 11: [50, 250], 12: [20, 100], 13: [10, 50], 14: [5, 25], 15: [2, 10] },
+            elevationKey: "ele",
+            levelKey: "level",
+            contourLayer: "contours",
+          }),
+        ],
+        maxzoom: 15,
+        attribution: '<a href="https://www.icgc.cat/">ICGC</a> terrain',
+      });
+      const major: maplibregl.ExpressionSpecification = [">", ["get", "level"], 0];
+      map.addLayer(
+        {
+          id: "contour-line",
+          type: "line",
+          source: "contours",
+          "source-layer": "contours",
+          // The sea and port docks read at or below zero; they are not part of this story.
+          filter: [">", ["get", "ele"], 0],
+          paint: {
+            "line-color": "#9a6b3f",
+            "line-width": ["case", major, 1.3, 0.6],
+            "line-opacity": ["case", major, 0.8, 0.45],
+          },
+        },
+        firstLabel,
+      );
+      map.addLayer(
+        {
+          id: "contour-label",
+          type: "symbol",
+          source: "contours",
+          "source-layer": "contours",
+          filter: ["all", major, [">", ["get", "ele"], 0]],
+          layout: {
+            "symbol-placement": "line",
+            "text-field": ["concat", ["number-format", ["get", "ele"], {}], " m"],
+            "text-font": ["Noto Sans Regular"],
+            "text-size": 10,
+          },
+          paint: { "text-color": "#7c4a1e", "text-halo-color": "#f6f1e7", "text-halo-width": 1.5 },
+        },
+        firstLabel,
+      );
       // Buildings carry the texture in the dense grid. Height grows in from z13 so the city view stays flat.
       map.addLayer(
         {
