@@ -53,8 +53,11 @@
       // Offline support (see README). When a newer worker takes over, reload once so the open tab
       // shows the new build instead of the shell it loaded with. The flag stops a reload loop.
       if ("serviceWorker" in navigator) {
+        // Only an update reloads. On a first visit the new worker also fires controllerchange when it
+        // claims the page, and reloading then would restart every first visit a second in.
+        var hadWorker = !!navigator.serviceWorker.controller;
         navigator.serviceWorker.addEventListener("controllerchange", function () {
-          if (navigator.serviceWorker.controller && !window.__reloading) { window.__reloading = true; location.reload(); }
+          if (hadWorker && !window.__reloading) { window.__reloading = true; location.reload(); }
         });
         window.addEventListener("load", function () { navigator.serviceWorker.register("/sw.js", { scope: "/" }); });
       }
