@@ -14,6 +14,7 @@ export type MapHandle = {
   focus: (id: string) => void;
   reset: () => void;
   focusSimulation: (coordinates: [number, number], cellId?: string | null) => void;
+  toggleTilt: () => void;
 };
 
 type Props = {
@@ -25,7 +26,10 @@ type Props = {
   onSelect: (id: string) => void;
   modelStreets?: StreetsCollection | null;
   modelHotspots?: HotspotsCollection | null;
+  onTiltChange?: (tilted: boolean) => void;
 };
+
+const TILT = 45;
 
 const CITY_BOUNDS: [[number, number], [number, number]] = [
   [2.09, 41.332],
@@ -130,7 +134,7 @@ function boundsOf(geometry: Geometry): [[number, number], [number, number]] | nu
 }
 
 export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
-  { collections, visibility, selectedId, day, focusNonce, onSelect, modelStreets = null, modelHotspots = null },
+  { collections, visibility, selectedId, day, focusNonce, onSelect, modelStreets = null, modelHotspots = null, onTiltChange },
   ref,
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -138,6 +142,8 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
   const indexRef = useRef<globalThis.Map<string, Feature>>(new globalThis.Map());
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
+  const onTiltChangeRef = useRef(onTiltChange);
+  onTiltChangeRef.current = onTiltChange;
   const visibilityRef = useRef(visibility);
   visibilityRef.current = visibility;
   const dayRef = useRef(day);
@@ -195,6 +201,11 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       );
       if (feature) openHotspotPopupRef.current(feature);
     },
+    toggleTilt() {
+      const map = mapRef.current;
+      if (!map) return;
+      map.easeTo({ pitch: map.getPitch() > 5 ? 0 : TILT, duration: 500 });
+    },
   }));
 
   useEffect(() => {
@@ -205,13 +216,15 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       bounds: CITY_BOUNDS,
       fitBoundsOptions: { padding: pad() },
       attributionControl: { compact: true },
-      pitch: 45,
+      pitch: TILT,
       maxPitch: 60,
       dragRotate: false,
       pitchWithRotate: false,
     });
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
     mapRef.current = map;
+    // The button and two-finger tilt on a phone both end here, so the button always matches the map.
+    map.on("pitchend", () => onTiltChangeRef.current?.(map.getPitch() > 5));
 
     map.on("load", () => {
       const empty: FeatureCollection = { type: "FeatureCollection", features: [] };

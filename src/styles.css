@@ -186,6 +186,8 @@ h1 {
 
 .round[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 
+.round.tilt { font-size: 14px; font-weight: 700; }
+
 .map-buttons {
   position: absolute;
   z-index: 3;

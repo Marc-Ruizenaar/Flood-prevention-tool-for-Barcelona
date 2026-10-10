@@ -81,6 +81,7 @@ export function App() {
   const [panelOpen, setPanelOpen] = useState(false);
   const dragRef = useRef<{ y: number; swiped: boolean }>({ y: 0, swiped: false });
   const mapRef = useRef<MapHandle>(null);
+  const [tilted, setTilted] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
@@ -336,6 +337,15 @@ export function App() {
       <div className="map-buttons">
         <button
           type="button"
+          className="round tilt"
+          aria-label="3D view"
+          aria-pressed={tilted}
+          onClick={() => mapRef.current?.toggleTilt()}
+        >
+          3D
+        </button>
+        <button
+          type="button"
           className="round"
           aria-label="Weather for the storm week"
           aria-pressed={weatherOpen}
@@ -399,6 +409,7 @@ export function App() {
           onSelect={(id) => openZone(id, false)}
           modelStreets={modelStreets.status === "ready" ? modelStreets.data : null}
           modelHotspots={modelHotspots.status === "ready" ? modelHotspots.data : null}
+          onTiltChange={setTilted}
         />
       ) : (
         <div className="map map-pending" />
