@@ -2,7 +2,6 @@ import { t } from "../lib/i18n";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import maplibregl, { type GeoJSONSource, type Map } from "maplibre-gl";
-import "maplibre-gl/dist/maplibre-gl.css";
 
 maplibregl.setMaxParallelImageRequests(16);
 import mlcontour from "maplibre-contour";
