@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { FeatureCollection } from "geojson";
+import type { FeatureCollection, Point } from "geojson";
 import { AboutPanel } from "./components/AboutPanel";
 import { FloodLegend } from "./components/FloodLegend";
 import { FactSheet } from "./components/FactSheet";
@@ -18,6 +18,7 @@ import {
   loadHotspots,
   loadMitigation,
   loadStreets,
+  streetsExtent,
   type DailySummary,
   type HotspotsCollection,
   type Loaded,
@@ -48,6 +49,17 @@ import { DEFAULT_VISIBILITY, groupForZone, type GroupId } from "./types";
 function hasReportsOn(date: string, signals?: FeatureCollection): boolean {
   if (dayByDate(date).reportIds.length > 0) return true;
   return (signals?.features ?? []).some((f) => Array.isArray(f.properties?.days) && reportShowsOn(f.properties?.days, date));
+}
+
+// Reported places (proof dots and reviewed reports) that sit outside the simulated streets' extent.
+function blindSpotCount(extent: [number, number, number, number], reports: FeatureCollection[]) {
+  const [w, s, e, n] = extent;
+  const points = reports
+    .flatMap((collection) => collection.features)
+    .filter((feature) => feature.geometry?.type === "Point")
+    .map((feature) => (feature.geometry as Point).coordinates);
+  const outside = points.filter(([x, y]) => x < w || x > e || y < s || y > n).length;
+  return { outside, total: points.length };
 }
 
 export function App() {
@@ -205,6 +217,24 @@ export function App() {
   }
 
   const zone = selectedId && data.zones ? data.zones[selectedId] : undefined;
+  const extent = modelStreets.status === "ready" ? streetsExtent(modelStreets.data) : null;
+  const blindSpot = extent
+    ? blindSpotCount(
+        extent,
+        [data.collections["proof-oct2026"], data.collections.signals].filter(
+          (collection): collection is FeatureCollection => Boolean(collection),
+        ),
+      )
+    : null;
+
+  function showBlindSpot() {
+    setPanelOpen(false);
+    if (!hasReportsOn(day, data.collections.signals) && atlasLocked(peakOf(gauges[day])?.mm ?? null)) {
+      selectDay(DEFAULT_DAY);
+    }
+    setVisibility((current) => ({ ...current, proof: true }));
+    mapRef.current?.reset();
+  }
 
   return (
     <div className={`app${zone ? " sheet-open" : ""}${panelOpen ? " panel-open" : ""}`}>
@@ -256,6 +286,14 @@ export function App() {
             <span className="panel-title">Where to act first</span>
             <span className="panel-hint">{panelOpen ? "Show map" : "See list"}</span>
           </button>
+          {blindSpot && blindSpot.outside > 0 ? (
+            <button type="button" className="panel-claim" onClick={showBlindSpot}>
+              <strong>
+                {blindSpot.outside} of {blindSpot.total}
+              </strong>{" "}
+              reported places fall outside the simulated area. <span>Show them</span>
+            </button>
+          ) : null}
 
           <LayerDock
             visibility={visibility}

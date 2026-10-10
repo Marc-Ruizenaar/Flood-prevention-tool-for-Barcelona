@@ -114,6 +114,17 @@ export type Loaded<T> =
 /** Days with bundled/API output for the default urgell run (extend via sync-flood-fixtures). */
 export const MODEL_DAYS = ["2026-10-02", "2026-10-03"] as const;
 
+// West, south, east, north of the simulated streets: the edge of what the run can say anything about.
+export function streetsExtent(streets: StreetsCollection): [number, number, number, number] | null {
+  let w = Infinity, s = Infinity, e = -Infinity, n = -Infinity;
+  for (const feature of streets.features) {
+    for (const [x, y] of feature.geometry.coordinates) {
+      w = Math.min(w, x); s = Math.min(s, y); e = Math.max(e, x); n = Math.max(n, y);
+    }
+  }
+  return w === Infinity ? null : [w, s, e, n];
+}
+
 const EMPTY_STREETS: StreetsCollection = { type: "FeatureCollection", features: [] };
 const EMPTY_HOTSPOTS: HotspotsCollection = { type: "FeatureCollection", features: [] };
 

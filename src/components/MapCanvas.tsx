@@ -5,7 +5,7 @@ import type { Feature, FeatureCollection, Geometry } from "geojson";
 import { HotspotCard } from "./HotspotCard";
 import { reportShowsOn, type GeoFile } from "../lib/data";
 import { floodColorExpression } from "../lib/modelStyle";
-import type { HotspotProps, HotspotsCollection, StreetsCollection } from "../lib/sim";
+import { streetsExtent, type HotspotProps, type HotspotsCollection, type StreetsCollection } from "../lib/sim";
 import { dayByDate } from "../lib/weather";
 import type { GroupId, ReliefFile } from "../types";
 
@@ -78,7 +78,7 @@ function pad(): maplibregl.PaddingOptions {
   const wide = window.innerWidth >= 960;
   return {
     top: wide ? 32 : 120,
-    bottom: wide ? 32 : 200,
+    bottom: wide ? 32 : 236,
     left: wide ? 428 : 24,
     right: wide ? 80 : 24,
   };
@@ -299,6 +299,27 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       });
 
       const floodColor = floodColorExpression();
+      map.addSource("model-area", { type: "geojson", data: empty });
+      map.addLayer({
+        id: "model-area",
+        type: "line",
+        source: "model-area",
+        paint: { "line-color": "#142028", "line-width": 1.5, "line-dasharray": [3, 2], "line-opacity": 0.7 },
+      });
+      map.addLayer({
+        id: "model-area-label",
+        type: "symbol",
+        source: "model-area",
+        layout: {
+          "symbol-placement": "line",
+          "symbol-spacing": 2000,
+          "text-field": "Simulated area",
+          "text-font": ["Noto Sans Regular"],
+          "text-size": 12,
+          "text-offset": [0, -0.8],
+        },
+        paint: { "text-color": "#142028", "text-halo-color": "#f6f1e7", "text-halo-width": 1.5 },
+      });
       map.addSource("model-streets", { type: "geojson", data: empty });
       map.addSource("model-hotspots", { type: "geojson", data: empty });
       map.addLayer({
@@ -473,14 +494,16 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       const hotspots = modelHotspotsRef.current ?? { type: "FeatureCollection" as const, features: [] };
       streetsSource.setData(streets);
       hotspotsSource.setData(hotspots);
-      if (!streets.features.length) return;
-      const bounds = new maplibregl.LngLatBounds();
-      for (const feature of streets.features) {
-        if (feature.geometry.type !== "LineString") continue;
-        for (const coord of feature.geometry.coordinates) bounds.extend(coord as [number, number]);
-      }
-      if (bounds.isEmpty()) return;
-      map.fitBounds(bounds, { padding: pad(), maxZoom: 17, duration: 700 });
+      const extent = streetsExtent(streets);
+      const [w, s, e, n] = extent ?? [0, 0, 0, 0];
+      (map.getSource("model-area") as GeoJSONSource | undefined)?.setData({
+        type: "FeatureCollection",
+        features: extent
+          ? [{ type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: [[w, n], [e, n], [e, s], [w, s], [w, n]] } }]
+          : [],
+      });
+      if (!extent) return;
+      map.fitBounds([[w, s], [e, n]], { padding: pad(), maxZoom: 17, duration: 700 });
     };
     applyModelDataRef.current();
   }, [modelStreets, modelHotspots]);
