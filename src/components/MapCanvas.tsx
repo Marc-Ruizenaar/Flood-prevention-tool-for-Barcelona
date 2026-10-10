@@ -2,14 +2,13 @@ import { t } from "../lib/i18n";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import maplibregl, { type GeoJSONSource, type Map } from "maplibre-gl";
-
-maplibregl.setMaxParallelImageRequests(16);
 import mlcontour from "maplibre-contour";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import { HotspotCard } from "./HotspotCard";
 import { reportShowsOn, type GeoFile } from "../lib/data";
 import { floodColorExpression, streetWidth } from "../lib/modelStyle";
-import { boxOutline, unionBox, type Bbox, type HotspotProps, type HotspotsCollection, type StreetsCollection } from "../lib/sim";
+import { edgePonding } from "../lib/artefacts";
+import { boxOutline, streetsExtent, unionBox, type Bbox, type HotspotProps, type HotspotsCollection, type StreetsCollection } from "../lib/sim";
 import { dayByDate } from "../lib/weather";
 import type { GroupId } from "../types";
 
@@ -18,9 +17,25 @@ export type MapHandle = {
   reset: () => void;
   focusSimulation: (coordinates: [number, number], cellId?: string | null) => void;
   toggleTilt: () => void;
-  // The one camera move from the start screen into the simulated area (flat city -> tilted model).
-  enter: () => void;
+  /** Screen position (px, inside the map container) of a place, or null before the map exists. */
+  project: (lon: number, lat: number) => { x: number; y: number } | null;
+  /** Where the map is looking right now, or null before the map exists. */
+  center: () => { lon: number; lat: number } | null;
+  /** Colour the model segments by flood likelihood p. `focus` also flies there, clear of the planner card. */
+  showScenario: (scenario: ScenarioLayer) => void;
+  clearScenario: () => void;
 };
+
+export type ScenarioLayer = {
+  points: { lon: number; lat: number; p: number }[];
+  /** The model's flood cut: from here the ramp is fully vermilion. */
+  threshold: number;
+  focus?: { lon: number; lat: number };
+};
+
+const SCENARIO_ID = "ml-scenario";
+
+const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 type Props = {
   collections: Partial<Record<GeoFile, FeatureCollection>>;
@@ -34,9 +49,6 @@ type Props = {
   onTiltChange?: (tilted: boolean) => void;
   modelBoxes?: Bbox[];
   onViewChange?: (view: Bbox) => void;
-  onReady?: () => void;
-  // True while a start screen covers the map: start flat and wide, and hold the model-area fit for enter().
-  waitForEnter?: boolean;
 };
 
 const TILT = 45;
@@ -158,8 +170,6 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
     onTiltChange,
     modelBoxes = [],
     onViewChange,
-    onReady,
-    waitForEnter = false,
   },
   ref,
 ) {
@@ -173,11 +183,6 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
   const onViewChangeRef = useRef(onViewChange);
   onViewChangeRef.current = onViewChange;
   const fittedRef = useRef(false);
-  const enteredRef = useRef(!waitForEnter);
-  const modelBoxesRef = useRef(modelBoxes);
-  modelBoxesRef.current = modelBoxes;
-  const onReadyRef = useRef(onReady);
-  onReadyRef.current = onReady;
   const visibilityRef = useRef(visibility);
   visibilityRef.current = visibility;
   const dayRef = useRef(day);
@@ -240,15 +245,70 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       if (!map) return;
       map.easeTo({ pitch: map.getPitch() > 5 ? 0 : TILT, duration: 500 });
     },
-    enter() {
+    project(lon, lat) {
       const map = mapRef.current;
-      if (!map || enteredRef.current) return;
-      enteredRef.current = true;
-      fittedRef.current = true;
-      const all = unionBox(modelBoxesRef.current);
-      const bounds: [[number, number], [number, number]] = all ? [[all[0], all[1]], [all[2], all[3]]] : CITY_BOUNDS;
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      map.fitBounds(bounds, { padding: pad(), maxZoom: 17, pitch: TILT, duration: reduced ? 0 : 2400, essential: true });
+      if (!map) return null;
+      const point = map.project([lon, lat]);
+      return { x: point.x, y: point.y };
+    },
+    center() {
+      const centre = mapRef.current?.getCenter();
+      return centre ? { lon: centre.lng, lat: centre.lat } : null;
+    },
+    showScenario({ points, threshold, focus }) {
+      const map = mapRef.current;
+      if (!map) return;
+      const data: FeatureCollection = {
+        type: "FeatureCollection",
+        features: points.map((point) => ({
+          type: "Feature",
+          properties: { p: point.p },
+          geometry: { type: "Point", coordinates: [point.lon, point.lat] },
+        })),
+      };
+      const source = map.getSource(SCENARIO_ID);
+      if (source) {
+        (source as GeoJSONSource).setData(data);
+      } else {
+        map.addSource(SCENARIO_ID, { type: "geojson", data });
+        const firstLabel = map.getStyle().layers.find((layer) => layer.type === "symbol")?.id;
+        map.addLayer(
+          {
+            id: SCENARIO_ID,
+            type: "circle",
+            source: SCENARIO_ID,
+            paint: {
+              "circle-radius": ["interpolate", ["linear"], ["zoom"], 12, 3, 17, 7],
+              "circle-opacity": 0.85,
+              "circle-stroke-width": 0,
+            },
+          },
+          firstLabel,
+        );
+      }
+      const top = Math.max(0.05, Math.min(threshold, 1));
+      // Blue so simulated streets stand apart from the orange flood layers and the aerial base.
+      map.setPaintProperty(SCENARIO_ID, "circle-color", [
+        "interpolate", ["linear"], ["get", "p"], 0, "#93c5fd", top, "#1d4ed8", 1, "#1d4ed8",
+      ]);
+      map.setPaintProperty(SCENARIO_ID, "circle-opacity", [
+        "interpolate", ["linear"], ["get", "p"], 0, 0.25, top, 0.85, 1, 0.95,
+      ]);
+      if (focus) {
+        map.flyTo({
+          center: [focus.lon, focus.lat],
+          zoom: Math.max(map.getZoom(), 15),
+          duration: reducedMotion() ? 0 : 650,
+          // On a phone the planner is a bottom sheet: lift the place into the clear space above it.
+          offset: window.innerWidth < 960 ? [0, -120] : [0, 0],
+        });
+      }
+    },
+    clearScenario() {
+      const map = mapRef.current;
+      if (!map) return;
+      if (map.getLayer(SCENARIO_ID)) map.removeLayer(SCENARIO_ID);
+      if (map.getSource(SCENARIO_ID)) map.removeSource(SCENARIO_ID);
     },
   }));
 
@@ -260,7 +320,7 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       bounds: CITY_BOUNDS,
       fitBoundsOptions: { padding: pad() },
       attributionControl: { compact: true },
-      pitch: waitForEnter ? 0 : TILT,
+      pitch: TILT,
       maxPitch: 60,
       dragRotate: false,
       pitchWithRotate: false,
@@ -275,7 +335,6 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
     };
     map.on("load", emitView);
     map.on("moveend", emitView);
-    map.once("load", () => onReadyRef.current?.());
 
     map.on("load", () => {
       const empty: FeatureCollection = { type: "FeatureCollection", features: [] };
@@ -588,7 +647,10 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
         activePopup?.remove();
         activeRoot?.unmount();
         activeRoot = createRoot(node);
-        activeRoot.render(<HotspotCard properties={feature.properties as HotspotProps} />);
+        const props = feature.properties as HotspotProps;
+        const streets = modelStreetsRef.current;
+        const edge = edgePonding(lon, lat, props.peak_depth_m, streets ? streetsExtent(streets) : null);
+        activeRoot.render(<HotspotCard properties={props} edgePonded={edge} />);
         activePopup = new maplibregl.Popup({ maxWidth: "min(340px, calc(100vw - 80px))", className: "model-popup" })
           .setLngLat([lon, lat])
           .setDOMContent(node)
@@ -716,7 +778,7 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       if (!source) return;
       source.setData(boxOutline(modelBoxes));
       const all = unionBox(modelBoxes);
-      if (!all || fittedRef.current || !enteredRef.current) return;
+      if (!all || fittedRef.current) return;
       fittedRef.current = true;
       map.fitBounds([[all[0], all[1]], [all[2], all[3]]], { padding: pad(), maxZoom: 17, duration: 700 });
     };

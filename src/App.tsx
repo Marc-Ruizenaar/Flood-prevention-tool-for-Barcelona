@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { t } from "./lib/i18n";
 import { LangSwitch } from "./components/LangSwitch";
 import type { FeatureCollection, Point } from "geojson";
@@ -6,10 +6,11 @@ import { AboutPanel } from "./components/AboutPanel";
 import { FloodLegend } from "./components/FloodLegend";
 import { FactSheet } from "./components/FactSheet";
 import { LayerDock } from "./components/LayerDock";
-import type { MapHandle } from "./components/MapCanvas";
+import { MapCanvas, type MapHandle } from "./components/MapCanvas";
 import { BuildReport } from "./components/BuildReport";
 import { CityFocusPanel } from "./components/CityFocusPanel";
 import { ModelPanel } from "./components/ModelPanel";
+import { ScenarioPanel } from "./components/ScenarioPanel";
 import type { CityAction } from "./lib/cityActions";
 import { WeatherPanel } from "./components/WeatherPanel";
 import { reportShowsOn, useFloodData } from "./lib/data";
@@ -53,11 +54,6 @@ import {
 } from "./lib/weather";
 import { DEFAULT_VISIBILITY, groupForZone, type GroupId } from "./types";
 
-// maplibre is most of the bundle. Fetch it right away, but in its own chunk, so the start screen
-// paints from a small first download while the map code arrives behind it.
-const mapChunk = import("./components/MapCanvas");
-const MapCanvas = lazy(() => mapChunk.then((m) => ({ default: m.MapCanvas })));
-
 // A reviewed signal dot dated this day counts as a report, so it unlocks the layer like a proof dot.
 function hasReportsOn(date: string, signals?: FeatureCollection): boolean {
   if (dayByDate(date).reportIds.length > 0) return true;
@@ -90,6 +86,7 @@ export function App() {
   const [modelMitigation, setModelMitigation] = useState<Loaded<MitigationReport>>({ status: "loading" });
   const [weatherOpen, setWeatherOpen] = useState(false);
   const [layersOpen, setLayersOpen] = useState(false);
+  const [plannerOpen, setPlannerOpen] = useState(false);
   const [day, setDay] = useState<string>(DEFAULT_DAY);
   const [index, setIndex] = useState<RunIndex | null>(null);
   const [view, setView] = useState<Bbox | null>(null);
@@ -97,19 +94,7 @@ export function App() {
   const dragRef = useRef<{ y: number; swiped: boolean }>({ y: 0, swiped: false });
   const mapRef = useRef<MapHandle>(null);
   const topbarRef = useRef<HTMLElement>(null);
-  // Start screen: a deep link (?zone=) skips it and lands on the zone as before.
-  const [intro, setIntro] = useState<"wait" | "leaving" | "done">(() =>
-    new URLSearchParams(window.location.search).has("zone") ? "done" : "wait",
-  );
-  const [mapReady, setMapReady] = useState(false);
-  const [slow, setSlow] = useState(false);
-  const [tilted, setTilted] = useState(intro === "done");
-
-  // ponytail: after 8 s let people in regardless; a stuck fetch should not block the demo.
-  useEffect(() => {
-    const id = window.setTimeout(() => setSlow(true), 8000);
-    return () => window.clearTimeout(id);
-  }, []);
+  const [tilted, setTilted] = useState(true);
 
   // The top card's height depends on the language, so the floating buttons follow the measured height.
   useEffect(() => {
@@ -216,11 +201,30 @@ export function App() {
       setAboutOpen(false);
       setWeatherOpen(false);
       setLayersOpen(false);
+      setPlannerOpen(false);
       setSelectedId(null);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  // The intro screen and other parts of the page can ask for the planner by name.
+  useEffect(() => {
+    const onOpen = () => {
+      setAboutOpen(false);
+      setWeatherOpen(false);
+      setLayersOpen(false);
+      setSelectedId(null);
+      setPlannerOpen(true);
+    };
+    window.addEventListener("open-scenario-planner", onOpen);
+    return () => window.removeEventListener("open-scenario-planner", onOpen);
+  }, []);
+
+  // Picking a place or report on the map takes over from the planner.
+  useEffect(() => {
+    if (selectedId) setPlannerOpen(false);
+  }, [selectedId]);
 
   function remember(id: string | null) {
     const url = new URL(window.location.href);
@@ -290,23 +294,6 @@ export function App() {
         ),
       )
     : null;
-
-  const loadingStep = !mapReady
-    ? t("Loading the map…")
-    : !data.ready
-      ? t("Loading published layers…")
-      : modelStreets.status === "loading"
-        ? t("Loading the simulation…")
-        : null;
-  const canStart = loadingStep === null || slow || Boolean(data.fatal);
-
-  function start() {
-    if (intro !== "wait") return;
-    setIntro("leaving");
-    mapRef.current?.enter();
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.setTimeout(() => setIntro("done"), reduced ? 0 : 700);
-  }
 
   function showBlindSpot() {
     setPanelOpen(false);
@@ -402,11 +389,33 @@ export function App() {
         <button
           type="button"
           className="round"
+          data-scenario-trigger
+          aria-label={t("Scenario planner")}
+          aria-pressed={plannerOpen}
+          onClick={() => {
+            setAboutOpen(false);
+            setWeatherOpen(false);
+            setLayersOpen(false);
+            setSelectedId(null);
+            remember(null);
+            setPlannerOpen(true);
+          }}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="8" />
+            <circle cx="12" cy="12" r="3.5" />
+            <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          className="round"
           aria-label={t("Map layers")}
           aria-pressed={layersOpen}
           onClick={() => {
             setAboutOpen(false);
             setWeatherOpen(false);
+            setPlannerOpen(false);
             setLayersOpen(true);
           }}
         >
@@ -432,6 +441,7 @@ export function App() {
           aria-pressed={weatherOpen}
           onClick={() => {
             setAboutOpen(false);
+            setPlannerOpen(false);
             setWeatherOpen(true);
           }}
         >
@@ -446,6 +456,7 @@ export function App() {
           aria-label={t("About and sources")}
           onClick={() => {
             setWeatherOpen(false);
+            setPlannerOpen(false);
             setAboutOpen(true);
           }}
         >
@@ -487,7 +498,6 @@ export function App() {
       {!data.ready && !data.fatal ? <div className="banner">{t("Loading published layers…")}</div> : null}
 
       {data.ready && data.zones ? (
-        <Suspense fallback={<div className="map map-pending" />}>
         <MapCanvas
           ref={mapRef}
           collections={data.collections}
@@ -501,10 +511,7 @@ export function App() {
           onTiltChange={setTilted}
           modelBoxes={boxes}
           onViewChange={setView}
-          onReady={() => setMapReady(true)}
-          waitForEnter={intro !== "done"}
         />
-        </Suspense>
       ) : (
         <div className="map map-pending" />
       )}
@@ -564,25 +571,7 @@ export function App() {
 
       {aboutOpen ? <AboutPanel sources={data.sources} onClose={() => setAboutOpen(false)} /> : null}
 
-      {intro !== "done" ? (
-        <div className={`intro${intro === "leaving" ? " is-leaving" : ""}`} aria-busy={!canStart}>
-          <div className="intro-card">
-            <span className="mark" aria-hidden="true" />
-            <div>
-              <p className="kicker">{t("Next rain · Barcelona")}</p>
-              <h1>{t("Where water collected, and where to act before the next storm.")}</h1>
-              <button type="button" className="intro-start" onClick={start} disabled={!canStart} autoFocus>
-                {t("Start")}
-              </button>
-              <p className="intro-status" role="status">
-                {loadingStep ?? t("Ready")}
-                <span className={`intro-bar${loadingStep ? " is-busy" : ""}`} aria-hidden="true" />
-              </p>
-              <p className="intro-sub">{formatDay(day)} · {rainCaption(gauges[day], rainLive)}</p>
-            </div>
-          </div>
-        </div>
-      ) : null}
+      <ScenarioPanel open={plannerOpen} onClose={() => setPlannerOpen(false)} mapRef={mapRef} zones={data.zones} />
     </div>
   );
 }

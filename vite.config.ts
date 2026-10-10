@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
+  // The Python model in ml/ has its own venv; its files must not trigger page reloads.
+  server: { watch: { ignored: ["**/ml/**"] } },
   plugins: [
     react(),
     VitePWA({
@@ -47,6 +49,15 @@ export default defineConfig({
             },
           },
           {
+            urlPattern: /^https:\/\/api\.open-meteo\.com\/.*/i,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "outlook",
+              networkTimeoutSeconds: 4,
+              expiration: { maxEntries: 8, maxAgeSeconds: 3 * 60 * 60 },
+            },
+          },
+          {
             urlPattern: /^https:\/\/tiles\.openfreemap\.org\/.*/i,
             handler: "CacheFirst",
             options: {
@@ -60,6 +71,14 @@ export default defineConfig({
             options: {
               cacheName: "terrain",
               expiration: { maxEntries: 300, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/geoserveis\.icgc\.cat\/icc_mapesmultibase\/.*/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "ortho",
+              expiration: { maxEntries: 600, maxAgeSeconds: 60 * 60 * 24 * 14 },
             },
           },
         ],
