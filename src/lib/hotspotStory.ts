@@ -15,8 +15,7 @@ function qValue(q: Quantity | null | undefined): number | null {
 
 function formatDuration(minutes: number): string {
   if (minutes < 90) return `${Math.round(minutes)} min`;
-  const hours = minutes / 60;
-  return `${hours.toFixed(1)} h`;
+  return `${Math.round(minutes / 60)} h`;
 }
 
 function directionPhrase(dir: string | null | undefined): string | null {

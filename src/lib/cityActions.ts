@@ -65,7 +65,7 @@ function arterialWeight(name: string | null | undefined): number {
 function durationHours(minutes: number | null | undefined): string {
   if (minutes == null || minutes <= 0) return "—";
   if (minutes < 90) return `${Math.round(minutes)} min`;
-  return `${(minutes / 60).toFixed(1)} h`;
+  return `${Math.round(minutes / 60)} h`;
 }
 
 function pushAction(actions: CityAction[], seen: Set<string>, action: CityAction) {
