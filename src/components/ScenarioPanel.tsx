@@ -539,6 +539,9 @@ export function ScenarioPanel({ open, onClose, mapRef, zones }: Props) {
                 >
                   {running ? t("Stop simulation") : t("Start simulation")}
                 </button>
+                <button type="button" className="sc-back" onClick={close}>
+                  {t("Back to map")}
+                </button>
               </div>
 
               <div className="sc-adjust">
