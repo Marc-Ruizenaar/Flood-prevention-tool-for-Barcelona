@@ -287,8 +287,9 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
         );
       }
       const top = Math.max(0.05, Math.min(threshold, 1));
+      // Blue so simulated streets stand apart from the orange flood layers and the aerial base.
       map.setPaintProperty(SCENARIO_ID, "circle-color", [
-        "interpolate", ["linear"], ["get", "p"], 0, "#142028", top, "#c2410c", 1, "#c2410c",
+        "interpolate", ["linear"], ["get", "p"], 0, "#93c5fd", top, "#1d4ed8", 1, "#1d4ed8",
       ]);
       map.setPaintProperty(SCENARIO_ID, "circle-opacity", [
         "interpolate", ["linear"], ["get", "p"], 0, 0.25, top, 0.85, 1, 0.95,
