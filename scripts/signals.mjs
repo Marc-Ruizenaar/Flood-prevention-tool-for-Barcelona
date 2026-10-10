@@ -5,7 +5,7 @@
 //   npm run signals -- --scheduled          same, but honour calm-mode cadence (for a twice-hourly timer)
 //   npm run signals -- --list               pending rows, highest-priority barri first; rows with no flood term last
 //   npm run signals -- --priority           refresh priority per barri (live XEMA rain)
-//   npm run signals -- --approve <id> --mechanism <m> [--barri <code|name>] --by R1
+//   npm run signals -- --approve <id> --mechanism <m> [--barri <code|name> [--place-on-page]] --by R1
 //   npm run signals -- --reject <id> --reason "<why>" --by R1
 //   npm run signals -- --add <https url> --barri <code|name> --mechanism <m> --date <ISO> --by R1 [--summary "..."]
 //
@@ -297,6 +297,14 @@ function approve(id) {
       row.place = { ...row.place, level: "barri", barri: code, district: gaz.barris[code].district, zone_ids: gaz.barris[code].zone_ids };
     }
     if (!row.place?.barri) fail("this row has no barri: pass --barri <code|name>");
+    // Place guard: candidates are the barris whose name or alias the gazetteer found in the title and excerpt at ingest.
+    // Any other barri needs the reviewer to state they read it on the page, so a card never claims a place the source did not name.
+    if (!(row.place.candidates ?? []).includes(row.place.barri)) {
+      const named = (row.place.candidates ?? []).map((c) => gaz.barris[c].name).join(", ");
+      if (!has("place-on-page"))
+        fail(`${gaz.barris[row.place.barri].name} is not named in this item's title or excerpt (${named ? `it names ${named}` : "it names no barri"}). Open the link; if the page itself names the barri, approve again with --place-on-page`);
+      row.place.checked_on_page_by = by;
+    }
     if (opt("summary")) row.summary = opt("summary");
     row.review = { status: "approved", by, at: iso(now), reason: null, mechanism: mech };
     counts.last_signal_at[row.place.barri] = row.published_at > (counts.last_signal_at[row.place.barri] ?? "") ? row.published_at : counts.last_signal_at[row.place.barri];

@@ -6,6 +6,7 @@ Adds a "reported impacts" dot per barri from items a person has reviewed. Nothin
 npm run signals                    # read Ajuntament press API + Betevé RSS, write pending rows to pending.local.jsonl
 npm run signals -- --list          # pending rows, highest-priority barri first, with links; rows with no flood term last
 npm run signals -- --approve <id> --mechanism slope_runoff --barri "Sant Genís dels Agudells" --by R1
+npm run signals -- --approve <id> --mechanism basement --barri "Sant Andreu" --place-on-page --by R1
 npm run signals -- --reject <id> --reason "Not about flooding." --by R1
 npm run signals -- --add <https url> --barri <code|name> --mechanism basement --date 2026-10-05T09:00Z --by R1
 npm run signals -- --priority      # refresh priority per barri (live XEMA rain)
@@ -15,6 +16,7 @@ npm run signals:check              # self-check: filters, gazetteer, priority, b
 
 Mechanisms: `street_overflow`, `basement`, `transformer_room`, `slope_runoff`. Reviewer codes only, never an email.
 Before approving, open the link and confirm the date and place appear on the page.
+`--approve --barri` only accepts a barri whose name or gazetteer alias was in the item's title or excerpt (the `candidates` the pipeline found). If the page names a barri the excerpt did not, read it there and add `--place-on-page`; the row then records who checked.
 Every allowlisted item is written, including ones the keyword regex misses (`"relevant": false`, listed last, dropped unreviewed after 72 h), because the feed watermark never re-reads an item. An expired or rejected row keeps no link and cannot be approved: publish it with `--add`. The build fails on two rows with the same `signal_id` (keep one line after a merge) and counts one page once, query string or not.
 
 | File | What | Committed |

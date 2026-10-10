@@ -186,3 +186,25 @@ test("storage split: unreviewed rows stay in a gitignored file, only decisions a
     assert.equal(spawnSync("git", ["check-ignore", "-q", p]).status, 0, `${p} is gitignored`);
   assert.equal(spawnSync("git", ["check-ignore", "-q", "signals/reviewed.jsonl"]).status, 1, "reviewed.jsonl is committed");
 });
+
+test("place guard: a barri the title and excerpt never named needs --place-on-page", () => {
+  const pending = { review: { status: "pending", by: null, at: null, reason: null, mechanism: null } };
+  const citywide = row({ signal_id: "00000000000000a1", place: { level: "none", barri: null, candidates: [] }, ...pending });
+  const named = row({ signal_id: "00000000000000a2", source_url: "https://beteve.cat/fixture-two/", place: { level: "barri", barri: null, candidates: [code("Sant Genís dels Agudells")] }, ...pending });
+  const dir = sandbox([citywide, named]);
+  const before = readFileSync(join(dir, "signals/pending.local.jsonl"), "utf8");
+  const approve = (id, ...extra) => run(dir, "scripts/signals.mjs", "--approve", id, "--mechanism", "street_overflow", "--by", "R0", ...extra);
+  const refused = approve(citywide.signal_id, "--barri", "Sant Andreu");
+  assert.equal(refused.status, 1, "a citywide release cannot be pinned to a barri it never names");
+  assert.match(refused.stderr, /Sant Andreu is not named.*--place-on-page/s);
+  assert.equal(readFileSync(join(dir, "signals/pending.local.jsonl"), "utf8"), before, "nothing written");
+  assert.deepEqual(lines(dir, "signals/reviewed.jsonl"), []);
+  assert.equal(approve(named.signal_id, "--barri", "Sant Andreu").status, 1, "a different barri from the one named");
+  assert.equal(approve(named.signal_id, "--barri", "Sant Genís Agudells").status, 0, "an alias of the named barri passes");
+  const over = approve(citywide.signal_id, "--barri", "Sant Andreu", "--place-on-page");
+  assert.equal(over.status, 0, over.stderr);
+  const rows = Object.fromEntries(lines(dir, "signals/reviewed.jsonl").map((r) => [r.signal_id, r]));
+  assert.equal(rows[citywide.signal_id].place.barri, code("Sant Andreu"));
+  assert.equal(rows[citywide.signal_id].place.checked_on_page_by, "R0", "the override records who read the page");
+  assert.equal(rows[named.signal_id].place.checked_on_page_by, undefined);
+});
