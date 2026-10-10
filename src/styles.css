@@ -957,6 +957,9 @@ a { color: var(--vermilion); }
   border-style: dashed;
 }
 
+.model-badge.is-edge { background: #fef3c7; border: 2px solid #b45309; }
+.model-badge .model-edge-note { font-size: 12px; font-weight: 600; color: #78350f; }
+
 .model-badge strong {
   width: fit-content;
   padding: 1px 6px;

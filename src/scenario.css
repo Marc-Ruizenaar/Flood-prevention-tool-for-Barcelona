@@ -1,0 +1,367 @@
+/* Scenario planner: a cream and ink glass card. Desktop: right column. Phone: bottom sheet. */
+
+.sc-panel {
+  position: absolute;
+  z-index: 5;
+  left: 8px;
+  right: 8px;
+  bottom: calc(8px + env(safe-area-inset-bottom));
+  max-height: 82vh;
+  max-height: min(82vh, 82dvh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--ink);
+  background: rgba(246, 241, 231, 0.7);
+  -webkit-backdrop-filter: blur(18px) saturate(1.1);
+  backdrop-filter: blur(18px) saturate(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 24px;
+  box-shadow: 0 12px 40px rgba(20, 32, 40, 0.22);
+  animation: sc-rise 0.28s ease-out;
+}
+
+.sc-panel:focus { outline: none; }
+
+@keyframes sc-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (min-width: 960px) {
+  .sc-panel {
+    left: auto;
+    right: 72px;
+    top: 16px;
+    bottom: 16px;
+    width: 380px;
+    max-height: none;
+  }
+}
+
+.sc-panel button { font: inherit; color: inherit; cursor: pointer; }
+
+.sc-panel button:focus-visible,
+.sc-panel input:focus-visible,
+.sc-panel a:focus-visible {
+  outline: 2px solid #e07a2f;
+  outline-offset: 2px;
+}
+
+/* Header */
+.sc-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+
+.sc-kicker {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.sc-date {
+  margin: 2px 0 0;
+  font-family: Fraunces, Georgia, serif;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.sc-sub { margin: 4px 0 0; font-size: 14px; font-weight: 500; color: var(--ink); }
+
+.sc-close {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  margin: -6px -8px 0 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.sc-close:hover { background: rgba(20, 32, 40, 0.08); }
+
+.sc-close svg,
+.sc-clear svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.sc-status { margin: 8px 0; font-size: 15px; font-weight: 500; }
+
+/* Hero ring */
+.sc-hero { display: flex; align-items: center; gap: 16px; }
+
+.sc-ring { flex: none; width: 88px; height: 88px; }
+.sc-ring-track { fill: none; stroke: rgba(20, 32, 40, 0.14); stroke-width: 9; }
+
+.sc-ring-fill {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 9;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.45s ease-out, stroke 0.2s;
+}
+
+.sc-ring-fill.is-hot { stroke: var(--vermilion); }
+
+.sc-ring-num {
+  font-family: Fraunces, Georgia, serif;
+  font-size: 26px;
+  font-weight: 600;
+  fill: var(--ink);
+}
+
+.sc-hero-text { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0; }
+.sc-caption { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.25; }
+
+.sc-sure {
+  min-height: 44px;
+  padding: 0 14px;
+  margin-left: -14px;
+  border: 0;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.sc-sure[aria-expanded="true"] { text-decoration-thickness: 2px; }
+
+.sc-sure-body {
+  padding: 12px 14px;
+  background: #fffdf8;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.sc-sure-level { margin: 0 0 6px; font-weight: 700; }
+.sc-sure-body ul { margin: 0; padding-left: 18px; }
+.sc-sure-body li + li { margin-top: 4px; }
+
+/* Focus card with the simulation pill */
+.sc-focus {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #fffdf8;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+}
+
+.sc-place {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.sc-go {
+  min-height: 48px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.sc-go:hover:not(:disabled) { background: #22333e; }
+.sc-go:disabled { opacity: 0.5; cursor: default; }
+
+/* Parameters */
+.sc-adjust { display: flex; flex-direction: column; gap: 12px; }
+
+.sc-chips,
+.sc-seg { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.sc-chip,
+.sc-seg-item {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid rgba(20, 32, 40, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 253, 248, 0.7);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.sc-chip:hover,
+.sc-seg-item:hover,
+.sc-day:hover { background: #fffdf8; }
+
+.sc-chip[aria-checked="true"],
+.sc-seg-item[aria-checked="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.sc-more {
+  align-self: flex-start;
+  min-height: 44px;
+  padding: 0 14px;
+  margin-left: -14px;
+  border: 0;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.sc-flag {
+  align-self: flex-start;
+  margin: 0;
+  padding: 8px 14px;
+  border: 1.5px dashed var(--ink);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Seven-day strip */
+.sc-strip { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+
+.sc-day {
+  position: relative;
+  min-height: 64px;
+  padding: 6px 0 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: rgba(255, 253, 248, 0.5);
+}
+
+.sc-day[aria-checked="true"] { background: var(--ink); color: var(--paper); }
+.sc-day-name { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.sc-day-glyph { font-size: 18px; line-height: 1; }
+.sc-day-chance { font-size: 12px; font-weight: 600; }
+
+/* Location combobox */
+.sc-loc { position: relative; }
+
+.sc-input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 48px 0 16px;
+  border: 1px solid rgba(20, 32, 40, 0.28);
+  border-radius: 999px;
+  background: #fffdf8;
+  font: inherit;
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.sc-input::placeholder { color: #5c5348; opacity: 1; }
+
+.sc-clear {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.sc-list {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 6px);
+  max-height: 264px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: #fffdf8;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 8px 28px rgba(20, 32, 40, 0.2);
+}
+
+.sc-opt {
+  min-height: 44px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.sc-opt:hover,
+.sc-opt.is-active { background: var(--paper-2); }
+.sc-opt.is-active { outline: 2px solid #e07a2f; outline-offset: -2px; }
+
+.sc-notice { margin: -4px 0 0; font-size: 14px; font-weight: 600; color: #8a3410; }
+
+.sc-credit { margin: 0; font-size: 12px; color: var(--ink); }
+.sc-credit a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+
+/* Numbered rings on the map */
+.sc-rings { position: absolute; inset: 0; z-index: 4; pointer-events: none; overflow: hidden; }
+
+.sc-spot {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(246, 241, 231, 0.72);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.sc-spot.is-hot { border-color: var(--vermilion); }
+
+/* Phone, simulation running: keep the map visible, keep only the essentials */
+@media (max-width: 959px) {
+  .sc-panel.is-running { max-height: 42vh; max-height: min(42vh, 42dvh); }
+  .sc-panel.is-running .sc-adjust { display: none; }
+}
+
+@media (max-width: 380px) {
+  .sc-panel { padding: 12px 12px 14px; }
+  .sc-chip, .sc-seg-item { padding: 0 11px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-panel { animation: none; }
+  .sc-ring-fill { transition: none; }
+}

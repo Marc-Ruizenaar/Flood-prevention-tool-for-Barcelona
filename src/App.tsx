@@ -10,6 +10,7 @@ import { MapCanvas, type MapHandle } from "./components/MapCanvas";
 import { BuildReport } from "./components/BuildReport";
 import { CityFocusPanel } from "./components/CityFocusPanel";
 import { ModelPanel } from "./components/ModelPanel";
+import { ScenarioPanel } from "./components/ScenarioPanel";
 import type { CityAction } from "./lib/cityActions";
 import { WeatherPanel } from "./components/WeatherPanel";
 import { reportShowsOn, useFloodData } from "./lib/data";
@@ -85,6 +86,7 @@ export function App() {
   const [modelMitigation, setModelMitigation] = useState<Loaded<MitigationReport>>({ status: "loading" });
   const [weatherOpen, setWeatherOpen] = useState(false);
   const [layersOpen, setLayersOpen] = useState(false);
+  const [plannerOpen, setPlannerOpen] = useState(false);
   const [day, setDay] = useState<string>(DEFAULT_DAY);
   const [index, setIndex] = useState<RunIndex | null>(null);
   const [view, setView] = useState<Bbox | null>(null);
@@ -199,11 +201,30 @@ export function App() {
       setAboutOpen(false);
       setWeatherOpen(false);
       setLayersOpen(false);
+      setPlannerOpen(false);
       setSelectedId(null);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  // The intro screen and other parts of the page can ask for the planner by name.
+  useEffect(() => {
+    const onOpen = () => {
+      setAboutOpen(false);
+      setWeatherOpen(false);
+      setLayersOpen(false);
+      setSelectedId(null);
+      setPlannerOpen(true);
+    };
+    window.addEventListener("open-scenario-planner", onOpen);
+    return () => window.removeEventListener("open-scenario-planner", onOpen);
+  }, []);
+
+  // Picking a place or report on the map takes over from the planner.
+  useEffect(() => {
+    if (selectedId) setPlannerOpen(false);
+  }, [selectedId]);
 
   function remember(id: string | null) {
     const url = new URL(window.location.href);
@@ -368,11 +389,33 @@ export function App() {
         <button
           type="button"
           className="round"
+          data-scenario-trigger
+          aria-label={t("Scenario planner")}
+          aria-pressed={plannerOpen}
+          onClick={() => {
+            setAboutOpen(false);
+            setWeatherOpen(false);
+            setLayersOpen(false);
+            setSelectedId(null);
+            remember(null);
+            setPlannerOpen(true);
+          }}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="8" />
+            <circle cx="12" cy="12" r="3.5" />
+            <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          className="round"
           aria-label={t("Map layers")}
           aria-pressed={layersOpen}
           onClick={() => {
             setAboutOpen(false);
             setWeatherOpen(false);
+            setPlannerOpen(false);
             setLayersOpen(true);
           }}
         >
@@ -398,6 +441,7 @@ export function App() {
           aria-pressed={weatherOpen}
           onClick={() => {
             setAboutOpen(false);
+            setPlannerOpen(false);
             setWeatherOpen(true);
           }}
         >
@@ -412,6 +456,7 @@ export function App() {
           aria-label={t("About and sources")}
           onClick={() => {
             setWeatherOpen(false);
+            setPlannerOpen(false);
             setAboutOpen(true);
           }}
         >
@@ -525,6 +570,8 @@ export function App() {
       ) : null}
 
       {aboutOpen ? <AboutPanel sources={data.sources} onClose={() => setAboutOpen(false)} /> : null}
+
+      <ScenarioPanel open={plannerOpen} onClose={() => setPlannerOpen(false)} mapRef={mapRef} zones={data.zones} />
     </div>
   );
 }

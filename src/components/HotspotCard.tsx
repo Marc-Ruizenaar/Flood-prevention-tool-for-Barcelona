@@ -32,7 +32,8 @@ const STEPS: { key: BudgetKey; label: string }[] = [
 
 const DIRECTIONS = ["N", "E", "S", "W"] as const;
 
-export function HotspotCard({ properties }: { properties: HotspotProps }) {
+// edgePonded: the deep reading sits at the closed edge of the run, so the depth is a wall artefact, an upper bound.
+export function HotspotCard({ properties, edgePonded = false }: { properties: HotspotProps; edgePonded?: boolean }) {
   const street = properties.nearest_street?.name || properties.nearest_street?.segment_id || t("Unnamed street");
   const rain = properties.local_rainfall;
   const explanation = properties.explanation;
@@ -58,10 +59,14 @@ export function HotspotCard({ properties }: { properties: HotspotProps }) {
           ))}
         </ul>
         <p className="hotspot-caveat">{story.caveat}</p>
-        {synthetic || conditional ? (
-          <p className={`model-badge${synthetic ? " is-synthetic" : ""}${conditional ? " is-conditional" : ""}`}>
+        {synthetic || conditional || edgePonded ? (
+          <p
+            className={`model-badge${synthetic ? " is-synthetic" : ""}${conditional ? " is-conditional" : ""}${edgePonded ? " is-edge" : ""}`}
+          >
             {synthetic ? <strong>SYNTHETIC</strong> : null}
             {conditional ? <strong>CONDITIONAL</strong> : null}
+            {edgePonded ? <strong>{t("Edge ponding")}</strong> : null}
+            {edgePonded ? <span className="model-edge-note">{t("Depth is an upper bound")}</span> : null}
           </p>
         ) : null}
       </section>
@@ -77,7 +82,7 @@ export function HotspotCard({ properties }: { properties: HotspotProps }) {
         </dd>
         <dt>{t("Peak depth")}</dt>
         <dd>
-          {formatDepth(properties.peak_depth_m)} at {formatWhen(properties.peak_time_local)}
+          {edgePonded ? t("> 1 m (upper bound)") : formatDepth(properties.peak_depth_m)} at {formatWhen(properties.peak_time_local)}
           {properties.peak_time_resolution ? <span className="model-note">{properties.peak_time_resolution}</span> : null}
         </dd>
         <dt>Minutes above 0.10 m</dt>

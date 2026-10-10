@@ -241,7 +241,16 @@ if (!existsSync(SCENARIOS)) {
 
 // Source copy of the intro scan: same forbidden wording, and no em-dash (U+2014).
 const EM_DASH = String.fromCharCode(0x2014);
-for (const path of ["src/components/IntroScan.tsx", "src/lib/scenarios.ts", "src/intro.css"]) {
+for (const path of [
+  "src/components/IntroScan.tsx",
+  "src/components/IntroScreen.tsx",
+  "src/lib/scenarios.ts",
+  "src/intro.css",
+  "src/components/ScenarioPanel.tsx",
+  "src/scenario.css",
+  "src/lib/outlook.ts",
+  "src/lib/scenarioUi.ts",
+]) {
   if (!existsSync(path)) continue;
   const text = readFileSync(path, "utf8");
   for (const pattern of FORBIDDEN) {
