@@ -7,15 +7,18 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import pytest
+from sklearn.model_selection import GroupKFold
 
 ML = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ML))
 
 from build_dataset import excess_rain, make_label  # noqa: E402
-from config import CAVEAT, DATA_ML, FEATURES, FORBIDDEN, LABEL_DEPTH_M, OUT  # noqa: E402
-from evaluate import class_metrics, spatial_cv, trust_assessment  # noqa: E402
+from config import (CALIBRATION_BANDS, CAVEAT, DATA_ML, FEATURES, FORBIDDEN, LABEL_DEPTH_M,  # noqa: E402
+                    MIN_STEP_ROWS, OUT)
+from evaluate import (class_metrics, fit_calibrator, nested_calibrated, reliability_bins,  # noqa: E402
+                      reliability_block, spatial_cv, trust_assessment)
 from geo import block_ids  # noqa: E402
-from predict_scenarios import is_extrapolated, risk_score  # noqa: E402
+from predict_scenarios import expected_share, is_extrapolated, risk_score  # noqa: E402
 from train import make_model  # noqa: E402
 
 CONTRACT_TOP = {"version", "kind", "caveat", "generated_at", "model", "metrics", "trust",
@@ -138,7 +141,7 @@ def test_scenarios_json_matches_contract():
     assert len(raw.encode("utf-8")) < 3_000_000
     data = json.loads(raw, parse_constant=lambda c: pytest.fail(f"non-finite constant {c}"))
     assert set(data) == CONTRACT_TOP
-    assert data["version"] == 1 and data["kind"] == "ml_scenario"
+    assert data["version"] == 2 and data["kind"] == "ml_scenario"
     assert data["caveat"] == CAVEAT
     n = len(data["segments"])
     assert n > 0
@@ -168,6 +171,16 @@ def test_scenarios_json_matches_contract():
     for w in FORBIDDEN:
         assert w.lower() not in low, f"forbidden word {w!r}"
     assert data["model"]["secondary_labels"].startswith(("not obtained", "used"))
+    cal = data["model"]["calibration"]
+    assert cal["method"] == "isotonic" and cal["fitted_on"] == "spatial out-of-fold predictions"
+    assert cal["n"] > 0 and cal["note"].startswith("Percentages mean:")
+    assert all(round(v, 3) == v for sc in data["scenarios"] for v in sc["p"])
+    assert cal["bands"] == CALIBRATION_BANDS == {"medium": 0.3, "high": 0.6}
+    assert cal["min_step_rows"] == MIN_STEP_ROWS
+    assert all(st["n"] >= MIN_STEP_ROWS for st in cal["steps"]) or len(cal["steps"]) == 1
+    for sc in data["scenarios"]:
+        assert 0 <= sc["expected_share"] <= 1
+        assert sc["expected_share"] == round(float(np.mean(sc["p"])), 4)
     assert set(data["metrics"]["leave_one_storm_out"]) == {
         "train_2026_10_02_test_2026_10_03", "train_2026_10_03_test_2026_10_02"}
 
@@ -184,3 +197,116 @@ def test_top_lists_skip_edge_artefact_segments():
     for sc in data["scenarios"]:
         picked = {ids[t["segment_index"]] for t in sc["top"]}
         assert picked.isdisjoint(artefacts), f"{sc['id']} alerts on an edge artefact"
+
+
+# ----------------------------------------------------------------------------- calibration
+RELIABILITY_KEYS = {"bins", "bins_raw", "brier_before", "brier_after", "at_70", "sentence"}
+BIN_KEYS = {"from", "to", "predicted_mean", "observed_rate", "n"}
+
+
+def scored_frame(n=800, seed=3):
+    """OOF-like scores that are too confident: true rate is pulled halfway to 0.5."""
+    rng = np.random.default_rng(seed)
+    df = synthetic_frame(n_seg=n // 2, seed=seed)
+    score = rng.random(len(df))
+    df["oof"] = score
+    df["label"] = (rng.random(len(df)) < 0.25 + 0.5 * score).astype(int)
+    return df
+
+
+def block_folds(df):
+    return list(GroupKFold(n_splits=5).split(df, df["label"], df["block"]))
+
+
+def test_calibrator_is_monotonic_and_bounded():
+    df = scored_frame()
+    cal = fit_calibrator(df["oof"], df["label"])
+    grid = np.linspace(-0.5, 1.5, 400)  # includes values outside the fitted range
+    out = cal.predict(grid)
+    assert (np.diff(out) >= -1e-12).all(), "calibrated p must never fall as the raw score rises"
+    assert out.min() >= 0.0 and out.max() <= 1.0
+
+
+def test_every_calibrated_step_rests_on_at_least_30_rows():
+    # A steep, noisy relation makes plain isotonic produce tiny steps at the top. Pooling must remove them.
+    rng = np.random.default_rng(11)
+    n = 1500
+    raw = rng.random(n)
+    y = (rng.random(n) < np.where(raw > 0.95, 1.0, 0.1 + 0.4 * raw)).astype(int)
+    cal = fit_calibrator(raw, y)
+    steps = cal.steps()
+    assert len(steps) >= 1
+    assert all(st["n"] >= MIN_STEP_ROWS for st in steps)
+    assert sum(st["n"] for st in steps) == n
+    ps = [st["p"] for st in steps]
+    assert ps == sorted(ps), "step table must be monotonic"
+    out = cal.predict(np.linspace(-0.5, 1.5, 500))
+    assert (np.diff(out) >= -1e-12).all() and out.min() >= 0.0 and out.max() <= 1.0
+
+
+def test_pooling_blocks_a_100_percent_top_step():
+    raw = np.linspace(0, 1, 400)
+    y = np.zeros(400, dtype=int)
+    y[-10:] = 1  # ten sure flooded rows at the very top, a plateau of 100% on 10 rows
+    cal = fit_calibrator(raw, y)
+    assert all(st["n"] >= MIN_STEP_ROWS for st in cal.steps())
+    assert cal.predict(np.array([1.0]))[0] < 1.0
+
+
+def test_expected_share_is_mean_p_rounded():
+    assert expected_share([0.0, 0.5, 1.0, 0.25]) == 0.4375
+    assert expected_share(np.array([0.1, 0.2, 0.2])) == 0.1667
+
+
+def test_reliability_block_keys_and_row_counts():
+    df = scored_frame()
+    folds = block_folds(df)
+    block, nested = reliability_block(df["oof"], df["label"], folds)
+    assert set(block) == RELIABILITY_KEYS
+    assert len(nested) == len(df)
+    assert not np.isnan(nested).any() and nested.min() >= 0 and nested.max() <= 1
+    for name in ("bins", "bins_raw"):
+        assert len(block[name]) == 5
+        assert all(set(b) == BIN_KEYS for b in block[name])
+        assert sum(b["n"] for b in block[name]) == len(df)
+        assert [b["from"] for b in block[name]] == [0.0, 0.2, 0.4, 0.6, 0.8]
+    assert block["at_70"] is None or (block["at_70"]["from"], block["at_70"]["to"]) == (0.6, 0.8)
+    assert isinstance(block["sentence"], str) and block["sentence"]
+    assert 0 <= block["brier_after"] <= 1 and 0 <= block["brier_before"] <= 1
+
+
+def test_nested_calibration_never_uses_the_held_out_fold():
+    df = scored_frame()
+    folds = block_folds(df)
+    oof, y = df["oof"].to_numpy(), df["label"].to_numpy()
+    nested = nested_calibrated(oof, y, folds)
+    for tr, te in folds:
+        expected = fit_calibrator(oof[tr], y[tr]).predict(oof[te])
+        assert np.allclose(nested[te], expected)
+
+
+def test_reliability_bins_sum_and_include_one():
+    p = np.array([0.0, 0.19, 0.2, 0.99, 1.0])
+    y = np.array([0, 0, 1, 1, 1])
+    bins = reliability_bins(p, y)
+    assert sum(b["n"] for b in bins) == 5
+    assert bins[-1]["n"] == 2 and bins[-1]["observed_rate"] == 1.0
+    empty = reliability_bins(np.array([0.1]), np.array([0]))
+    assert empty[3]["n"] == 0 and empty[3]["predicted_mean"] is None
+
+
+def test_scenarios_json_reliability_matches_metrics_json():
+    metrics_path, sc_path = DATA_ML / "metrics.json", DATA_ML / "scenarios.json"
+    assert metrics_path.exists() and sc_path.exists(), "run train.py and predict_scenarios.py first"
+    m = json.loads(metrics_path.read_text(encoding="utf-8"))
+    d = json.loads(sc_path.read_text(encoding="utf-8"))
+    rel = d["metrics"]["reliability"]
+    assert rel == m["metrics"]["reliability"]
+    assert set(rel) == RELIABILITY_KEYS
+    n_eval = d["model"]["calibration"]["n"]
+    assert sum(b["n"] for b in rel["bins"]) == n_eval == sum(b["n"] for b in rel["bins_raw"])
+    assert sum(d["metrics"]["calibrated_confusion"]["confusion"].values()) == n_eval
+    assert d["metrics"]["calibrated_confusion"]["n"] == n_eval
+    assert rel["brier_after"] <= rel["brier_before"] + 1e-9
+    if rel["at_70"] is not None:
+        assert rel["at_70"] in rel["bins"]

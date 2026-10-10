@@ -31,8 +31,34 @@ export type RealWorldCheck = {
   lift: number | null; // hit_rate / random_rate
 };
 
+export type ReliabilityBin = {
+  from: number;
+  to: number;
+  predicted_mean: number | null; // null when the bin is empty
+  observed_rate: number | null;
+  n: number;
+};
+
+/** v2: how far the shown percentages can be trusted, measured on streets the calibrator never saw. */
+export type Reliability = {
+  bins: ReliabilityBin[]; // after calibration, 5 equal-width bins
+  bins_raw: ReliabilityBin[]; // before calibration
+  brier_before: number;
+  brier_after: number;
+  at_70: ReliabilityBin | null; // the 60 to 80% bin, or null when the model rarely says it
+  sentence: string; // plain English
+};
+
+export type Calibration = {
+  method: string; // "isotonic"
+  fitted_on: string;
+  n: number;
+  note: string;
+  bands?: { medium: number; high: number }; // risk words: medium from `medium`, high from `high`
+};
+
 export type ScenariosFile = {
-  version: 1;
+  version: 1 | 2;
   kind: "ml_scenario";
   caveat: string;
   generated_at: string; // ISO time
@@ -45,6 +71,7 @@ export type ScenariosFile = {
     trained_rain_mm: [number, number];
     secondary_labels: string;
     excluded_rows: string;
+    calibration?: Calibration; // v2 only
   };
   metrics: {
     spatial_cv: ClassMetrics; // 500 m blocks, out of fold, both days
@@ -53,6 +80,8 @@ export type ScenariosFile = {
       train_2026_10_03_test_2026_10_02: ClassMetrics;
     };
     real_world: RealWorldCheck[]; // 150 m and 300 m
+    reliability?: Reliability; // v2 only
+    calibrated_confusion?: ClassMetrics; // v2 only, matrix at the threshold on the calibrated scores
   };
   trust: {
     level: TrustLevel;
@@ -67,7 +96,8 @@ export type ScenariosFile = {
     drainage_mm_h: number; // 10 | 20 | 30
     extrapolated: boolean; // true outside the trained rain range or drainage other than 20 mm/h
     risk_score: number; // 0..10, one decimal
-    share_flooded: number; // share of segments with p >= threshold
+    share_flooded: number; // share of segments with p >= threshold (fragile: prefer expected_share)
+    expected_share?: number; // mean p over all segments, 0..1, 4 decimals
     p: number[]; // per segment, same order as `segments`, 3 decimals
     top: { rank: number; segment_index: number; name: string; lon: number; lat: number; p: number }[];
   }[];
@@ -113,6 +143,35 @@ function validMetrics(x: unknown): boolean {
   );
 }
 
+function validBin(x: unknown): boolean {
+  return isRec(x) && fin(x.from) && fin(x.to) && finOrNull(x.predicted_mean) && finOrNull(x.observed_rate) && fin(x.n) && x.n >= 0;
+}
+
+function validReliability(x: unknown): boolean {
+  if (!isRec(x)) return false;
+  if (!Array.isArray(x.bins) || x.bins.length === 0 || !x.bins.every(validBin)) return false;
+  if (!Array.isArray(x.bins_raw) || x.bins_raw.length === 0 || !x.bins_raw.every(validBin)) return false;
+  if (!fin(x.brier_before) || !fin(x.brier_after)) return false;
+  if (x.at_70 !== null && !validBin(x.at_70)) return false;
+  return typeof x.sentence === "string" && x.sentence.length > 0;
+}
+
+function validBands(x: unknown): boolean {
+  return isRec(x) && fin(x.medium) && fin(x.high) && x.medium >= 0 && x.medium < x.high && x.high <= 1;
+}
+
+function validCalibration(x: unknown): boolean {
+  return (
+    isRec(x) &&
+    typeof x.method === "string" &&
+    typeof x.fitted_on === "string" &&
+    fin(x.n) &&
+    typeof x.note === "string" &&
+    x.note.length > 0 &&
+    (x.bands === undefined || validBands(x.bands))
+  );
+}
+
 function validRealWorld(x: unknown): boolean {
   return (
     isRec(x) &&
@@ -133,6 +192,9 @@ function validScenario(x: unknown, segmentCount: number): boolean {
   if (!isRec(x)) return false;
   if (typeof x.id !== "string" || typeof x.extrapolated !== "boolean") return false;
   if (!fin(x.rain_mm) || !fin(x.drainage_mm_h) || !fin(x.risk_score) || !fin(x.share_flooded)) return false;
+  if (x.expected_share !== undefined && !(fin(x.expected_share) && x.expected_share >= 0 && x.expected_share <= 1)) {
+    return false;
+  }
   if (!Array.isArray(x.p) || x.p.length !== segmentCount || !x.p.every(fin)) return false;
   if (!Array.isArray(x.top)) return false;
   return x.top.every(
@@ -150,15 +212,18 @@ function validScenario(x: unknown, segmentCount: number): boolean {
   );
 }
 
-/** Returns the file if it matches the contract fields the intro screen reads, otherwise null. */
+/** Returns the file if it matches the contract fields the intro screen reads, otherwise null. Accepts v1 and v2. */
 export function validateScenarios(x: unknown): ScenariosFile | null {
-  if (!isRec(x) || x.kind !== "ml_scenario" || x.version !== 1) return null;
+  if (!isRec(x) || x.kind !== "ml_scenario" || (x.version !== 1 && x.version !== 2)) return null;
   if (typeof x.caveat !== "string" || !x.caveat) return null;
   const { model, metrics, trust, segments, scenarios } = x;
   if (!isRec(model) || !fin(model.trained_storms)) return null;
   const rain = model.trained_rain_mm;
   if (!Array.isArray(rain) || rain.length !== 2 || !rain.every(fin)) return null;
+  if (model.calibration !== undefined && !validCalibration(model.calibration)) return null;
   if (!isRec(metrics) || !validMetrics(metrics.spatial_cv)) return null;
+  if (metrics.reliability !== undefined && !validReliability(metrics.reliability)) return null;
+  if (metrics.calibrated_confusion !== undefined && !validMetrics(metrics.calibrated_confusion)) return null;
   if (!Array.isArray(metrics.real_world) || !metrics.real_world.every(validRealWorld)) return null;
   if (!isRec(trust) || (trust.level !== "low" && trust.level !== "medium" && trust.level !== "high")) return null;
   if (!strings(trust.reasons) || !strings(x.improvements)) return null;
@@ -229,9 +294,18 @@ export function floodThreshold(file: ScenariosFile): number {
   return Number.isFinite(cut) ? cut : FLOOD_THRESHOLD;
 }
 
-/** Top areas whose model score reaches the matrix threshold: the ones worth an alert ring. */
+/**
+ * The score from which a street counts as at risk in user-facing logic. A calibrated (v2) file
+ * carries its own medium band (matches riskWord); otherwise the matrix threshold is used.
+ */
+export function alertCut(file: ScenariosFile): number {
+  const medium = file.model.calibration?.bands?.medium;
+  return typeof medium === "number" && Number.isFinite(medium) ? medium : floodThreshold(file);
+}
+
+/** Top areas at or above the alert cut (medium band, or the matrix threshold on older files). */
 export function areasAtRisk(file: ScenariosFile, scenario: Scenario): number {
-  const cut = floodThreshold(file);
+  const cut = alertCut(file);
   return scenario.top.filter((area) => area.p >= cut).length;
 }
 
@@ -350,7 +424,7 @@ export function whereToGo(
   const start = file.segments[segmentIndex];
   const startP = scenario.p[segmentIndex];
   if (!start || startP === undefined) return null;
-  const cut = floodThreshold(file);
+  const cut = alertCut(file);
   let best: WhereToGo | null = null;
   for (let i = 0; i < file.segments.length; i++) {
     if (i === segmentIndex) continue;

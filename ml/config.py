@@ -71,6 +71,9 @@ SCEN_RAIN_MM = [25, 50, 75, 100, 143]
 SCEN_DRAINAGE_MM_H = [10, 20, 30]
 CAVEAT = ("Prototype trained on 2 simulated storms. Shows susceptibility under a what-if "
           "scenario, not a prediction of real weather.")
+MIN_STEP_ROWS = 30      # no calibrated level may rest on fewer out-of-fold rows than this
+# Risk bands for anything user-facing. They match riskWord() in src/lib/scenarioUi.ts.
+CALIBRATION_BANDS = {"medium": 0.3, "high": 0.6}
 FORBIDDEN = ["will rain", "mm expected", "€", "guaranteed flood", "forecast"]
 
 STATIC_FEATURES = ["elevation_m", "slope_pct", "log_flow_acc", "twi", "depression_depth_m",

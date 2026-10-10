@@ -17,16 +17,20 @@ import pandas as pd
 from sklearn.ensemble import HistGradientBoostingClassifier
 
 from build_dataset import excess_rain
-from config import (CAVEAT, DATA_ML, FEATURES, HGB_PARAMS, LABEL_DEFINITION, OUT,
-                    TRAINED_DRAINAGE_MM_H)
-from evaluate import (BASE_IMPROVEMENTS, class_metrics, clean, leave_one_storm_out,
-                      normalise_importance, real_world, results_based_improvements, roc_auc,
-                      spatial_cv, training_frame, trust_assessment)
+from config import (CALIBRATION_BANDS, CAVEAT, DATA_ML, FEATURES, HGB_PARAMS, LABEL_DEFINITION,
+                    MIN_STEP_ROWS, OUT, TRAINED_DRAINAGE_MM_H)
+from evaluate import (BASE_IMPROVEMENTS, calibrated_confusion, class_metrics, clean, fit_calibrator,
+                      leave_one_storm_out, normalise_importance, real_world, reliability_block,
+                      results_based_improvements, roc_auc, spatial_cv, training_frame,
+                      trust_assessment)
 
 # Secondary label source (MAPRI flood zones). Set by the documented attempt, see README.
 SECONDARY_LABELS = ("not obtained: the Generalitat WMS/WFS (sig.gencat.cat) rejects non-browser "
                     "clients with a UserAgentFilterError (HTTP 403), and the layer names are not "
                     "published without GetCapabilities. Not worked around.")
+
+CALIBRATION_NOTE = ("Percentages mean: share of comparable streets that flooded in the physics simulation "
+                    "for that rain. Not yet checked against real floods.")
 
 # Scenario used for the real-world check: the heavy day (3 Oct), rain 143 mm at 20 mm/h.
 CHECK_RAIN_MM = 143.4
@@ -58,8 +62,15 @@ def run() -> dict:
     rain_by_date = df.groupby("date")["rain_mm"].first()
     rain_range = [float(rain_by_date.min()), float(rain_by_date.max())]
 
-    oof_df, _, mean_imp = spatial_cv(df, make_model)
+    oof_df, folds, mean_imp = spatial_cv(df, make_model)
     spatial = class_metrics(oof_df["label"], oof_df["oof"])
+
+    # Calibration. The shipped calibrator is fitted on ALL out-of-fold scores. Its quality is
+    # measured separately with a nested split (fitted on the other folds, applied to the held-out one).
+    calibrator = fit_calibrator(oof_df["oof"], oof_df["label"])
+    joblib.dump(calibrator, OUT / "calibrator.joblib")
+    reliability, nested = reliability_block(oof_df["oof"], oof_df["label"], folds)
+    cal_confusion = calibrated_confusion(oof_df["label"], nested)
     loso = leave_one_storm_out(df, make_model)
 
     final = make_model().fit(train[FEATURES], train["label"])
@@ -78,6 +89,15 @@ def run() -> dict:
     within = {d: roc_auc(g["label"], g["oof"]) for d, g in oof_df.groupby("date")}
     improvements = BASE_IMPROVEMENTS + results_based_improvements(spatial, loso, rw, n_excluded, within)
 
+    # The pooling rule guarantees this. Fail loudly if it ever stops holding.
+    if len(calibrator.counts) > 1 and int(calibrator.counts.min()) < MIN_STEP_ROWS:
+        raise SystemExit(f"calibrator has a step with {int(calibrator.counts.min())} rows, "
+                         f"minimum is {MIN_STEP_ROWS}")
+    max_p = float(calibrator.values.max())
+    improvements.append(
+        f"The model can only separate a few risk levels (top calibrated level {max_p * 100:.0f}%), because "
+        "two storms give little evidence at the extremes. More storms would give it finer levels.")
+
     result = {
         "model": {
             "type": "HistGradientBoostingClassifier (scikit-learn)",
@@ -88,11 +108,24 @@ def run() -> dict:
             "trained_rain_mm": rain_range,
             "secondary_labels": SECONDARY_LABELS,
             "excluded_rows": f"edge-ponded segments on 2026-10-03 (n={n_excluded})",
+            "calibration": {
+                "method": "isotonic",
+                "fitted_on": "spatial out-of-fold predictions",
+                "n": int(len(oof_df)),
+                "note": CALIBRATION_NOTE,
+                "min_step_rows": MIN_STEP_ROWS,
+                "n_steps": int(len(calibrator.values)),
+                "max_p": round(max_p, 4),
+                "steps": calibrator.steps(),
+                "bands": dict(CALIBRATION_BANDS),
+            },
         },
         "metrics": {
             "spatial_cv": spatial,
             "leave_one_storm_out": loso,
             "real_world": rw,
+            "reliability": reliability,
+            "calibrated_confusion": cal_confusion,
         },
         "trust": trust,
         "improvements": improvements,
@@ -112,6 +145,14 @@ if __name__ == "__main__":
           f"bal={sp['balanced_accuracy']:.3f} prec={sp['precision']} rec={sp['recall']} "
           f"auc={sp['roc_auc']} brier={sp['brier']:.4f}")
     print("  confusion", sp["confusion"])
+    rel = m["reliability"]
+    print(f"calibration: brier {rel['brier_before']:.4f} -> {rel['brier_after']:.4f} (nested)")
+    for b in rel["bins"]:
+        print("  calibrated bin", b)
+    for b in rel["bins_raw"]:
+        print("  raw bin", b)
+    print("  at_70:", rel["at_70"], "|", rel["sentence"])
+    print("  calibrated confusion", m["calibrated_confusion"])
     for k, v in m["leave_one_storm_out"].items():
         print(f"LOSO {k}: n={v['n']} auc={v['roc_auc']} acc={v['accuracy']:.3f} base={v['baseline_accuracy']:.3f} "
               f"prec={v['precision']} rec={v['recall']} confusion={v['confusion']}")

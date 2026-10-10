@@ -12,6 +12,7 @@ import { dirname, join } from "node:path";
 
 import {
   adviceText,
+  alertCut,
   areasAtRisk,
   areasAtRiskLabel,
   areasAtRiskSpoken,
@@ -64,10 +65,85 @@ test("validateScenarios rejects junk and wrong kind or version", () => {
   assert.equal(validateScenarios("nope"), null);
   assert.equal(validateScenarios({}), null);
   const raw = load();
-  raw.version = 2;
+  raw.version = 3;
   assert.equal(validateScenarios(raw), null);
   const raw2 = load();
   raw2.kind = "other";
+  assert.equal(validateScenarios(raw2), null);
+});
+
+// A v2 file with no risk bands falls back to the matrix threshold (older calibrated files).
+const noBands = () => {
+  const raw = load();
+  delete raw.model.calibration.bands;
+  return raw;
+};
+
+// A v1 file is the v2 fixture without the calibration additions.
+const asV1 = () => {
+  const raw = load();
+  raw.version = 1;
+  delete raw.model.calibration;
+  delete raw.metrics.reliability;
+  delete raw.metrics.calibrated_confusion;
+  return raw;
+};
+
+test("a v2 file keeps its calibration and reliability", () => {
+  const file = validateScenarios(load());
+  assert.ok(file);
+  assert.equal(file.version, 2);
+  assert.equal(file.model.calibration?.method, "isotonic");
+  assert.equal(file.metrics.reliability?.bins.length, 5);
+  assert.equal(file.metrics.reliability?.at_70?.n, 40);
+  assert.ok(file.metrics.calibrated_confusion);
+});
+
+test("a v1 file without calibration still passes", () => {
+  const file = validateScenarios(asV1());
+  assert.ok(file);
+  assert.equal(file.version, 1);
+  assert.equal(file.metrics.reliability, undefined);
+});
+
+test("a v2 file may have at_70 null and empty bins", () => {
+  const raw = load();
+  raw.metrics.reliability.at_70 = null;
+  assert.ok(validateScenarios(raw));
+});
+
+test("validateScenarios rejects malformed reliability", () => {
+  const cases = [
+    (r) => { r.bins = "nope"; },
+    (r) => { r.bins = []; },
+    (r) => { delete r.bins_raw; },
+    (r) => { r.bins[0].n = "300"; },
+    (r) => { r.bins[1].n = -1; },
+    (r) => { delete r.bins[2].observed_rate; },
+    (r) => { r.bins_raw[0].from = Number.NaN; },
+    (r) => { r.brier_before = "0.06"; },
+    (r) => { delete r.brier_after; },
+    (r) => { delete r.at_70; },
+    (r) => { r.at_70 = { predicted_mean: 0.7 }; },
+    (r) => { r.sentence = ""; },
+    (r) => { r.sentence = 7; },
+  ];
+  cases.forEach((mutate, i) => {
+    const raw = load();
+    mutate(raw.metrics.reliability);
+    assert.equal(validateScenarios(raw), null, `malformed reliability case ${i} should fail`);
+  });
+  const raw = load();
+  raw.metrics.reliability = null;
+  assert.equal(validateScenarios(raw), null);
+});
+
+test("validateScenarios rejects a malformed calibration block or calibrated confusion", () => {
+  const raw = load();
+  raw.model.calibration = { method: "isotonic" };
+  assert.equal(validateScenarios(raw), null);
+  const raw2 = load();
+  raw2.metrics.calibrated_confusion = { n: 1 };
   assert.equal(validateScenarios(raw2), null);
 });
 
@@ -118,7 +194,7 @@ test("haversineM is zero for the same point and sane for a known pair", () => {
 });
 
 test("whereToGo picks a lower-p AND higher segment, never the same one", () => {
-  const file = validateScenarios(load());
+  const file = validateScenarios(noBands());
   const scenario = findScenario(file, 50, 20);
   const result = whereToGo(file, scenario, 0);
   assert.ok(result);
@@ -144,7 +220,7 @@ test("whereToGo respects maxM", () => {
 });
 
 test("whereToGo never picks a destination at or above the flood threshold", () => {
-  const file = validateScenarios(load());
+  const file = validateScenarios(noBands());
   const base = findScenario(file, 143, 10);
   assert.equal(file.metrics.spatial_cv.threshold, 0.5);
   // s6 (p 0.35) is nearest and fine. Push it to 0.55: s1 (0.60) and s2 (0.50) are still lower than the
@@ -167,7 +243,7 @@ test("whereToGo never picks a destination at or above the flood threshold", () =
 });
 
 test("whereToGo uses the file's own threshold", () => {
-  const file = validateScenarios(load());
+  const file = validateScenarios(noBands());
   const scenario = findScenario(file, 50, 20);
   // With a 0.2 cut only s3 (0.08), s4 (0.02) and s6 (0.12) qualify for start s0; s6 is nearest.
   const strict = { ...file, metrics: { ...file.metrics, spatial_cv: { ...file.metrics.spatial_cv, threshold: 0.2 } } };
@@ -193,7 +269,7 @@ test("whereToGo returns null on empty data and bad index", () => {
 });
 
 test("adviceText words both outcomes without giving orders", () => {
-  const file = validateScenarios(load());
+  const file = validateScenarios(noBands());
   const scenario = findScenario(file, 50, 20);
   const text = adviceText(whereToGo(file, scenario, 0));
   assert.match(text, /^A higher, lower-risk street nearby: C\. Villarroel, about \d+ m away \(straight line\)$/);
@@ -201,14 +277,60 @@ test("adviceText words both outcomes without giving orders", () => {
   assert.match(adviceText(null), /No clearly safer, higher street within 600 m/);
 });
 
-test("areasAtRisk counts top areas at or above the threshold", () => {
-  const file = validateScenarios(load());
+test("areasAtRisk without bands counts top areas at or above the matrix threshold", () => {
+  const file = validateScenarios(noBands());
   assert.equal(areasAtRisk(file, findScenario(file, 50, 20)), 3);
   assert.equal(areasAtRisk(file, findScenario(file, 143, 10)), 5);
 });
 
-test("areasAtRiskLabel adds a plus only when the whole top list is at risk", () => {
+test("with bands, areasAtRisk counts top areas at or above the medium band", () => {
   const file = validateScenarios(load());
+  assert.deepEqual(file.model.calibration?.bands, { medium: 0.3, high: 0.6 });
+  assert.equal(alertCut(file), 0.3);
+  // r50_d20 top p: 0.91 0.88 0.82 0.31 0.22 0.12 -> four reach 0.3 (three reached 0.5).
+  assert.equal(areasAtRisk(file, findScenario(file, 50, 20)), 4);
+  // r143_d10 top p: 0.99 0.98 0.97 0.6 0.5 0.35 -> all six reach 0.3 (five reached 0.5).
+  assert.equal(areasAtRisk(file, findScenario(file, 143, 10)), 6);
+  assert.equal(alertCut(validateScenarios(noBands())), 0.5);
+});
+
+test("with bands, whereToGo only suggests streets under the medium band", () => {
+  const file = validateScenarios(load());
+  for (const s of file.scenarios) {
+    for (let i = 0; i < file.segments.length; i++) {
+      const r = whereToGo(file, s, i, 5000);
+      if (r) assert.ok(r.p < 0.3 && r.p < s.p[i]);
+    }
+  }
+  // r143_d10: s6 (0.35) is under 0.5 but not under 0.3, so s3 (0.20) is chosen instead.
+  const result = whereToGo(file, findScenario(file, 143, 10), 0, 5000);
+  assert.ok(result);
+  assert.equal(result.index, 3);
+});
+
+test("validateScenarios checks the bands and expected_share when present", () => {
+  const file = validateScenarios(load());
+  assert.ok(file);
+  assert.ok(file.scenarios.every((s) => typeof s.expected_share === "number"));
+  const badBands = load();
+  badBands.model.calibration.bands = { medium: 0.6, high: 0.3 };
+  assert.equal(validateScenarios(badBands), null);
+  const missingHigh = load();
+  missingHigh.model.calibration.bands = { medium: 0.3 };
+  assert.equal(validateScenarios(missingHigh), null);
+  const badShare = load();
+  badShare.scenarios[0].expected_share = 1.2;
+  assert.equal(validateScenarios(badShare), null);
+  const noShare = load();
+  delete noShare.scenarios[0].expected_share;
+  assert.ok(validateScenarios(noShare));
+  const v1 = validateScenarios(asV1());
+  assert.ok(v1);
+  assert.equal(alertCut(v1), 0.5);
+});
+
+test("areasAtRiskLabel adds a plus only when the whole top list is at risk", () => {
+  const file = validateScenarios(noBands());
   const scenario = findScenario(file, 143, 10);
   assert.equal(areasAtRiskLabel(file, scenario), "5");
   assert.equal(areasAtRiskSpoken(file, scenario), "5 alert areas");

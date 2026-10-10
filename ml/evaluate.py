@@ -9,11 +9,12 @@ import math
 import numpy as np
 import pandas as pd
 from sklearn.inspection import permutation_importance
+from sklearn.isotonic import IsotonicRegression
 from sklearn.model_selection import GroupKFold
 
 from config import (CV_FOLDS, FEATURES, HIGH_LIFT_300, HIGH_LOSO_AUC, HIGH_MIN_REAL_POINTS,
-                    HIGH_MIN_STORMS, MED_LOSO_AUC, MED_MIN_STORMS, MED_SPATIAL_AUC, RADII_M,
-                    THRESHOLD, TOP_N, TOP_SPREAD_M)
+                    HIGH_MIN_STORMS, MED_LOSO_AUC, MED_MIN_STORMS, MED_SPATIAL_AUC, MIN_STEP_ROWS,
+                    RADII_M, THRESHOLD, TOP_N, TOP_SPREAD_M)
 from geo import greedy_top
 
 
@@ -138,6 +139,160 @@ def leave_one_storm_out(df: pd.DataFrame, make_model):
         key = f"train_{tr_date.replace('-', '_')}_test_{te_date.replace('-', '_')}"
         out[key] = class_metrics(te["label"].to_numpy(), p)
     return out
+
+
+# ----------------------------------------------------------------------------- calibration
+def new_calibrator() -> IsotonicRegression:
+    return IsotonicRegression(out_of_bounds="clip", y_min=0.0, y_max=1.0)
+
+
+class PooledStepCalibrator:
+    """Isotonic map pooled so that every step rests on at least `min_rows` out-of-fold rows.
+
+    1. Fit plain isotonic regression (the pool-adjacent-violators solution).
+    2. Its output is a staircase. Take each step as a block of rows, in raw-score order.
+    3. While some block has fewer than `min_rows` rows, merge the smallest one into the neighbour
+       with the closer value. The merged value is the row-weighted mean of the observed rate.
+       A merged value lies between the two it replaces, so the staircase stays non-decreasing.
+
+    `edges` are raw-score cut points (midway between neighbouring blocks), `values` the level of each
+    block, `counts` the rows behind it. Prediction is a lookup, so it is monotonic and bounded by the
+    observed rates, hence inside [0, 1].
+    """
+
+    def __init__(self, min_rows: int = 30):
+        self.min_rows = int(min_rows)
+        self.edges = np.empty(0)
+        self.values = np.empty(0)
+        self.counts = np.empty(0, dtype=int)
+        self.lows = np.empty(0)   # smallest raw score in each block
+        self.highs = np.empty(0)  # largest raw score in each block
+
+    def fit(self, oof, y):
+        x = np.asarray(oof, dtype=float)
+        t = np.asarray(y, dtype=float)
+        order = np.argsort(x, kind="stable")
+        x, t = x[order], t[order]
+        iso = new_calibrator().fit(x, t)
+        level = iso.predict(x)
+        # Blocks: runs of rows that share one isotonic level.
+        cuts = np.flatnonzero(np.diff(level) != 0) + 1
+        starts = np.concatenate(([0], cuts))
+        ends = np.concatenate((cuts, [len(x)]))
+        blocks = [{"n": int(e - s), "pos": float(t[s:e].sum()), "lo": float(x[s]), "hi": float(x[e - 1])}
+                  for s, e in zip(starts, ends)]
+        while len(blocks) > 1:
+            small = min(range(len(blocks)), key=lambda i: (blocks[i]["n"], i))
+            if blocks[small]["n"] >= self.min_rows:
+                break
+            rate = lambda b: b["pos"] / b["n"]  # noqa: E731
+            options = [j for j in (small - 1, small + 1) if 0 <= j < len(blocks)]
+            other = min(options, key=lambda j: (abs(rate(blocks[j]) - rate(blocks[small])), j))
+            lo, hi = sorted((small, other))
+            a, b = blocks[lo], blocks[hi]
+            blocks[lo:hi + 1] = [{"n": a["n"] + b["n"], "pos": a["pos"] + b["pos"],
+                                  "lo": a["lo"], "hi": b["hi"]}]
+        self.counts = np.array([b["n"] for b in blocks], dtype=int)
+        self.values = np.array([b["pos"] / b["n"] for b in blocks], dtype=float)
+        self.lows = np.array([b["lo"] for b in blocks])
+        self.highs = np.array([b["hi"] for b in blocks])
+        self.edges = (self.highs[:-1] + self.lows[1:]) / 2.0
+        return self
+
+    def predict(self, raw):
+        idx = np.searchsorted(self.edges, np.asarray(raw, dtype=float), side="right")
+        return np.clip(self.values[idx], 0.0, 1.0)
+
+    def steps(self) -> list[dict]:
+        """The step table for the file: `to_raw` is the top of each step (null for the last)."""
+        return [{"to_raw": (round(float(self.edges[i]), 4) if i < len(self.edges) else None),
+                 "p": round(float(v), 4), "n": int(c)}
+                for i, (v, c) in enumerate(zip(self.values, self.counts))]
+
+
+def fit_calibrator(oof, y, min_rows: int = MIN_STEP_ROWS) -> PooledStepCalibrator:
+    """Isotonic map from the raw model score to the observed flood rate, fitted on out-of-fold
+    scores and pooled so every step has at least `min_rows` rows."""
+    return PooledStepCalibrator(min_rows).fit(oof, y)
+
+
+def nested_calibrated(oof, y, folds) -> np.ndarray:
+    """Calibrated predictions for honest measurement.
+
+    For each outer spatial fold, fit the calibrator on the out-of-fold scores of the OTHER folds
+    only and apply it to the held-out fold. A street is never calibrated by a map that saw it.
+    Caveat: the other folds' scores came from models that were trained on rows of the held-out fold,
+    so this is not a fully independent nested split. A stricter version would need an inner CV.
+    """
+    oof = np.asarray(oof, dtype=float)
+    y = np.asarray(y, dtype=float)
+    out = np.full(len(oof), np.nan)
+    for _, te in folds:
+        rest = np.ones(len(oof), dtype=bool)
+        rest[te] = False
+        out[te] = fit_calibrator(oof[rest], y[rest]).predict(oof[te])
+    return out
+
+
+def reliability_bins(p, y, n_bins: int = 5) -> list[dict]:
+    """Equal-width bins on [0, 1]. The last bin includes 1.0. Empty bins keep n=0 and null means."""
+    p = np.asarray(p, dtype=float)
+    y = np.asarray(y, dtype=float)
+    edges = np.linspace(0, 1, n_bins + 1)
+    rows = []
+    for i, (lo, hi) in enumerate(zip(edges[:-1], edges[1:])):
+        m = (p >= lo) & ((p < hi) if i < n_bins - 1 else (p <= hi))
+        n = int(m.sum())
+        rows.append({"from": round(float(lo), 2), "to": round(float(hi), 2),
+                     "predicted_mean": float(p[m].mean()) if n else None,
+                     "observed_rate": float(y[m].mean()) if n else None, "n": n})
+    return rows
+
+
+# A reliability bin with fewer streets than this is called a small sample.
+THIN_BIN_ROWS = 30
+
+
+def reliability_sentence(at_70: dict | None) -> str:
+    if at_70 is None:
+        return ("The model almost never gives a 60 to 80% chance, so there is no honest '70%' to check. "
+                "Read the table for the levels it does give.")
+    said = round(at_70["predicted_mean"] * 100)
+    got = round(at_70["observed_rate"] * 100)
+    text = (f"When the model says {said}%, the simulation flooded {got}% of the time "
+            f"({at_70['n']} streets).")
+    if at_70["n"] < THIN_BIN_ROWS:
+        text += " That is a small sample, so treat it as rough."
+    return text
+
+
+def reliability_block(oof, y, folds) -> tuple[dict, np.ndarray]:
+    """metrics.reliability of the contract (v2) and the pooled nested calibrated predictions."""
+    y = np.asarray(y, dtype=float)
+    oof = np.asarray(oof, dtype=float)
+    nested = nested_calibrated(oof, y, folds)
+    bins = reliability_bins(nested, y)
+    mid = next((b for b in bins if b["from"] == 0.6 and b["to"] == 0.8), None)
+    at_70 = None
+    if mid is not None and mid["n"] > 0:
+        at_70 = dict(mid)
+    return {
+        "bins": bins,
+        "bins_raw": reliability_bins(oof, y),
+        "brier_before": float(np.mean((oof - y) ** 2)),
+        "brier_after": float(np.mean((nested - y) ** 2)),
+        "at_70": at_70,
+        "sentence": reliability_sentence(at_70),
+    }, nested
+
+
+def calibrated_confusion(y, nested) -> dict:
+    """Confusion matrix at the standard threshold on the nested calibrated predictions."""
+    m = class_metrics(y, nested)
+    return {"n": m["n"], "threshold": m["threshold"], "confusion": m["confusion"],
+            "accuracy": m["accuracy"], "baseline_accuracy": m["baseline_accuracy"],
+            "balanced_accuracy": m["balanced_accuracy"], "precision": m["precision"],
+            "recall": m["recall"], "f1": m["f1"], "roc_auc": m["roc_auc"], "brier": m["brier"]}
 
 
 # ----------------------------------------------------------------------------- real world
