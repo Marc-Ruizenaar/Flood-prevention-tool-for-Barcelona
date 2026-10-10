@@ -84,13 +84,26 @@ export function App() {
   const [modelDaily, setModelDaily] = useState<Loaded<DailySummary[]>>({ status: "loading" });
   const [modelMitigation, setModelMitigation] = useState<Loaded<MitigationReport>>({ status: "loading" });
   const [weatherOpen, setWeatherOpen] = useState(false);
+  const [layersOpen, setLayersOpen] = useState(false);
   const [day, setDay] = useState<string>(DEFAULT_DAY);
   const [index, setIndex] = useState<RunIndex | null>(null);
   const [view, setView] = useState<Bbox | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const dragRef = useRef<{ y: number; swiped: boolean }>({ y: 0, swiped: false });
   const mapRef = useRef<MapHandle>(null);
+  const topbarRef = useRef<HTMLElement>(null);
   const [tilted, setTilted] = useState(true);
+
+  // The top card's height depends on the language, so the floating buttons follow the measured height.
+  useEffect(() => {
+    const el = topbarRef.current;
+    if (!el) return;
+    const apply = () => el.closest<HTMLElement>(".app")?.style.setProperty("--top-h", `${el.offsetHeight}px`);
+    apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -185,6 +198,7 @@ export function App() {
       if (event.key !== "Escape") return;
       setAboutOpen(false);
       setWeatherOpen(false);
+      setLayersOpen(false);
       setSelectedId(null);
     };
     window.addEventListener("keydown", onKey);
@@ -272,7 +286,7 @@ export function App() {
   return (
     <div className={`app${zone ? " sheet-open" : ""}${panelOpen ? " panel-open" : ""}`}>
       <div className="rail">
-        <header className="topbar">
+        <header className="topbar" ref={topbarRef}>
           <div className="brand">
             <span className="mark" aria-hidden="true" />
             <div className="brand-copy">
@@ -330,24 +344,6 @@ export function App() {
             </button>
           ) : null}
 
-          <LayerDock
-            visibility={visibility}
-            failed={data.failed}
-            dayLabel={formatDay(day)}
-            mm={peakOf(gauges[day])?.mm ?? null}
-            hasReports={hasReportsOn(day, data.collections.signals)}
-            proofLegend={dayByDate(day).proofLegend}
-            onToggle={(id: GroupId) => {
-              if (
-                id === "proof" &&
-                !hasReportsOn(day, data.collections.signals) &&
-                atlasLocked(peakOf(gauges[day])?.mm ?? null)
-              ) {
-                return;
-              }
-              setVisibility((current) => ({ ...current, [id]: !current[id] }));
-            }}
-          />
           {modelStreets.status === "ready" ? <FloodLegend /> : null}
 
           <div className="panel-body">
@@ -369,6 +365,23 @@ export function App() {
       </div>
 
       <div className="map-buttons">
+        <button
+          type="button"
+          className="round"
+          aria-label={t("Map layers")}
+          aria-pressed={layersOpen}
+          onClick={() => {
+            setAboutOpen(false);
+            setWeatherOpen(false);
+            setLayersOpen(true);
+          }}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 4l8 4.5-8 4.5-8-4.5Z" />
+            <path d="M4 13l8 4.5 8-4.5" />
+            <path d="M4 16.5L12 21l8-4.5" />
+          </svg>
+        </button>
         <button
           type="button"
           className="round tilt"
@@ -486,6 +499,28 @@ export function App() {
             openZone(id, true);
           }}
           onClose={() => setWeatherOpen(false)}
+        />
+      ) : null}
+
+      {layersOpen ? (
+        <LayerDock
+          visibility={visibility}
+          failed={data.failed}
+          dayLabel={formatDay(day)}
+          mm={peakOf(gauges[day])?.mm ?? null}
+          hasReports={hasReportsOn(day, data.collections.signals)}
+          proofLegend={dayByDate(day).proofLegend}
+          onClose={() => setLayersOpen(false)}
+          onToggle={(id: GroupId) => {
+            if (
+              id === "proof" &&
+              !hasReportsOn(day, data.collections.signals) &&
+              atlasLocked(peakOf(gauges[day])?.mm ?? null)
+            ) {
+              return;
+            }
+            setVisibility((current) => ({ ...current, [id]: !current[id] }));
+          }}
         />
       ) : null}
 

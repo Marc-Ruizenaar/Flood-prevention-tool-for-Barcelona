@@ -27,10 +27,11 @@ body {
 
 button, a { font: inherit; }
 
-.app {
+.app, .citizen {
   position: relative;
   height: 100dvh;
-  overflow: hidden;
+  /* clip, not hidden: a focused control can otherwise scroll the whole app sideways */
+  overflow: clip;
 }
 
 .map {
@@ -46,7 +47,7 @@ button, a { font: inherit; }
 
 /* Phone first: map full-bleed, one top card, round map buttons, one peeking sheet.
    At 960px the card and sheet stack into a left rail. pad() in MapCanvas mirrors these sizes. */
-:root { --peek: 220px; }
+:root { --peek: 196px; --top-h: 100px; }
 
 .rail { display: contents; }
 
@@ -134,12 +135,12 @@ h1 {
   color: var(--ink-soft);
 }
 
-.close, .related-btn, .layer-toggle, .round, .panel-handle {
+.close, .related-btn, .layer-row, .round, .panel-handle {
   border: 0;
   cursor: pointer;
 }
 
-.when button:focus-visible, .close:focus-visible, .layer-toggle:focus-visible, .round:focus-visible,
+.when button:focus-visible, .close:focus-visible, .layer-row:focus-visible, .round:focus-visible,
 .panel-handle:focus-visible, .panel-claim:focus-visible, .related-btn:focus-visible, .city-action-row:focus-visible, a:focus-visible {
   outline: 2px solid #e07a2f;
   outline-offset: 2px;
@@ -157,7 +158,7 @@ h1 {
 .banner {
   position: absolute;
   z-index: 4;
-  top: calc(84px + env(safe-area-inset-top));
+  top: calc(var(--top-h) + 18px + env(safe-area-inset-top));
   left: 12px;
   right: 68px;
   background: var(--paper);
@@ -198,7 +199,7 @@ h1 {
 .map-buttons {
   position: absolute;
   z-index: 3;
-  top: calc(84px + env(safe-area-inset-top));
+  top: calc(var(--top-h) + 18px + env(safe-area-inset-top));
   right: 12px;
   display: flex;
   flex-direction: column;
@@ -276,34 +277,6 @@ h1 {
 .panel-claim strong { color: var(--ink); }
 .panel-claim span { color: var(--vermilion); font-weight: 600; white-space: nowrap; }
 
-.dock {
-  flex: none;
-  overflow-x: auto;
-  scrollbar-width: none;
-  padding: 2px 16px;
-}
-
-.dock-scroll { display: flex; gap: 8px; }
-
-.layer-toggle {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  padding: 0 16px 0 14px;
-  border-radius: 999px;
-  background: var(--paper-2);
-  color: var(--ink);
-  font-size: 14px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.layer-toggle.is-on { background: var(--ink); color: var(--paper); }
-.layer-toggle.is-on .swatch { box-shadow: 0 0 0 2px var(--paper); }
-.layer-toggle:disabled { opacity: 0.5; cursor: not-allowed; }
-
 .swatches { display: flex; gap: 3px; }
 .swatch { display: block; }
 .swatch-square { width: 12px; height: 12px; border-radius: 3px; }
@@ -323,15 +296,15 @@ h1 {
 
 .flood-legend-list {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 3px;
   margin: 0;
   padding: 0;
   list-style: none;
+  align-items: end;
 }
 
-.flood-legend-list { align-items: end; }
-.flood-legend-list li { display: flex; flex-direction: column; gap: 3px; }
+.flood-legend-list li { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 /* Bars thicken with depth, like the street lines on the map, so the classes read without colour. */
 .flood-legend-list li > span:first-child { height: 6px; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(28, 25, 23, 0.25); }
 .flood-legend-list li:nth-child(1) > span:first-child { height: 2px; }
@@ -339,7 +312,7 @@ h1 {
 .flood-legend-list li:nth-child(3) > span:first-child { height: 5px; }
 .flood-legend-list li:nth-child(4) > span:first-child { height: 7px; }
 .flood-legend-list li:nth-child(5) > span:first-child { height: 9px; }
-.flood-legend-list em { font-style: normal; font-size: 11px; color: var(--muted); }
+.flood-legend-list em { font-style: normal; font-size: 11px; line-height: 1.15; color: var(--muted); overflow-wrap: anywhere; }
 
 .panel-body {
   flex: 1;
@@ -371,6 +344,8 @@ h1 {
 
 .maplibregl-ctrl-bottom-right {
   bottom: calc(var(--peek) + env(safe-area-inset-bottom));
+  /* keeps the expanded attribution out from under the recenter button */
+  max-width: calc(100% - 68px);
 }
 
 .maplibregl-ctrl-attrib {
@@ -379,6 +354,9 @@ h1 {
 }
 
 @media (max-width: 959px) {
+  /* ponytail: the tagline is the only non-essential line, so the card stays two lines in every language */
+  .brand .purpose { display: none; }
+
   .brand h1 {
     position: absolute;
     width: 1px;
@@ -403,7 +381,7 @@ h1 {
   left: 0;
   right: 0;
   bottom: 0;
-  max-height: min(78dvh, 680px);
+  max-height: min(72dvh, 680px);
   border-radius: 22px 22px 0 0;
   display: flex;
   flex-direction: column;
@@ -616,6 +594,69 @@ a { color: var(--vermilion); }
   background: rgba(20, 32, 40, 0.35);
 }
 
+/* Layer picker: a short sheet on phones, a card beside the buttons on desktop. */
+.layers {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  padding: 0 6px 8px;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  animation: rise 220ms ease-out;
+}
+
+.layers .sheet-bar { padding: 10px 4px 0 12px; }
+.layers h2 { margin: 0; font-size: 18px; }
+
+.layer-list { list-style: none; margin: 4px 0 0; padding: 0; }
+.layer-list li + li { border-top: 1px solid var(--line); }
+
+.layer-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 56px;
+  padding: 10px 6px 10px 12px;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+}
+
+.layer-row:disabled { opacity: 0.5; cursor: not-allowed; }
+.layer-copy { flex: 1; min-width: 0; }
+.layer-name { display: block; font-size: 15px; font-weight: 600; }
+.layer-legend { display: block; margin-top: 2px; font-size: 12px; line-height: 1.35; color: var(--muted); }
+
+.toggle {
+  flex: none;
+  position: relative;
+  width: 40px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(20, 32, 40, 0.18);
+  transition: background 150ms;
+}
+
+.toggle::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(20, 32, 40, 0.3);
+  transition: transform 150ms;
+}
+
+.layer-row[aria-pressed="true"] .toggle { background: var(--ink); }
+.layer-row[aria-pressed="true"] .toggle::after { transform: translateX(16px); }
+
 .about {
   left: 12px;
   right: 12px;
@@ -670,6 +711,8 @@ a { color: var(--vermilion); }
 
   .map-buttons { top: 16px; right: 16px; }
 
+  .layers { left: auto; right: 72px; top: 16px; bottom: auto; width: 360px; animation: none; }
+
   .recenter { bottom: 40px; right: 16px; }
 
   .app.panel-open .map-buttons,
@@ -688,6 +731,7 @@ a { color: var(--vermilion); }
   .app.sheet-open .recenter { right: 432px; visibility: visible; }
 
   .app.sheet-open .maplibregl-ctrl-top-right { right: 422px; }
+  .app.sheet-open .maplibregl-ctrl-bottom-right { right: 416px; }
 
   .app.sheet-open .panel { visibility: visible; }
 
@@ -702,6 +746,11 @@ a { color: var(--vermilion); }
   }
 
   .sheet .handle { display: none; }
+}
+
+/* Narrow desktops: rail + sheet would hide the map, so the list yields to the open card. */
+@media (min-width: 960px) and (max-width: 1279px) {
+  .app.sheet-open .panel { display: none; }
 }
 
 
@@ -824,8 +873,8 @@ a { color: var(--vermilion); }
 .model-days button {
   border: 0;
   cursor: pointer;
-  min-height: 32px;
-  padding: 0 8px;
+  min-height: 36px;
+  padding: 0 10px;
   border-radius: 999px;
   background: rgba(20, 32, 40, 0.08);
   color: var(--ink);
@@ -954,7 +1003,6 @@ a { color: var(--vermilion); }
 .model-popup .maplibregl-popup-content { max-height: min(340px, 36dvh); overflow: auto; border-radius: 14px; background: #f6f1e7; }
 
 /* Resident view (/citizen): one top card, one result sheet. Desktop stacks both in a 380px left column. */
-.citizen { position: relative; height: 100dvh; overflow: hidden; }
 
 .citizen-card,
 .citizen-result {
@@ -996,6 +1044,7 @@ a { color: var(--vermilion); }
   max-height: 44dvh;
   overflow: auto;
   padding: 12px 16px 16px;
+  scrollbar-gutter: stable;
 }
 .citizen-result .close { float: right; margin: -6px -8px 0 0; font-size: 22px; }
 .citizen-result h2 { margin: 4px 0 6px; font-family: Fraunces, Palatino, serif; font-size: 20px; letter-spacing: -0.02em; }
@@ -1012,5 +1061,6 @@ a { color: var(--vermilion); }
 }
 
 .switches { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
-.lang button { min-height: 28px; padding: 0 9px; font-size: 11px; letter-spacing: 0.08em; }
-.citizen-card .lang { display: inline-flex; margin-top: 10px; margin-left: 12px; vertical-align: middle; }
+.lang button { min-height: 32px; padding: 0 10px; font-size: 11px; letter-spacing: 0.08em; }
+.citizen-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.citizen-head .kicker { min-width: 0; }

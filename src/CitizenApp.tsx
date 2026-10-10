@@ -192,7 +192,10 @@ export function CitizenApp() {
       <div ref={containerRef} className="map" />
 
       <header className="citizen-card">
-        <p className="kicker">{t("Next rain · Barcelona · For residents")}</p>
+        <div className="citizen-head">
+          <p className="kicker">{t("Next rain · Barcelona · For residents")}</p>
+          <LangSwitch />
+        </div>
         <h1>{t("Is my street at risk?")}</h1>
         <p className="purpose">{t("See how deep the water got near you on {day}, and what to do before the next storm.", { day: formatDay(DEFAULT_DAY) })}</p>
         <div className="citizen-actions">
@@ -215,7 +218,6 @@ export function CitizenApp() {
           ))}
         </ul>
         <a className="citizen-switch" href="/">{t("City staff view →")}</a>
-        <LangSwitch />
       </header>
 
       {place ? (

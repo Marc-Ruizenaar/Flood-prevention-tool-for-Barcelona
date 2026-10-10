@@ -108,9 +108,10 @@ function zoneIdOf(feature: { properties?: Record<string, unknown> | null }): str
 // Mirrors the layout in styles.css: phone = top card + peeking sheet, desktop = 380px left rail.
 function pad(): maplibregl.PaddingOptions {
   const wide = window.innerWidth >= 960;
+  const topbar = document.querySelector(".topbar, .citizen-card")?.getBoundingClientRect().bottom ?? 110;
   return {
-    top: wide ? 32 : 120,
-    bottom: wide ? 32 : 256,
+    top: wide ? 32 : Math.round(topbar) + 12,
+    bottom: wide ? 32 : 232,
     left: wide ? 428 : 24,
     right: wide ? 80 : 24,
   };
