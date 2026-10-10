@@ -1,0 +1,9 @@
+{
+  "note": "Hosts whose items may become an inbox row or a card source. source_kind comes only from this file, never from a model. Individuals' accounts never go here. The Bluesky mirrors (*.eurosky.social) stay off until someone shows who runs them (design D3).",
+  "hosts": {
+    "ajuntament.barcelona.cat": { "kind": "official", "label": "Ajuntament de Barcelona" },
+    "interior.gencat.cat": { "kind": "official", "label": "Generalitat de Catalunya, Interior" },
+    "opendata-ajuntament.barcelona.cat": { "kind": "open_data", "label": "Open Data BCN" },
+    "beteve.cat": { "kind": "press", "label": "Betevé" }
+  }
+}

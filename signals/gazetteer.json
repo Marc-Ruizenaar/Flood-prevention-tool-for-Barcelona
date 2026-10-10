@@ -1,0 +1,901 @@
+{
+ "note": "Place-name gazetteer for the signals pipeline. Built by scripts/signals-gazetteer.mjs. Barri names, codes and polygons: Open Data BCN 20170706-districtes-barris (CC BY 4.0, Barcelona City Council). Aliases: Resilience Atlas rcc_iu6_danys_propietats n_barri. zone_ids: repo data/geojson vertices inside each barri. Never shipped under data/.",
+ "source_sha256": "4b133235825a9ca147e2e9763881f085cf6eddab9265e404fe125585646bfa27",
+ "districts": {
+  "10": "Sant Martí",
+  "01": "Ciutat Vella",
+  "02": "Eixample",
+  "03": "Sants-Montjuïc",
+  "04": "Les Corts",
+  "05": "Sarrià-Sant Gervasi",
+  "06": "Gràcia",
+  "07": "Horta-Guinardó",
+  "08": "Nou Barris",
+  "09": "Sant Andreu"
+ },
+ "barris": {
+  "10": {
+   "name": "Sant Antoni",
+   "district": "02",
+   "aliases": [],
+   "label": [
+    2.15901,
+    41.37824
+   ],
+   "zone_ids": [
+    "hotspot-urgell-roma",
+    "hotspot-parallel",
+    "sewer-parallel-raval"
+   ]
+  },
+  "11": {
+   "name": "el Poble-sec",
+   "district": "03",
+   "aliases": [
+    "el Poble Sec"
+   ],
+   "label": [
+    2.15955,
+    41.36694
+   ],
+   "zone_ids": [
+    "stream-tapioles",
+    "hotspot-tapioles",
+    "sewer-parallel-raval"
+   ]
+  },
+  "12": {
+   "name": "la Marina del Prat Vermell",
+   "district": "03",
+   "aliases": [
+    "Marina Prat Vermell"
+   ],
+   "label": [
+    2.12852,
+    41.33296
+   ],
+   "zone_ids": [
+    "hotspot-seat"
+   ]
+  },
+  "13": {
+   "name": "la Marina de Port",
+   "district": "03",
+   "aliases": [],
+   "label": [
+    2.13966,
+    41.35984
+   ],
+   "zone_ids": []
+  },
+  "14": {
+   "name": "la Font de la Guatlla",
+   "district": "03",
+   "aliases": [
+    "Font la Guatlla"
+   ],
+   "label": [
+    2.14729,
+    41.37122
+   ],
+   "zone_ids": [
+    "sewer-parallel-raval"
+   ]
+  },
+  "15": {
+   "name": "Hostafrancs",
+   "district": "03",
+   "aliases": [],
+   "label": [
+    2.14495,
+    41.37523
+   ],
+   "zone_ids": [
+    "sewer-parallel-raval",
+    "sewer-badal"
+   ]
+  },
+  "16": {
+   "name": "la Bordeta",
+   "district": "03",
+   "aliases": [],
+   "label": [
+    2.13514,
+    41.36828
+   ],
+   "zone_ids": [
+    "hotspot-parcerisa"
+   ]
+  },
+  "17": {
+   "name": "Sants - Badal",
+   "district": "03",
+   "aliases": [],
+   "label": [
+    2.12719,
+    41.37508
+   ],
+   "zone_ids": [
+    "sewer-badal"
+   ]
+  },
+  "18": {
+   "name": "Sants",
+   "district": "03",
+   "aliases": [],
+   "label": [
+    2.13517,
+    41.37733
+   ],
+   "zone_ids": [
+    "sewer-badal"
+   ]
+  },
+  "19": {
+   "name": "les Corts",
+   "district": "04",
+   "aliases": [],
+   "label": [
+    2.13408,
+    41.38687
+   ],
+   "zone_ids": [
+    "proof-les-corts-2026-10"
+   ]
+  },
+  "20": {
+   "name": "la Maternitat i Sant Ramon",
+   "district": "04",
+   "aliases": [
+    "La Maternitat"
+   ],
+   "label": [
+    2.11577,
+    41.38055
+   ],
+   "zone_ids": [
+    "stream-riera-blanca",
+    "hotspot-riera-blanca",
+    "tank-zona-universitaria"
+   ]
+  },
+  "21": {
+   "name": "Pedralbes",
+   "district": "04",
+   "aliases": [],
+   "label": [
+    2.10932,
+    41.38978
+   ],
+   "zone_ids": []
+  },
+  "22": {
+   "name": "Vallvidrera, el Tibidabo i les Planes",
+   "district": "05",
+   "aliases": [],
+   "label": [
+    2.09677,
+    41.41916
+   ],
+   "zone_ids": [
+    "slope-sant-genis"
+   ]
+  },
+  "23": {
+   "name": "Sarrià",
+   "district": "05",
+   "aliases": [],
+   "label": [
+    2.11551,
+    41.40302
+   ],
+   "zone_ids": []
+  },
+  "24": {
+   "name": "les Tres Torres",
+   "district": "05",
+   "aliases": [],
+   "label": [
+    2.1288,
+    41.40061
+   ],
+   "zone_ids": []
+  },
+  "25": {
+   "name": "Sant Gervasi - la Bonanova",
+   "district": "05",
+   "aliases": [
+    "La Bonanova"
+   ],
+   "label": [
+    2.13005,
+    41.40989
+   ],
+   "zone_ids": []
+  },
+  "26": {
+   "name": "Sant Gervasi - Galvany",
+   "district": "05",
+   "aliases": [
+    "Galvany"
+   ],
+   "label": [
+    2.14167,
+    41.39766
+   ],
+   "zone_ids": [
+    "hotspot-macia",
+    "sewer-diagonal"
+   ]
+  },
+  "27": {
+   "name": "el Putxet i el Farró",
+   "district": "05",
+   "aliases": [
+    "el Putxet"
+   ],
+   "label": [
+    2.1433,
+    41.40713
+   ],
+   "zone_ids": []
+  },
+  "28": {
+   "name": "Vallcarca i els Penitents",
+   "district": "06",
+   "aliases": [
+    "Vallcarca"
+   ],
+   "label": [
+    2.13998,
+    41.41732
+   ],
+   "zone_ids": [
+    "slope-sant-genis"
+   ]
+  },
+  "29": {
+   "name": "el Coll",
+   "district": "06",
+   "aliases": [],
+   "label": [
+    2.14727,
+    41.41886
+   ],
+   "zone_ids": []
+  },
+  "30": {
+   "name": "la Salut",
+   "district": "06",
+   "aliases": [],
+   "label": [
+    2.15414,
+    41.41205
+   ],
+   "zone_ids": []
+  },
+  "31": {
+   "name": "la Vila de Gràcia",
+   "district": "06",
+   "aliases": [],
+   "label": [
+    2.15597,
+    41.40402
+   ],
+   "zone_ids": [
+    "proof-gracia-2026-10",
+    "hotspot-via-augusta",
+    "sewer-diagonal"
+   ]
+  },
+  "32": {
+   "name": "el Camp d'en Grassot i Gràcia Nova",
+   "district": "06",
+   "aliases": [
+    "Gràcia Nova"
+   ],
+   "label": [
+    2.16702,
+    41.40455
+   ],
+   "zone_ids": []
+  },
+  "33": {
+   "name": "el Baix Guinardó",
+   "district": "07",
+   "aliases": [],
+   "label": [
+    2.1686,
+    41.41123
+   ],
+   "zone_ids": []
+  },
+  "34": {
+   "name": "Can Baró",
+   "district": "07",
+   "aliases": [],
+   "label": [
+    2.1633,
+    41.41654
+   ],
+   "zone_ids": []
+  },
+  "35": {
+   "name": "el Guinardó",
+   "district": "07",
+   "aliases": [],
+   "label": [
+    2.17459,
+    41.41866
+   ],
+   "zone_ids": []
+  },
+  "36": {
+   "name": "la Font d'en Fargues",
+   "district": "07",
+   "aliases": [
+    "La Font Fargues"
+   ],
+   "label": [
+    2.16445,
+    41.42479
+   ],
+   "zone_ids": []
+  },
+  "37": {
+   "name": "el Carmel",
+   "district": "07",
+   "aliases": [],
+   "label": [
+    2.15473,
+    41.42195
+   ],
+   "zone_ids": []
+  },
+  "38": {
+   "name": "la Teixonera",
+   "district": "07",
+   "aliases": [],
+   "label": [
+    2.14421,
+    41.42259
+   ],
+   "zone_ids": [
+    "slope-sant-genis"
+   ]
+  },
+  "39": {
+   "name": "Sant Genís dels Agudells",
+   "district": "07",
+   "aliases": [
+    "Sant Genís Agudells"
+   ],
+   "label": [
+    2.12946,
+    41.42725
+   ],
+   "zone_ids": [
+    "proof-sant-genis-2026-10",
+    "slope-sant-genis"
+   ]
+  },
+  "40": {
+   "name": "Montbau",
+   "district": "07",
+   "aliases": [],
+   "label": [
+    2.14054,
+    41.43501
+   ],
+   "zone_ids": [
+    "slope-sant-genis"
+   ]
+  },
+  "41": {
+   "name": "la Vall d'Hebron",
+   "district": "07",
+   "aliases": [],
+   "label": [
+    2.14734,
+    41.42831
+   ],
+   "zone_ids": []
+  },
+  "42": {
+   "name": "la Clota",
+   "district": "07",
+   "aliases": [],
+   "label": [
+    2.15322,
+    41.42925
+   ],
+   "zone_ids": []
+  },
+  "43": {
+   "name": "Horta",
+   "district": "07",
+   "aliases": [],
+   "label": [
+    2.15075,
+    41.44208
+   ],
+   "zone_ids": [
+    "stream-cartella",
+    "hotspot-tajo-cartella"
+   ]
+  },
+  "44": {
+   "name": "Vilapicina i la Torre Llobeta",
+   "district": "08",
+   "aliases": [
+    "Vilapicina"
+   ],
+   "label": [
+    2.17426,
+    41.42828
+   ],
+   "zone_ids": [
+    "sewer-sant-andreu"
+   ]
+  },
+  "45": {
+   "name": "Porta",
+   "district": "08",
+   "aliases": [],
+   "label": [
+    2.17824,
+    41.43459
+   ],
+   "zone_ids": [
+    "sewer-sant-andreu"
+   ]
+  },
+  "46": {
+   "name": "el Turó de la Peira",
+   "district": "08",
+   "aliases": [
+    "el Turó Peira"
+   ],
+   "label": [
+    2.17136,
+    41.43214
+   ],
+   "zone_ids": []
+  },
+  "47": {
+   "name": "Can Peguera",
+   "district": "08",
+   "aliases": [],
+   "label": [
+    2.16537,
+    41.43523
+   ],
+   "zone_ids": []
+  },
+  "48": {
+   "name": "la Guineueta",
+   "district": "08",
+   "aliases": [],
+   "label": [
+    2.16986,
+    41.43873
+   ],
+   "zone_ids": [
+    "hotspot-llucmajor"
+   ]
+  },
+  "49": {
+   "name": "Canyelles",
+   "district": "08",
+   "aliases": [],
+   "label": [
+    2.16193,
+    41.4451
+   ],
+   "zone_ids": [
+    "slope-torre-baro"
+   ]
+  },
+  "50": {
+   "name": "les Roquetes",
+   "district": "08",
+   "aliases": [],
+   "label": [
+    2.17575,
+    41.44765
+   ],
+   "zone_ids": [
+    "stream-torre-baro",
+    "slope-torre-baro"
+   ]
+  },
+  "51": {
+   "name": "Verdun",
+   "district": "08",
+   "aliases": [],
+   "label": [
+    2.17515,
+    41.44236
+   ],
+   "zone_ids": []
+  },
+  "52": {
+   "name": "la Prosperitat",
+   "district": "08",
+   "aliases": [],
+   "label": [
+    2.18234,
+    41.443
+   ],
+   "zone_ids": [
+    "sewer-sant-andreu"
+   ]
+  },
+  "53": {
+   "name": "la Trinitat Nova",
+   "district": "08",
+   "aliases": [],
+   "label": [
+    2.18469,
+    41.44951
+   ],
+   "zone_ids": [
+    "slope-torre-baro"
+   ]
+  },
+  "54": {
+   "name": "Torre Baró",
+   "district": "08",
+   "aliases": [],
+   "label": [
+    2.17128,
+    41.45454
+   ],
+   "zone_ids": [
+    "stream-torre-baro",
+    "proof-torre-baro-2026-10",
+    "slope-torre-baro"
+   ]
+  },
+  "55": {
+   "name": "Ciutat Meridiana",
+   "district": "08",
+   "aliases": [],
+   "label": [
+    2.17662,
+    41.46189
+   ],
+   "zone_ids": [
+    "slope-torre-baro"
+   ]
+  },
+  "56": {
+   "name": "Vallbona",
+   "district": "08",
+   "aliases": [],
+   "label": [
+    2.18383,
+    41.46376
+   ],
+   "zone_ids": [
+    "slope-torre-baro"
+   ]
+  },
+  "57": {
+   "name": "la Trinitat Vella",
+   "district": "09",
+   "aliases": [],
+   "label": [
+    2.19314,
+    41.45082
+   ],
+   "zone_ids": []
+  },
+  "58": {
+   "name": "Baró de Viver",
+   "district": "09",
+   "aliases": [],
+   "label": [
+    2.19917,
+    41.44665
+   ],
+   "zone_ids": []
+  },
+  "59": {
+   "name": "el Bon Pastor",
+   "district": "09",
+   "aliases": [],
+   "label": [
+    2.20178,
+    41.43708
+   ],
+   "zone_ids": []
+  },
+  "60": {
+   "name": "Sant Andreu",
+   "district": "09",
+   "aliases": [],
+   "label": [
+    2.18903,
+    41.43296
+   ],
+   "zone_ids": [
+    "proof-sant-andreu-2026-10",
+    "sewer-sant-andreu"
+   ]
+  },
+  "61": {
+   "name": "la Sagrera",
+   "district": "09",
+   "aliases": [],
+   "label": [
+    2.19009,
+    41.42354
+   ],
+   "zone_ids": [
+    "stream-rambla-prim"
+   ]
+  },
+  "62": {
+   "name": "el Congrés i els Indians",
+   "district": "09",
+   "aliases": [
+    "El Congrés"
+   ],
+   "label": [
+    2.1807,
+    41.42499
+   ],
+   "zone_ids": []
+  },
+  "63": {
+   "name": "Navas",
+   "district": "09",
+   "aliases": [],
+   "label": [
+    2.18633,
+    41.41828
+   ],
+   "zone_ids": []
+  },
+  "64": {
+   "name": "el Camp de l'Arpa del Clot",
+   "district": "10",
+   "aliases": [
+    "el Camp de l'Arpa"
+   ],
+   "label": [
+    2.18219,
+    41.41214
+   ],
+   "zone_ids": [
+    "hotspot-clot-navas"
+   ]
+  },
+  "65": {
+   "name": "el Clot",
+   "district": "10",
+   "aliases": [],
+   "label": [
+    2.19109,
+    41.4108
+   ],
+   "zone_ids": []
+  },
+  "66": {
+   "name": "el Parc i la Llacuna del Poblenou",
+   "district": "10",
+   "aliases": [
+    "Llacuna Poblenou"
+   ],
+   "label": [
+    2.19154,
+    41.4019
+   ],
+   "zone_ids": [
+    "sewer-poblenou"
+   ]
+  },
+  "67": {
+   "name": "la Vila Olímpica del Poblenou",
+   "district": "10",
+   "aliases": [
+    "La Vila Olímpica"
+   ],
+   "label": [
+    2.19593,
+    41.39138
+   ],
+   "zone_ids": [
+    "sewer-poblenou"
+   ]
+  },
+  "68": {
+   "name": "el Poblenou",
+   "district": "10",
+   "aliases": [],
+   "label": [
+    2.20143,
+    41.39895
+   ],
+   "zone_ids": [
+    "sewer-poblenou"
+   ]
+  },
+  "69": {
+   "name": "Diagonal Mar i el Front Marítim del Poblenou",
+   "district": "10",
+   "aliases": [
+    "Diagonal Mar"
+   ],
+   "label": [
+    2.21352,
+    41.40614
+   ],
+   "zone_ids": [
+    "sewer-poblenou"
+   ]
+  },
+  "70": {
+   "name": "el Besòs i el Maresme",
+   "district": "10",
+   "aliases": [
+    "el Besòs"
+   ],
+   "label": [
+    2.21324,
+    41.41553
+   ],
+   "zone_ids": []
+  },
+  "71": {
+   "name": "Provençals del Poblenou",
+   "district": "10",
+   "aliases": [
+    "Provençals Poblenou"
+   ],
+   "label": [
+    2.20499,
+    41.41179
+   ],
+   "zone_ids": []
+  },
+  "72": {
+   "name": "Sant Martí de Provençals",
+   "district": "10",
+   "aliases": [
+    "Sant Martí Provençals"
+   ],
+   "label": [
+    2.19825,
+    41.41714
+   ],
+   "zone_ids": []
+  },
+  "73": {
+   "name": "la Verneda i la Pau",
+   "district": "10",
+   "aliases": [],
+   "label": [
+    2.201,
+    41.42507
+   ],
+   "zone_ids": [
+    "stream-rambla-prim",
+    "hotspot-rambla-prim",
+    "tank-rambla-prim"
+   ]
+  },
+  "01": {
+   "name": "el Raval",
+   "district": "01",
+   "aliases": [],
+   "label": [
+    2.16832,
+    41.3799
+   ],
+   "zone_ids": [
+    "hotspot-sant-pau"
+   ]
+  },
+  "02": {
+   "name": "el Barri Gòtic",
+   "district": "01",
+   "aliases": [],
+   "label": [
+    2.17879,
+    41.38015
+   ],
+   "zone_ids": [
+    "sewer-parallel-raval"
+   ]
+  },
+  "03": {
+   "name": "la Barceloneta",
+   "district": "01",
+   "aliases": [],
+   "label": [
+    2.18999,
+    41.3807
+   ],
+   "zone_ids": []
+  },
+  "04": {
+   "name": "Sant Pere, Santa Caterina i la Ribera",
+   "district": "01",
+   "aliases": [
+    "Sant Pere"
+   ],
+   "label": [
+    2.18291,
+    41.38632
+   ],
+   "zone_ids": []
+  },
+  "05": {
+   "name": "el Fort Pienc",
+   "district": "02",
+   "aliases": [],
+   "label": [
+    2.18198,
+    41.39846
+   ],
+   "zone_ids": []
+  },
+  "06": {
+   "name": "la Sagrada Família",
+   "district": "02",
+   "aliases": [],
+   "label": [
+    2.17695,
+    41.40556
+   ],
+   "zone_ids": [
+    "sewer-diagonal"
+   ]
+  },
+  "07": {
+   "name": "la Dreta de l'Eixample",
+   "district": "02",
+   "aliases": [
+    "la Dreta"
+   ],
+   "label": [
+    2.16779,
+    41.39432
+   ],
+   "zone_ids": [
+    "hotspot-diagonal-bruc",
+    "sewer-diagonal"
+   ]
+  },
+  "08": {
+   "name": "l'Antiga Esquerra de l'Eixample",
+   "district": "02",
+   "aliases": [
+    "l'Antiga Esquerra"
+   ],
+   "label": [
+    2.15425,
+    41.39054
+   ],
+   "zone_ids": [
+    "sewer-diagonal"
+   ]
+  },
+  "09": {
+   "name": "la Nova Esquerra de l'Eixample",
+   "district": "02",
+   "aliases": [
+    "la Nova Esquerra"
+   ],
+   "label": [
+    2.14901,
+    41.38226
+   ],
+   "zone_ids": [
+    "sewer-parallel-raval"
+   ]
+  }
+ }
+}

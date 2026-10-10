@@ -57,13 +57,26 @@ const HIT_RANK: Record<string, number> = {
 function proofForDay(
   collection: FeatureCollection | undefined,
   day: string,
+  signals?: FeatureCollection,
 ): FeatureCollection | undefined {
-  if (!collection) return undefined;
+  if (!collection && !signals) return undefined;
   const ids = new Set(dayByDate(day).reportIds);
   return {
     type: "FeatureCollection",
-    features: collection.features.filter((feature) => ids.has(String(feature.properties?.id ?? ""))),
+    features: [
+      ...(collection?.features ?? []).filter((feature) => ids.has(String(feature.properties?.id ?? ""))),
+      ...signalsForDay(signals, day),
+    ],
   };
+}
+
+// Reviewed reports (scripts/signals-build.mjs), one dot per barri. A feature with a `days`
+// list shows only on those days; one without it (current build output) shows on every day.
+function signalsForDay(collection: FeatureCollection | undefined, day: string): Feature[] {
+  return (collection?.features ?? []).filter((feature) => {
+    const days = feature.properties?.days;
+    return !Array.isArray(days) || days.includes(day);
+  });
 }
 
 function zoneIdOf(feature: { properties?: Record<string, unknown> | null }): string | null {
@@ -203,8 +216,8 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       add("streams", collections["buried-streams"]);
       add("tanks", collections["retention-tanks"]);
       add("hotspots", collections["resccue-hotspots"]);
-      add("proof", proofForDay(collections["proof-oct2026"], dayRef.current));
-      for (const feature of collections["proof-oct2026"]?.features ?? []) {
+      add("proof", proofForDay(collections["proof-oct2026"], dayRef.current, collections.signals));
+      for (const feature of [...(collections["proof-oct2026"]?.features ?? []), ...(collections.signals?.features ?? [])]) {
         const fid = feature.properties?.id;
         if (typeof fid === "string" && feature.properties?.tappable !== false) {
           indexRef.current.set(fid, feature);
@@ -453,7 +466,7 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
     const apply = () => {
       const source = map.getSource("proof") as GeoJSONSource | undefined;
       if (!source) return;
-      const proof = proofForDay(collections["proof-oct2026"], day);
+      const proof = proofForDay(collections["proof-oct2026"], day, collections.signals);
       source.setData(proof ?? { type: "FeatureCollection", features: [] });
     };
     if (map.getSource("proof")) apply();

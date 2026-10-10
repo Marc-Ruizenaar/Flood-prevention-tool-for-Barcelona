@@ -9,6 +9,7 @@ export const GEOJSON_FILES = [
   "retention-tanks",
   "slopes-torrents",
   "proof-oct2026",
+  "signals",
 ] as const;
 
 export type GeoFile = (typeof GEOJSON_FILES)[number];
@@ -50,6 +51,8 @@ export function useFloodData(): LoadState & { ready: boolean } {
     (async () => {
       try {
         const zones = await loadJson<ZoneMap>("/data/zones.json");
+        // Reviewed signal cards (scripts/signals-build.mjs). Missing file = no signals, not an error.
+        Object.assign(zones, await loadJson<ZoneMap>("/data/signals-cards.json").catch(() => ({})));
         const [sourcesResult, reliefResult, ...layers] = await Promise.allSettled([
           loadJson<Record<string, SourceEntry>>("/data/sources.json"),
           loadJson<ReliefFile>("/data/relief.json"),
