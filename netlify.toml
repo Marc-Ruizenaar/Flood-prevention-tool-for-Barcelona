@@ -7,3 +7,9 @@
 # (see signals/README.md). Remove it to let reports age out on their own.
 [build.environment]
   SIGNALS_NOW = "2026-10-10T16:00Z"
+
+# The resident view lives at /citizen in the same single-page app.
+[[redirects]]
+  from = "/citizen"
+  to = "/index.html"
+  status = 200

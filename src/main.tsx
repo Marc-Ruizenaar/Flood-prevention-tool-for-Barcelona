@@ -13,12 +13,14 @@ import "@fontsource/outfit/latin-ext-400.css";
 import "@fontsource/outfit/latin-ext-500.css";
 import "@fontsource/outfit/latin-ext-600.css";
 import { App } from "./App";
+import { CitizenApp } from "./CitizenApp";
 import "./styles.css";
 
 maplibregl.setMaxParallelImageRequests(16);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
+    {/* ponytail: two views, one path check. A router earns its place at the third view. */}
+    {window.location.pathname.startsWith("/citizen") ? <CitizenApp /> : <App />}
   </StrictMode>,
 );
