@@ -1,0 +1,29 @@
+{
+  "note": "Barcelona publishes no evacuation routes for street flooding. The municipal plan (PAEM insuficiència drenant) and INUNCAT work by confinement: stay inside, go up, keep out of basements, garages and underpasses, and only leave if 112 or Protecció Civil tell you to. The entries below are the real things a resident can use. Sources in docs/evacuation-research.md.",
+  "phones": [
+    { "number": "112", "label": "Emergencies (rescue, people trapped, fire, injuries)" },
+    { "number": "900 703 030", "label": "CUESB, city social emergencies, 24 h: lost your home, need shelter or help for a vulnerable person" },
+    { "number": "010", "label": "City information line: closures, facilities, what is open" }
+  ],
+  "links": [
+    { "label": "Protecció Civil, flood self-protection advice", "url": "https://dsp.interior.gencat.cat/handle/20.500.14007/3307" },
+    { "label": "Meteocat warnings", "url": "https://www.meteo.cat/prediccio/smp" },
+    { "label": "TMB service status", "url": "https://www.tmb.cat/ca/estat-servei" },
+    { "label": "Servei Català de Trànsit, road closures", "url": "https://sct.gencat.cat/ca/trànsit/incidencies/" }
+  ],
+  "closedLastStorm": [
+    { "name": "Metro L5 Hospital Clínic, Rosselló access", "at": [2.1503, 41.3885] },
+    { "name": "Metro L3 Les Corts, Joan Güell access", "at": [2.1301, 41.385] },
+    { "name": "Metro L3 Zona Universitària, Parc Cervantes access", "at": [2.1137, 41.3875] },
+    { "name": "Metro L1 Marina, Almogàvers access", "at": [2.1877, 41.3942] },
+    { "name": "Metro L1 Glòries, plaça de les Glòries access", "at": [2.1898, 41.4035] },
+    { "name": "Metro L1 Florida, Mas Nou access", "at": [2.1113, 41.3697] },
+    { "name": "Metro L1 Hospital de Bellvitge, Riera Blanca access", "at": [2.1055, 41.3466] },
+    { "name": "Metro L5 El Carmel, plaça Pastrana access", "at": [2.1572, 41.4195] },
+    { "name": "Metro L5 El Coll | La Teixonera, Arenys access", "at": [2.1443, 41.4196] },
+    { "name": "Metro L10 Nord La Salut, Marquès de Sant Mori access", "at": [2.2285, 41.4471] },
+    { "name": "Parc de la Ciutadella (closed, 160 people moved out)", "at": [2.1868, 41.3883] },
+    { "name": "Ronda de Dalt at Via Júlia, Llobregat direction", "at": [2.1748, 41.4433] }
+  ],
+  "closedLastStormSource": "https://www.metropoliabierta.cat/mobilitat/20261004/accessos-metro-barcelona-tancats-temporal-pluges-desena-dentrades-afectades/1003742799680_0.html"
+}

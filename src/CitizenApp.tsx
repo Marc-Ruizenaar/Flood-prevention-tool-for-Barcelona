@@ -21,6 +21,7 @@ import {
 import { DEFAULT_DAY, formatDay } from "./lib/weather";
 import { t } from "./lib/i18n";
 import { LangSwitch } from "./components/LangSwitch";
+import { RESOURCES, closedNear, streetsToAvoid } from "./lib/evacuation";
 
 // The resident view: one question ("what happened near me?"), plain words, and what to do next time.
 // Same simulated streets as the city view, without the checklist, 3D or model internals.
@@ -34,7 +35,7 @@ const CITY_CENTRE: LngLat = [2.17, 41.39];
 const LEGEND_WORDS = { dry: t("Dry"), low: t("Ankle"), moderate: t("Shin"), high: t("Knee"), severe: t("Over knee") } as const;
 const ADVICE_URL = "https://dsp.interior.gencat.cat/handle/20.500.14007/3307";
 
-type Place = { at: LngLat; label: string };
+type Place = { at: LngLat; label: string; mine?: boolean };
 
 const EXAMPLES: Place[] = [
   { at: [2.1705, 41.3846], label: "La Rambla" },
@@ -150,7 +151,18 @@ export function CitizenApp() {
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !place) return;
-    markerRef.current ??= new maplibregl.Marker({ color: "#142028" });
+    // A located person gets a blue pulsing dot (screen readers get the label); a tapped place keeps the dark pin.
+    markerRef.current?.remove();
+    if (place.mine) {
+      const el = document.createElement("div");
+      el.className = "you-marker";
+      el.setAttribute("role", "img");
+      el.setAttribute("aria-label", t("Your location"));
+      el.title = t("Your location");
+      markerRef.current = new maplibregl.Marker({ element: el });
+    } else {
+      markerRef.current = new maplibregl.Marker({ color: "#142028" });
+    }
     markerRef.current.setLngLat(place.at).addTo(map);
     // On a phone the result sheet covers the lower half, so lift the place into the visible gap.
     const phone = window.innerWidth < 960;
@@ -172,7 +184,7 @@ export function CitizenApp() {
           setLocateError(t("You seem to be outside Barcelona. Tap the map or try an example."));
           return;
         }
-        setPlace({ at, label: t("Your location") });
+        setPlace({ at, label: t("Your location"), mine: true });
       },
       () => {
         setLocating(false);
@@ -234,6 +246,7 @@ export function CitizenApp() {
             <li>{t("Never walk or drive through a flooded street. Go into a building and wait.")}</li>
             <li>{t("Follow Protecció Civil alerts. In an emergency, call 112.")}</li>
           </ul>
+          <WhatToDo place={place} streets={streets} />
           <p className="citizen-source">
             {t("Advice from")}{" "}
             <a href={ADVICE_URL} target="_blank" rel="noreferrer">
@@ -324,6 +337,53 @@ function Verdict({
         })}
       </p>
       <p className="citizen-caveat">{t("A computer simulation of one storm, not a forecast, and not yet checked against every street.")}</p>
+    </>
+  );
+}
+
+// No evacuation routes exist for street flooding in Barcelona; the official plan is to stay inside and go up.
+// So this lists the low streets to keep away from, what shut nearby last time, and who to call.
+function WhatToDo({ place, streets }: { place: Place; streets: Loaded<StreetsCollection> }) {
+  const avoid = streets.status === "ready" ? streetsToAvoid(streets.data, place.at) : [];
+  const closed = closedNear(place.at);
+  return (
+    <>
+      <h2>{t("If it floods: where to go")}</h2>
+      <p>
+        {t("Nowhere, if you can help it. Barcelona has no evacuation routes for street flooding: the plan is to stay inside, go to an upper floor, and keep out of basements, garages and underpasses. Leave only if 112 or Protecció Civil tell you to.")}
+      </p>
+      {avoid.length ? (
+        <p>
+          <strong>{t("Streets to keep away from near here:")}</strong>{" "}
+          {avoid.map((s) => `${s.name} (${DEPTH_WORDS[s.depth >= 1 ? "severe" : s.depth >= 0.5 ? "high" : "moderate"]})`).join(", ")}.
+        </p>
+      ) : null}
+      {closed.length ? (
+        <p>
+          <strong>{t("Shut during the October storm, within {km} km:", { km: 1.5 })}</strong>{" "}
+          {closed.map((c) => `${c.name}, ${Math.round(c.metres / 100) * 100} m`).join("; ")}.{" "}
+          <a href={RESOURCES.closedLastStormSource} target="_blank" rel="noreferrer">
+            TMB, 4 Oct
+          </a>
+        </p>
+      ) : null}
+      <ul className="citizen-advice">
+        {RESOURCES.phones.map((ph) => (
+          <li key={ph.number}>
+            <strong>{ph.number}</strong> · {t(ph.label)}
+          </li>
+        ))}
+      </ul>
+      <p className="citizen-source">
+        {RESOURCES.links.map((l, i) => (
+          <span key={l.url}>
+            {i ? " · " : ""}
+            <a href={l.url} target="_blank" rel="noreferrer">
+              {t(l.label)}
+            </a>
+          </span>
+        ))}
+      </p>
     </>
   );
 }
