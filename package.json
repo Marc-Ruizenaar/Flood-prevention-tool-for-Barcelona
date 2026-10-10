@@ -13,6 +13,7 @@
     "preview": "vite preview --host 127.0.0.1 --port 4173",
     "sync:flood": "node scripts/sync-flood-fixtures.mjs",
     "test:city-actions": "node scripts/test-city-actions.mjs",
+    "test:nearby": "node scripts/test-nearby.mjs",
     "qa": "node scripts/qa.mjs",
     "qa:urls": "node scripts/qa.mjs --urls",
     "preqa": "node scripts/signals-build.mjs",
