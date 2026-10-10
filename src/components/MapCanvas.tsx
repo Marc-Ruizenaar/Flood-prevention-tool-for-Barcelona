@@ -304,16 +304,19 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
         source: "model-streets",
         paint: {
           "line-color": floodColor,
+          // Depth sets width, zoom scales it, so the city view stays readable instead of one red mass.
           "line-width": [
             "interpolate",
             ["linear"],
-            ["coalesce", ["to-number", ["get", "max_depth_m"]], 0],
-            0,
-            4,
-            0.5,
-            16,
+            ["zoom"],
+            12,
+            ["interpolate", ["linear"], ["coalesce", ["to-number", ["get", "max_depth_m"]], 0], 0, 0.75, 0.5, 3],
+            15,
+            ["interpolate", ["linear"], ["coalesce", ["to-number", ["get", "max_depth_m"]], 0], 0, 2, 0.5, 8],
+            17,
+            ["interpolate", ["linear"], ["coalesce", ["to-number", ["get", "max_depth_m"]], 0], 0, 4, 0.5, 16],
           ],
-          "line-opacity": ["case", ["==", ["get", "flood_class"], "dry"], 0.75, 0.95],
+          "line-opacity": ["case", ["==", ["get", "flood_class"], "dry"], 0.3, 0.9],
         },
       });
       map.addLayer({
@@ -324,11 +327,11 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
           "circle-radius": [
             "interpolate",
             ["linear"],
-            ["coalesce", ["to-number", ["get", "peak_depth_m"]], 0],
-            0,
-            8,
-            0.5,
-            18,
+            ["zoom"],
+            12,
+            ["interpolate", ["linear"], ["coalesce", ["to-number", ["get", "peak_depth_m"]], 0], 0, 5, 0.5, 9],
+            16,
+            ["interpolate", ["linear"], ["coalesce", ["to-number", ["get", "peak_depth_m"]], 0], 0, 8, 0.5, 18],
           ],
           "circle-color": floodColor,
           "circle-stroke-width": 2,
