@@ -1,5 +1,5 @@
 // ponytail: dictionary keyed by the English string, switch reloads the page. No context, no provider.
-// Zone cards, weather summaries and the model's technical readouts stay in the language of their data files.
+// Zone cards come from data/zones.<lang>.json overlays (see data.ts); the model's technical readouts stay as the backend wrote them.
 
 export type Lang = "ca" | "es" | "en";
 export const LANGS: { id: Lang; label: string }[] = [
@@ -217,6 +217,39 @@ const DICT: Record<"ca" | "es", Record<string, string>> = {
     "Station file did not load": "El fitxer d’estacions no s’ha carregat",
     "No daily total published yet": "Encara no s’ha publicat el total diari",
     "saved XEMA copy": "còpia XEMA desada",
+
+    // Weather days, mechanism chips
+    "Moderate rain": "Pluja moderada",
+    "Record rain": "Pluja de rècord",
+    "About 15 mm at each of the three city stations — a wet Friday, but well below Saturday’s record. No October proof is dated this day.": "Uns 15 mm a cadascuna de les tres estacions de la ciutat: un divendres plujós, però molt per sota del rècord de dissabte. Cap prova d’octubre té data d’aquest dia.",
+    "The heaviest day at the three city stations. The city also reported a maximum of 206 litres per square metre and a citywide mean of 152.3. Can Bruixa recorded 207 litres through Saturday. The October proof is on for this rain: the landslide reported on Sunday, and the Torre Baró cleanup and transformer-room cuts reported on Wednesday.": "El dia més intens a les tres estacions de la ciutat. L’Ajuntament també va informar d’un màxim de 206 litres per metre quadrat i una mitjana de 152,3 a tota la ciutat. Can Bruixa va registrar 207 litres al llarg del dissabte. Les proves d’octubre corresponen a aquesta pluja: l’esllavissada reportada el diumenge, i la neteja de Torre Baró i els talls en cambres de transformadors reportats el dimecres.",
+    "Street overflow": "Desbordament al carrer",
+    "Basement": "Soterrani",
+    "Transformer room": "Cambra de transformadors",
+    "Slope runoff": "Escorrentia de vessant",
+    "Torrent": "Torrent",
+    "Mitigation": "Mitigació",
+    "Observed impact": "Impacte observat",
+
+    // Ground paragraph on the fact sheet
+    "north": "nord",
+    "northeast": "nord-est",
+    "east": "est",
+    "southeast": "sud-est",
+    "south": "sud",
+    "west": "oest",
+    "About {meters} m up, falling {fall} m in {span} m toward the {toward}. Rain runs off a fall this steep, as slope water.": "A uns {meters} m d’alçada, baixant {fall} m en {span} m cap al {toward}. La pluja s’escola per un pendent tan fort com aigua de vessant.",
+    "The tank sits at about {meters} m, on ground that falls {fall} m in {span} m toward the {toward}.": "El dipòsit és a uns {meters} m, en un terreny que baixa {fall} m en {span} m cap al {toward}.",
+    "About {meters} m, falling {fall} m in {span} m toward the {toward}.": "A uns {meters} m, baixant {fall} m en {span} m cap al {toward}.",
+    "Rain keeps moving downhill, toward the lower streets.": "La pluja continua baixant, cap als carrers més baixos.",
+    "barely at all": "gairebé gens",
+    "only {fall} m": "només {fall} m",
+    "The tank sits at about {meters} m. The ground around it falls {grade} in {span} m, so water that arrives here has little grade to leave.": "El dipòsit és a uns {meters} m. El terreny del voltant baixa {grade} en {span} m, així que l’aigua que hi arriba té poc pendent per marxar.",
+    "About {meters} m, and level for {span} m around this place.": "A uns {meters} m, i pla en {span} m al voltant d’aquest lloc.",
+    "About {meters} m, with only {fall} m of fall in {span} m.": "A uns {meters} m, amb només {fall} m de desnivell en {span} m.",
+    "With so little grade, rain stays on the street and in the drains.": "Amb tan poc pendent, la pluja es queda al carrer i als embornals.",
+    "{meters} m at the marked place, and the drop to the lowest ground {span} m away. ICGC terrain model, 2022. Not a flood depth.": "{meters} m al lloc marcat, i el desnivell fins al terreny més baix a {span} m. Model del terreny de l’ICGC, 2022. No és una profunditat d’inundació.",
+    "ICGC territorial elevations": "Elevacions territorials de l’ICGC",
     "Impacts from this rain, reported in the days after 3 October.": "Impactes d’aquesta pluja, reportats els dies posteriors al 3 d’octubre.",
     "Lidar terrain only: hollows and flat lowland across the metro. Not a simulation: no rain, no drains, no depth.": "Només terreny lidar: clotades i terres baixes planes a tota l’àrea metropolitana. No és una simulació: sense pluja, embornals ni profunditat.",
     "Contour lines in metres, Collserola down to the sea. The fall is on each card. Not a flood depth.": "Corbes de nivell en metres, de Collserola fins al mar. El desnivell és a cada fitxa. No és una profunditat d’inundació.",
@@ -389,6 +422,39 @@ const DICT: Record<"ca" | "es", Record<string, string>> = {
     "Station file did not load": "El fichero de estaciones no se ha cargado",
     "No daily total published yet": "Aún no se ha publicado el total diario",
     "saved XEMA copy": "copia XEMA guardada",
+
+    // Weather days, mechanism chips
+    "Moderate rain": "Lluvia moderada",
+    "Record rain": "Lluvia récord",
+    "About 15 mm at each of the three city stations — a wet Friday, but well below Saturday’s record. No October proof is dated this day.": "Unos 15 mm en cada una de las tres estaciones de la ciudad: un viernes lluvioso, pero muy por debajo del récord del sábado. Ninguna prueba de octubre tiene fecha de este día.",
+    "The heaviest day at the three city stations. The city also reported a maximum of 206 litres per square metre and a citywide mean of 152.3. Can Bruixa recorded 207 litres through Saturday. The October proof is on for this rain: the landslide reported on Sunday, and the Torre Baró cleanup and transformer-room cuts reported on Wednesday.": "El día más intenso en las tres estaciones de la ciudad. El Ayuntamiento también informó de un máximo de 206 litros por metro cuadrado y una media de 152,3 en toda la ciudad. Can Bruixa registró 207 litros a lo largo del sábado. Las pruebas de octubre corresponden a esta lluvia: el deslizamiento reportado el domingo, y la limpieza de Torre Baró y los cortes en cámaras de transformadores reportados el miércoles.",
+    "Street overflow": "Desbordamiento en la calle",
+    "Basement": "Sótano",
+    "Transformer room": "Cámara de transformadores",
+    "Slope runoff": "Escorrentía de ladera",
+    "Torrent": "Torrente",
+    "Mitigation": "Mitigación",
+    "Observed impact": "Impacto observado",
+
+    // Ground paragraph on the fact sheet
+    "north": "norte",
+    "northeast": "noreste",
+    "east": "este",
+    "southeast": "sureste",
+    "south": "sur",
+    "west": "oeste",
+    "About {meters} m up, falling {fall} m in {span} m toward the {toward}. Rain runs off a fall this steep, as slope water.": "A unos {meters} m de altura, bajando {fall} m en {span} m hacia el {toward}. La lluvia escurre por una pendiente tan fuerte como agua de ladera.",
+    "The tank sits at about {meters} m, on ground that falls {fall} m in {span} m toward the {toward}.": "El depósito está a unos {meters} m, en un terreno que baja {fall} m en {span} m hacia el {toward}.",
+    "About {meters} m, falling {fall} m in {span} m toward the {toward}.": "A unos {meters} m, bajando {fall} m en {span} m hacia el {toward}.",
+    "Rain keeps moving downhill, toward the lower streets.": "La lluvia sigue bajando, hacia las calles más bajas.",
+    "barely at all": "casi nada",
+    "only {fall} m": "solo {fall} m",
+    "The tank sits at about {meters} m. The ground around it falls {grade} in {span} m, so water that arrives here has little grade to leave.": "El depósito está a unos {meters} m. El terreno de alrededor baja {grade} en {span} m, así que el agua que llega aquí tiene poca pendiente para salir.",
+    "About {meters} m, and level for {span} m around this place.": "A unos {meters} m, y llano en {span} m alrededor de este lugar.",
+    "About {meters} m, with only {fall} m of fall in {span} m.": "A unos {meters} m, con solo {fall} m de desnivel en {span} m.",
+    "With so little grade, rain stays on the street and in the drains.": "Con tan poca pendiente, la lluvia se queda en la calle y en los sumideros.",
+    "{meters} m at the marked place, and the drop to the lowest ground {span} m away. ICGC terrain model, 2022. Not a flood depth.": "{meters} m en el lugar marcado, y el desnivel hasta el terreno más bajo a {span} m. Modelo del terreno del ICGC, 2022. No es una profundidad de inundación.",
+    "ICGC territorial elevations": "Elevaciones territoriales del ICGC",
     "Impacts from this rain, reported in the days after 3 October.": "Impactos de esta lluvia, reportados en los días posteriores al 3 de octubre.",
     "Lidar terrain only: hollows and flat lowland across the metro. Not a simulation: no rain, no drains, no depth.": "Solo terreno lidar: hondonadas y tierras bajas llanas en toda el área metropolitana. No es una simulación: sin lluvia, sumideros ni profundidad.",
     "Contour lines in metres, Collserola down to the sea. The fall is on each card. Not a flood depth.": "Curvas de nivel en metros, de Collserola hasta el mar. El desnivel está en cada ficha. No es una profundidad de inundación.",

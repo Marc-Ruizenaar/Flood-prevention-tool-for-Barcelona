@@ -53,13 +53,12 @@ export function FactSheet({ zone, zones, relief, reliefSourceUrl, onClose, onOpe
             <h3>{t("The ground")}</h3>
             <p>{reliefCopy(relief, mitigation)}</p>
             <p className="geometry-note">
-              {relief.meters} m at the marked place, and the drop to the lowest ground {relief.spanMeters} m
-              away. ICGC terrain model, 2022. Not a flood depth.
+              {t("{meters} m at the marked place, and the drop to the lowest ground {span} m away. ICGC terrain model, 2022. Not a flood depth.", { meters: relief.meters, span: relief.spanMeters })}
               {reliefSourceUrl ? (
                 <>
                   {" "}
                   <a href={reliefSourceUrl} target="_blank" rel="noopener noreferrer">
-                    ICGC territorial elevations
+                    {t("ICGC territorial elevations")}
                   </a>
                 </>
               ) : null}

@@ -1,6 +1,7 @@
+import { lang } from "./i18n";
 import { useEffect, useState } from "react";
 import type { FeatureCollection } from "geojson";
-import type { ReliefFile, ZoneMap } from "../types";
+import type { ReliefFile, ZoneMap, ZoneCard } from "../types";
 
 export const GEOJSON_FILES = ["proof-oct2026", "signals"] as const;
 
@@ -53,6 +54,11 @@ export function useFloodData(): LoadState & { ready: boolean } {
         const zones = await loadJson<ZoneMap>("/data/zones.json");
         // Reviewed signal cards (scripts/signals-build.mjs). Missing file = no signals, not an error.
         Object.assign(zones, await loadJson<ZoneMap>("/data/signals-cards.json").catch(() => ({})));
+        // ponytail: translated card text is an overlay per language; a missing file or card keeps the English.
+        if (lang !== "en") {
+          const overlay = await loadJson<Record<string, Partial<ZoneCard>>>(`/data/zones.${lang}.json`).catch(() => ({}));
+          for (const [id, fields] of Object.entries(overlay)) if (zones[id]) Object.assign(zones[id], fields);
+        }
         const [sourcesResult, reliefResult, ...layers] = await Promise.allSettled([
           loadJson<Record<string, SourceEntry>>("/data/sources.json"),
           loadJson<ReliefFile>("/data/relief.json"),

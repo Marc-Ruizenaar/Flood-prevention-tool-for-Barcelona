@@ -1,0 +1,215 @@
+{
+  "sewer-diagonal": {
+    "atlasTerm": "Desbordamiento del alcantarillado T10",
+    "whatCouldFail": "En una tormenta de diseño T10, el Atlas de Resiliencia sitúa este eje de la Diagonal entre los lugares donde el alcantarillado no puede evacuar el caudal, de modo que el agua sale de los sumideros hacia la calle.",
+    "preventiveAction": "Revisa y limpia sumideros y pozos a lo largo del eje antes de lluvia fuerte.",
+    "geometryNote": "Corredor simplificado a lo largo del eje que el atlas nombra, de la plaza de Francesc Macià por Balmes hasta el meridiano de la Via Laietana. No es la malla hidráulica del PICBA."
+  },
+  "sewer-poblenou": {
+    "atlasTerm": "Desbordamiento del alcantarillado T10",
+    "whatCouldFail": "El mismo mapa de capacidad T10 incluye el Poblenou entre las zonas donde los colectores salen en carga a la calle. El centro del Poblenou es uno de los lugares que el atlas dice que sigue siendo crítico a medida que los déficits de drenaje empeoran.",
+    "preventiveAction": "Revisa los sumideros del centro del Poblenou antes de lluvia fuerte, incluidos los puntos bajos de la rambla.",
+    "geometryNote": "Contorno simplificado del barrio del Poblenou que el atlas nombra. No es una curva de profundidad de inundación."
+  },
+  "sewer-sant-andreu": {
+    "atlasTerm": "Desbordamiento del alcantarillado T10",
+    "whatCouldFail": "Cuando el Atlas de Resiliencia compara el peligro de inundación actual con escenarios climáticos a medio plazo, Sant Andreu es una de las zonas donde los déficits de drenaje empeoran y el agua llega a la calle.",
+    "preventiveAction": "Revisa los sumideros y los puntos bajos conocidos de Sant Andreu antes de lluvia fuerte.",
+    "geometryNote": "Contorno simplificado de Sant Andreu de Palomar, el barrio que el atlas nombra. No es una curva de profundidad de inundación."
+  },
+  "sewer-parallel-raval": {
+    "atlasTerm": "Desbordamiento del alcantarillado T10",
+    "whatCouldFail": "El mapa T10 del PICBA agrupa el Paral·lel, Sant Antoni y el Raval entre los ejes donde el alcantarillado entra en carga y el agua sale a la calle.",
+    "preventiveAction": "Limpia los sumideros del Paral·lel y del lado del Raval de la ronda de Sant Pau antes de lluvia fuerte.",
+    "geometryNote": "Traza simplificada de los ejes Paral·lel–Sant Antoni–Raval que el atlas nombra juntos. No es la malla del PICBA."
+  },
+  "sewer-badal": {
+    "name": "Eje Badal",
+    "atlasTerm": "Desbordamiento del alcantarillado T10",
+    "whatCouldFail": "La comparación de peligros del Atlas de Resiliencia marca el eje Badal entre los lugares donde los déficits de drenaje se intensifican y los colectores pueden salir en carga a la calle.",
+    "preventiveAction": "Revisa los sumideros del eje Badal antes de lluvia fuerte.",
+    "geometryNote": "Corredor simplificado sobre el eje Badal que el atlas nombra. No es una curva de profundidad de inundación."
+  },
+  "hotspot-macia": {
+    "atlasTerm": "Punto crítico publicado",
+    "whatCouldFail": "Primero de los 14 puntos críticos de inundación urbana de la lista RESCCUE / PDISBA’19. El peligro publicado es agua en la calle cuando el drenaje se satura, para peatones y tráfico, no una profundidad.",
+    "preventiveAction": "Revisa los sumideros alrededor de la plaza de Francesc Macià y elimina las obstrucciones antes de lluvia fuerte.",
+    "geometryNote": "Punto en la plaza de Francesc Macià, el lugar que la lista nombra."
+  },
+  "hotspot-urgell-roma": {
+    "atlasTerm": "Punto crítico publicado",
+    "whatCouldFail": "Incluido en la lista RESCCUE / PDISBA’19 de 14 puntos críticos. El peligro publicado es la inundación de la calle donde la red de drenaje se satura, con el riesgo que conlleva para peatones y tráfico.",
+    "preventiveAction": "Revisa los sumideros del cruce Urgell / Roma y elimina las obstrucciones antes de lluvia fuerte.",
+    "geometryNote": "Punto en el cruce Urgell / avenida de Roma, en Sant Antoni."
+  },
+  "hotspot-parallel": {
+    "atlasTerm": "Punto crítico publicado",
+    "whatCouldFail": "Incluido en la lista RESCCUE / PDISBA’19 de 14 puntos críticos. El peligro publicado es la inundación de la calle cuando el drenaje se satura.",
+    "preventiveAction": "Revisa los sumideros donde la ronda de Sant Pau encuentra el Paral·lel y elimina las obstrucciones antes de lluvia fuerte.",
+    "geometryNote": "Punto en el cruce ronda de Sant Pau / Paral·lel."
+  },
+  "hotspot-sant-pau": {
+    "name": "Entorno de la calle de Sant Pau",
+    "atlasTerm": "Punto crítico publicado",
+    "whatCouldFail": "Incluido en la lista RESCCUE / PDISBA’19 de 14 puntos críticos, en el Raval. El peligro publicado es la inundación de la calle cuando el drenaje se satura.",
+    "preventiveAction": "Revisa los sumideros de la calle de Sant Pau y elimina las obstrucciones antes de lluvia fuerte.",
+    "geometryNote": "Punto en la calle de Sant Pau, en el Raval."
+  },
+  "hotspot-diagonal-bruc": {
+    "atlasTerm": "Punto crítico publicado",
+    "whatCouldFail": "Incluido en la lista RESCCUE / PDISBA’19 de 14 puntos críticos, en el tramo de la Diagonal entre Bruc y Roger de Flor. El peligro publicado es la inundación de la calle cuando el drenaje se satura.",
+    "preventiveAction": "Revisa los sumideros de este tramo de la Diagonal y elimina las obstrucciones antes de lluvia fuerte.",
+    "geometryNote": "Punto en el tramo de la Diagonal entre la calle del Bruc y la calle de Roger de Flor."
+  },
+  "hotspot-clot-navas": {
+    "atlasTerm": "Punto crítico publicado",
+    "whatCouldFail": "Incluido en la lista RESCCUE / PDISBA’19 de 14 puntos críticos. El peligro publicado es la inundación de la calle cuando el drenaje se satura.",
+    "preventiveAction": "Revisa los sumideros entre el Clot y Navas y elimina las obstrucciones antes de lluvia fuerte.",
+    "geometryNote": "Punto entre la plaza del Clot y Navas, el par que la lista nombra."
+  },
+  "hotspot-via-augusta": {
+    "atlasTerm": "Punto crítico publicado",
+    "whatCouldFail": "Incluido en la lista RESCCUE / PDISBA’19 de 14 puntos críticos, en el corredor de Gràcia de Via Augusta, Príncep d’Astúries y Rambla del Prat. El peligro publicado es la inundación de la calle cuando el drenaje se satura.",
+    "preventiveAction": "Revisa los sumideros de este corredor de Gràcia y elimina las obstrucciones antes de lluvia fuerte.",
+    "geometryNote": "Punto en la plaza de Gal·la Placídia, en el lado de Via Augusta del corredor nombrado."
+  },
+  "hotspot-rambla-prim": {
+    "name": "Entorno de la Rambla de Prim",
+    "atlasTerm": "Punto crítico publicado",
+    "whatCouldFail": "Incluido en la lista RESCCUE / PDISBA’19 de 14 puntos críticos. El peligro publicado es la inundación de la calle alrededor de la Rambla de Prim cuando el drenaje se satura.",
+    "preventiveAction": "Revisa los sumideros de la Rambla de Prim y elimina las obstrucciones antes de lluvia fuerte.",
+    "geometryNote": "Punto en la Rambla de Prim, en la Verneda."
+  },
+  "hotspot-llucmajor": {
+    "atlasTerm": "Punto crítico publicado",
+    "whatCouldFail": "Incluido en la lista RESCCUE / PDISBA’19 de 14 puntos críticos. El peligro publicado es la inundación de la calle cuando el drenaje se satura.",
+    "preventiveAction": "Revisa los sumideros alrededor de la plaza de Llucmajor y elimina las obstrucciones antes de lluvia fuerte.",
+    "geometryNote": "Punto en la plaza de Llucmajor."
+  },
+  "hotspot-tajo-cartella": {
+    "atlasTerm": "Punto crítico publicado",
+    "whatCouldFail": "Incluido en la lista RESCCUE / PDISBA’19 de 14 puntos críticos, en la calle del Tajo y la calle de Cartellà, en Horta. El peligro publicado es la inundación de la calle cuando el drenaje se satura.",
+    "preventiveAction": "Revisa los sumideros de Tajo y Cartellà y elimina las obstrucciones antes de lluvia fuerte.",
+    "geometryNote": "Punto entre la calle del Tajo y la calle de Cartellà, en Horta."
+  },
+  "hotspot-parcerisa": {
+    "atlasTerm": "Punto crítico publicado",
+    "whatCouldFail": "Incluido en la lista RESCCUE / PDISBA’19 de 14 puntos críticos. El peligro publicado es la inundación de la calle cuando el drenaje se satura.",
+    "preventiveAction": "Revisa los sumideros de la calle de Parcerisa y elimina las obstrucciones antes de lluvia fuerte.",
+    "geometryNote": "Punto en la calle de Parcerisa, en la Marina de Port."
+  },
+  "hotspot-riera-blanca": {
+    "atlasTerm": "Punto crítico publicado",
+    "whatCouldFail": "Incluido en la lista RESCCUE / PDISBA’19 de 14 puntos críticos, en la avenida que sigue la antigua Riera Blanca. El peligro publicado es la inundación de la calle cuando el drenaje se satura.",
+    "preventiveAction": "Revisa los sumideros de la Riera Blanca y elimina las obstrucciones antes de lluvia fuerte.",
+    "geometryNote": "Punto en la calle de la Riera Blanca, en el límite de la ciudad."
+  },
+  "hotspot-seat": {
+    "name": "Entorno de SEAT (Zona Franca)",
+    "atlasTerm": "Punto crítico publicado",
+    "whatCouldFail": "Incluido en la lista RESCCUE / PDISBA’19 de 14 puntos críticos, alrededor de SEAT en la Zona Franca. El peligro publicado es la inundación de la calle cuando el drenaje se satura.",
+    "preventiveAction": "Revisa los sumideros de esta parte de la Zona Franca y elimina las obstrucciones antes de lluvia fuerte.",
+    "geometryNote": "Punto en la zona de la Zona Franca nombrada con SEAT en la lista. No es el contorno de un edificio."
+  },
+  "hotspot-tapioles": {
+    "atlasTerm": "Punto crítico publicado",
+    "whatCouldFail": "Incluido en la lista RESCCUE / PDISBA’19 de 14 puntos críticos. La calle lleva el nombre del torrente; el peligro publicado es la inundación de la calle cuando el drenaje se satura.",
+    "preventiveAction": "Revisa los sumideros de Tapioles y elimina las obstrucciones antes de lluvia fuerte.",
+    "geometryNote": "Punto en la calle de Tapioles, en el Poble-sec."
+  },
+  "stream-rambla-prim": {
+    "name": "Corredor de la Rambla de Prim",
+    "atlasTerm": "Corredor de riera soterrada",
+    "whatCouldFail": "RESCCUE incluye el entorno de la Rambla de Prim como punto crítico de inundación. La avenida se sitúa sobre el corredor de drenaje que aún concentra la escorrentía hacia el lado del Besòs, de modo que los sumideros salen en carga a la calle.",
+    "preventiveAction": "Revisa los sumideros de la rambla antes de lluvia fuerte. El depósito aprobado es un alivio futuro, no una protección ya en servicio.",
+    "geometryNote": "Traza simplificada de la Rambla de Prim. No es el eje de un canal levantado. Las líneas tenues de otros lugares son rieras del ICGC sin nombre."
+  },
+  "stream-cartella": {
+    "name": "Corredor Tajo – Cartellà",
+    "atlasTerm": "Corredor de riera soterrada",
+    "whatCouldFail": "RESCCUE nombra la calle del Tajo y la calle de Cartellà juntas como un solo punto crítico de inundación en Horta. La escorrentía se concentra en estas calles y puede salir en carga a la superficie.",
+    "preventiveAction": "Limpia los sumideros de ambas calles antes de lluvia fuerte.",
+    "geometryNote": "Traza corta que une la calle del Tajo y la calle de Cartellà. No es el eje de un canal levantado."
+  },
+  "stream-riera-blanca": {
+    "atlasTerm": "Corredor de riera soterrada",
+    "whatCouldFail": "La calle de la Riera Blanca sigue la antigua riera por el límite de la ciudad, y RESCCUE aún la incluye como punto crítico de inundación. El agua en esa avenida es el peligro publicado cuando el drenaje se satura.",
+    "preventiveAction": "Revisa los sumideros de la Riera Blanca antes de lluvia fuerte.",
+    "geometryNote": "Traza simplificada de la avenida que lleva el nombre de la riera. No es el eje de un canal levantado."
+  },
+  "stream-tapioles": {
+    "atlasTerm": "Corredor de riera soterrada",
+    "whatCouldFail": "RESCCUE nombra el torrente de Tapioles como punto crítico en el Poble-sec. La calle es la traza que queda de ese torrente, y el peligro publicado es agua en la calle cuando entra en carga.",
+    "preventiveAction": "Limpia los sumideros de Tapioles antes de lluvia fuerte.",
+    "geometryNote": "Traza simplificada de la calle de Tapioles. No es el eje de un canal levantado."
+  },
+  "stream-torre-baro": {
+    "name": "Trazas de rieras, Torre Baró",
+    "atlasTerm": "Traza geológica de riera",
+    "whatCouldFail": "El mapa geotécnico del ICGC dibuja líneas de riera por Torre Baró. Ninguno de los 14 puntos críticos del alcantarillado está sobre ellas. El fallo aquí es el torrente y la escorrentía de ladera, no un punto de carga de la lista del alcantarillado.",
+    "preventiveAction": "Revisa laderas, muros y drenaje de la calle donde estas trazas encuentran las calles, antes de lluvia intensa.",
+    "geometryNote": "Todas las líneas RIER_LN con el punto medio dentro de Torre Baró. El fichero de origen no nombra los segmentos."
+  },
+  "tank-rambla-prim": {
+    "name": "Depósito pluvial de la Rambla de Prim",
+    "atlasTerm": "Depósito pluvial (aprobado)",
+    "whatCouldFail": "Mitigación, no un modo de fallo. El Ayuntamiento aprobó un depósito de 94.000 m³ en la Rambla de Prim para reducir la carga del alcantarillado en la parte baja de la rambla, el frente marítimo, la Verneda i la Pau, el Besòs i el Maresme y el Poblenou. En la aprobación de julio de 2025, la fase 1 aún estaba en construcción, así que este mapa no considera que el depósito ya proteja la calle.",
+    "preventiveAction": "Hasta que esté en servicio, mantén limpios los sumideros de la rambla antes de lluvia fuerte. Cuando funcione, confirma que regula antes de una tormenta.",
+    "geometryNote": "Situado en la Rambla de Prim, la avenida que el proyecto nombra. No es una cámara levantada. El ámbar significa aprobado, aún no contado como en servicio."
+  },
+  "tank-zona-universitaria": {
+    "name": "Depósito pluvial de la Zona Universitària",
+    "atlasTerm": "Depósito pluvial (en servicio)",
+    "whatCouldFail": "Mitigación, no un modo de fallo. La nota municipal de julio de 2025 cuenta 15 depósitos pluviales ya en servicio y nombra el de la zona universitaria como el mayor. Reduce el caudal punta en ese lado de la ciudad. No elimina el riesgo en el resto.",
+    "preventiveAction": "Confirma que el depósito está disponible para regular antes de una tormenta.",
+    "geometryNote": "Situado en la zona universitaria que esa nota nombra. No es la coordenada de una cámara levantada."
+  },
+  "slope-torre-baro": {
+    "atlasTerm": "Riesgo de ladera y torrente",
+    "whatCouldFail": "Torre Baró mira a Collserola. La escorrentía de ladera, los sedimentos y las trazas de torrente son un mecanismo distinto de los puntos críticos del alcantarillado del llano, y ninguno de los 14 puntos publicados está aquí. Un mapa solo de alcantarillado no explica este barrio.",
+    "preventiveAction": "Revisa laderas, muros de contención y sumideros en el borde de la montaña antes de lluvia intensa.",
+    "geometryNote": "Límite de barrio simplificado. No es una curva de inundación INUNCAT ni un mapa de profundidad."
+  },
+  "slope-sant-genis": {
+    "atlasTerm": "Riesgo de ladera y torrente",
+    "whatCouldFail": "Sant Genís dels Agudells está en el borde de Collserola. La escorrentía de ladera y torrente es el peligro que la cartografía de protección civil trata aparte de los 14 puntos críticos del alcantarillado, y ninguno de esos puntos está en este barrio.",
+    "preventiveAction": "Revisa laderas y sumideros en el borde de la montaña antes de lluvia intensa.",
+    "geometryNote": "Límite de barrio simplificado. No es una curva de inundación INUNCAT."
+  },
+  "proof-torre-baro-2026-10": {
+    "name": "Torre Baró: limpieza tras las lluvias",
+    "whatCouldFail": "El 7 de octubre de 2026 el Ayuntamiento envió 13 equipos a Torre Baró tras barro, deslizamientos, muros caídos y calles cortadas. Se reportaron una veintena de incidencias, y tierra y escombros se habían esparcido por el barrio. Aquí no hay ningún punto crítico del alcantarillado que señalar.",
+    "preventiveAction": "Retira los escombros y revisa laderas y muros antes de la próxima lluvia intensa.",
+    "geometryNote": "Plaza dels Eucaliptus, uno de los lugares que Betevé nombró en la limpieza."
+  },
+  "proof-sant-andreu-2026-10": {
+    "name": "Sant Andreu: cortes de luz",
+    "whatCouldFail": "Betevé, citando a Endesa, informó de agua entrando en cámaras de transformadores y equipos eléctricos en bajos y sótanos. En las 24 horas anteriores al 7 de octubre de 2026, Sant Andreu concentró 144 de esas incidencias. Este punto es ese clúster de distrito, sobre un barrio que el atlas del alcantarillado ya marca.",
+    "preventiveAction": "Revisa el drenaje hacia sótanos y cámaras de transformadores del distrito antes de la próxima lluvia fuerte.",
+    "geometryNote": "Clúster de distrito de ese informe, no un solo edificio."
+  },
+  "proof-gracia-2026-10": {
+    "name": "Gràcia: cortes de luz",
+    "whatCouldFail": "Betevé, citando a Endesa, informó de agua entrando en cámaras de transformadores y equipos eléctricos en bajos y sótanos. En las 24 horas anteriores al 7 de octubre de 2026, Gràcia concentró 108 de esas incidencias. El punto está junto a un punto crítico publicado del alcantarillado, no en su lugar.",
+    "preventiveAction": "Revisa el drenaje hacia sótanos y cámaras de transformadores del distrito antes de la próxima lluvia fuerte.",
+    "geometryNote": "Clúster de distrito cerca del punto crítico de Via Augusta. No es un solo edificio."
+  },
+  "proof-les-corts-2026-10": {
+    "name": "Les Corts: cortes de luz",
+    "whatCouldFail": "Betevé, citando a Endesa, informó de agua entrando en cámaras de transformadores y equipos eléctricos en bajos y sótanos. En las 24 horas anteriores al 7 de octubre de 2026, Les Corts concentró 353 de esas incidencias, la mayor cuota de distrito de esa actualización.",
+    "preventiveAction": "Revisa el drenaje hacia sótanos y cámaras de transformadores del distrito antes de la próxima lluvia fuerte.",
+    "geometryNote": "Clúster de distrito de ese informe, no un solo edificio ni el pluviómetro."
+  },
+  "proof-sant-genis-2026-10": {
+    "name": "Sant Genís: deslizamiento en Cànoves",
+    "whatCouldFail": "Betevé informó de un deslizamiento en la calle de Cànoves que cortó la calle, con un camión de bomberos atascado en los escombros. Eso es un fallo de ladera. No es ninguno de los 14 puntos críticos del alcantarillado.",
+    "preventiveAction": "Revisa la ladera sobre la calle y retira los escombros antes de la próxima lluvia intensa.",
+    "geometryNote": "Calle de Cànoves, la calle que ese informe nombra."
+  },
+  "sig-09": {
+    "name": "la Nova Esquerra de l'Eixample: informes revisados, 4 oct. 2026",
+    "whatCouldFail": "El 4 de octubre de 2026, 1 informe revisado de Betevé describía agua desbordando en las calles de la Nova Esquerra de l'Eixample. Informes enlazados, no una medida de profundidad ni de daños.",
+    "preventiveAction": "Mantén limpios los sumideros y las rejillas y evita los pasos bajos mientras corra el agua.",
+    "geometryNote": "Punto de la etiqueta del barrio, no el lugar de cada informe."
+  }
+}

@@ -38,10 +38,9 @@ const STORM_PROOF_IDS = [
 const DAYS: DayWeather[] = [
   {
     date: "2026-10-02",
-    condition: "Moderate rain",
+    condition: t("Moderate rain"),
     stance: "measured",
-    summary:
-      "About 15 mm at each of the three city stations — a wet Friday, but well below Saturday’s record. No October proof is dated this day.",
+    summary: t("About 15 mm at each of the three city stations — a wet Friday, but well below Saturday’s record. No October proof is dated this day."),
     sources: [
       {
         label: "Aiguats d’octubre de 2026",
@@ -52,10 +51,9 @@ const DAYS: DayWeather[] = [
   },
   {
     date: "2026-10-03",
-    condition: "Record rain",
+    condition: t("Record rain"),
     stance: "measured",
-    summary:
-      "The heaviest day at the three city stations. The city also reported a maximum of 206 litres per square metre and a citywide mean of 152.3. Can Bruixa recorded 207 litres through Saturday. The October proof is on for this rain: the landslide reported on Sunday, and the Torre Baró cleanup and transformer-room cuts reported on Wednesday.",
+    summary: t("The heaviest day at the three city stations. The city also reported a maximum of 206 litres per square metre and a citywide mean of 152.3. Can Bruixa recorded 207 litres through Saturday. The October proof is on for this rain: the landslide reported on Sunday, and the Torre Baró cleanup and transformer-room cuts reported on Wednesday."),
     sources: [
       {
         label: "Distrito de Gràcia, Ajuntament de Barcelona",

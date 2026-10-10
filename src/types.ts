@@ -84,13 +84,13 @@ export const DEFAULT_VISIBILITY: Record<GroupId, boolean> = {
 };
 
 export const MECHANISM_LABEL: Record<Mechanism, string> = {
-  street_overflow: "Street overflow",
-  basement: "Basement",
-  transformer_room: "Transformer room",
-  slope_runoff: "Slope runoff",
-  torrent: "Torrent",
-  mitigation: "Mitigation",
-  observed_impact: "Observed impact",
+  street_overflow: t("Street overflow"),
+  basement: t("Basement"),
+  transformer_room: t("Transformer room"),
+  slope_runoff: t("Slope runoff"),
+  torrent: t("Torrent"),
+  mitigation: t("Mitigation"),
+  observed_impact: t("Observed impact"),
 };
 
 const FILE_GROUP: Record<string, GroupId> = {

@@ -1,0 +1,215 @@
+{
+  "sewer-diagonal": {
+    "atlasTerm": "Desbordament del clavegueram T10",
+    "whatCouldFail": "En una tempesta de disseny T10, l’Atles de Resiliència situa aquest eix de la Diagonal entre els llocs on el clavegueram no pot evacuar el cabal, de manera que l’aigua surt dels embornals cap al carrer.",
+    "preventiveAction": "Revisa i neteja embornals i pous al llarg de l’eix abans de pluja forta.",
+    "geometryNote": "Corredor simplificat al llarg de l’eix que l’atles anomena, de la plaça de Francesc Macià per Balmes fins al meridià de la Via Laietana. No és la malla hidràulica del PICBA."
+  },
+  "sewer-poblenou": {
+    "atlasTerm": "Desbordament del clavegueram T10",
+    "whatCouldFail": "El mateix mapa de capacitat T10 inclou el Poblenou entre les zones on els col·lectors surten en càrrega al carrer. El centre del Poblenou és un dels llocs que l’atles diu que continua sent crític a mesura que els dèficits de drenatge empitjoren.",
+    "preventiveAction": "Revisa els embornals del centre del Poblenou abans de pluja forta, inclosos els punts baixos de la rambla.",
+    "geometryNote": "Contorn simplificat del barri del Poblenou que l’atles anomena. No és una corba de profunditat d’inundació."
+  },
+  "sewer-sant-andreu": {
+    "atlasTerm": "Desbordament del clavegueram T10",
+    "whatCouldFail": "Quan l’Atles de Resiliència compara el perill d’inundació actual amb escenaris climàtics a mitjà termini, Sant Andreu és una de les zones on els dèficits de drenatge empitjoren i l’aigua arriba al carrer.",
+    "preventiveAction": "Revisa els embornals i els punts baixos coneguts de Sant Andreu abans de pluja forta.",
+    "geometryNote": "Contorn simplificat de Sant Andreu de Palomar, el barri que l’atles anomena. No és una corba de profunditat d’inundació."
+  },
+  "sewer-parallel-raval": {
+    "atlasTerm": "Desbordament del clavegueram T10",
+    "whatCouldFail": "El mapa T10 del PICBA agrupa el Paral·lel, Sant Antoni i el Raval entre els eixos on el clavegueram entra en càrrega i l’aigua surt al carrer.",
+    "preventiveAction": "Neteja els embornals del Paral·lel i del costat del Raval de la ronda de Sant Pau abans de pluja forta.",
+    "geometryNote": "Traça simplificada dels eixos Paral·lel–Sant Antoni–Raval que l’atles anomena junts. No és la malla del PICBA."
+  },
+  "sewer-badal": {
+    "name": "Eix Badal",
+    "atlasTerm": "Desbordament del clavegueram T10",
+    "whatCouldFail": "La comparació de perills de l’Atles de Resiliència marca l’eix Badal entre els llocs on els dèficits de drenatge s’intensifiquen i els col·lectors poden sortir en càrrega al carrer.",
+    "preventiveAction": "Revisa els embornals de l’eix Badal abans de pluja forta.",
+    "geometryNote": "Corredor simplificat sobre l’eix Badal que l’atles anomena. No és una corba de profunditat d’inundació."
+  },
+  "hotspot-macia": {
+    "atlasTerm": "Punt crític publicat",
+    "whatCouldFail": "Primer dels 14 punts crítics d’inundació urbana de la llista RESCCUE / PDISBA’19. El perill publicat és aigua al carrer quan el drenatge se satura, per a vianants i trànsit, no una profunditat.",
+    "preventiveAction": "Revisa els embornals al voltant de la plaça de Francesc Macià i elimina les obstruccions abans de pluja forta.",
+    "geometryNote": "Punt a la plaça de Francesc Macià, el lloc que la llista anomena."
+  },
+  "hotspot-urgell-roma": {
+    "atlasTerm": "Punt crític publicat",
+    "whatCouldFail": "Inclòs a la llista RESCCUE / PDISBA’19 de 14 punts crítics. El perill publicat és la inundació del carrer on la xarxa de drenatge se satura, amb el risc que comporta per a vianants i trànsit.",
+    "preventiveAction": "Revisa els embornals de la cruïlla Urgell / Roma i elimina les obstruccions abans de pluja forta.",
+    "geometryNote": "Punt a la cruïlla Urgell / avinguda de Roma, a Sant Antoni."
+  },
+  "hotspot-parallel": {
+    "atlasTerm": "Punt crític publicat",
+    "whatCouldFail": "Inclòs a la llista RESCCUE / PDISBA’19 de 14 punts crítics. El perill publicat és la inundació del carrer quan el drenatge se satura.",
+    "preventiveAction": "Revisa els embornals on la ronda de Sant Pau troba el Paral·lel i elimina les obstruccions abans de pluja forta.",
+    "geometryNote": "Punt a la cruïlla ronda de Sant Pau / Paral·lel."
+  },
+  "hotspot-sant-pau": {
+    "name": "Entorn del carrer de Sant Pau",
+    "atlasTerm": "Punt crític publicat",
+    "whatCouldFail": "Inclòs a la llista RESCCUE / PDISBA’19 de 14 punts crítics, al Raval. El perill publicat és la inundació del carrer quan el drenatge se satura.",
+    "preventiveAction": "Revisa els embornals del carrer de Sant Pau i elimina les obstruccions abans de pluja forta.",
+    "geometryNote": "Punt al carrer de Sant Pau, al Raval."
+  },
+  "hotspot-diagonal-bruc": {
+    "atlasTerm": "Punt crític publicat",
+    "whatCouldFail": "Inclòs a la llista RESCCUE / PDISBA’19 de 14 punts crítics, al tram de la Diagonal entre Bruc i Roger de Flor. El perill publicat és la inundació del carrer quan el drenatge se satura.",
+    "preventiveAction": "Revisa els embornals d’aquest tram de la Diagonal i elimina les obstruccions abans de pluja forta.",
+    "geometryNote": "Punt al tram de la Diagonal entre el carrer del Bruc i el carrer de Roger de Flor."
+  },
+  "hotspot-clot-navas": {
+    "atlasTerm": "Punt crític publicat",
+    "whatCouldFail": "Inclòs a la llista RESCCUE / PDISBA’19 de 14 punts crítics. El perill publicat és la inundació del carrer quan el drenatge se satura.",
+    "preventiveAction": "Revisa els embornals entre el Clot i Navas i elimina les obstruccions abans de pluja forta.",
+    "geometryNote": "Punt entre la plaça del Clot i Navas, el parell que la llista anomena."
+  },
+  "hotspot-via-augusta": {
+    "atlasTerm": "Punt crític publicat",
+    "whatCouldFail": "Inclòs a la llista RESCCUE / PDISBA’19 de 14 punts crítics, al corredor de Gràcia de Via Augusta, Príncep d’Astúries i Rambla del Prat. El perill publicat és la inundació del carrer quan el drenatge se satura.",
+    "preventiveAction": "Revisa els embornals d’aquest corredor de Gràcia i elimina les obstruccions abans de pluja forta.",
+    "geometryNote": "Punt a la plaça de Gal·la Placídia, al costat de Via Augusta del corredor anomenat."
+  },
+  "hotspot-rambla-prim": {
+    "name": "Entorn de la Rambla de Prim",
+    "atlasTerm": "Punt crític publicat",
+    "whatCouldFail": "Inclòs a la llista RESCCUE / PDISBA’19 de 14 punts crítics. El perill publicat és la inundació del carrer al voltant de la Rambla de Prim quan el drenatge se satura.",
+    "preventiveAction": "Revisa els embornals de la Rambla de Prim i elimina les obstruccions abans de pluja forta.",
+    "geometryNote": "Punt a la Rambla de Prim, a la Verneda."
+  },
+  "hotspot-llucmajor": {
+    "atlasTerm": "Punt crític publicat",
+    "whatCouldFail": "Inclòs a la llista RESCCUE / PDISBA’19 de 14 punts crítics. El perill publicat és la inundació del carrer quan el drenatge se satura.",
+    "preventiveAction": "Revisa els embornals al voltant de la plaça de Llucmajor i elimina les obstruccions abans de pluja forta.",
+    "geometryNote": "Punt a la plaça de Llucmajor."
+  },
+  "hotspot-tajo-cartella": {
+    "atlasTerm": "Punt crític publicat",
+    "whatCouldFail": "Inclòs a la llista RESCCUE / PDISBA’19 de 14 punts crítics, al carrer del Tajo i el carrer de Cartellà, a Horta. El perill publicat és la inundació del carrer quan el drenatge se satura.",
+    "preventiveAction": "Revisa els embornals de Tajo i Cartellà i elimina les obstruccions abans de pluja forta.",
+    "geometryNote": "Punt entre el carrer del Tajo i el carrer de Cartellà, a Horta."
+  },
+  "hotspot-parcerisa": {
+    "atlasTerm": "Punt crític publicat",
+    "whatCouldFail": "Inclòs a la llista RESCCUE / PDISBA’19 de 14 punts crítics. El perill publicat és la inundació del carrer quan el drenatge se satura.",
+    "preventiveAction": "Revisa els embornals del carrer de Parcerisa i elimina les obstruccions abans de pluja forta.",
+    "geometryNote": "Punt al carrer de Parcerisa, a la Marina de Port."
+  },
+  "hotspot-riera-blanca": {
+    "atlasTerm": "Punt crític publicat",
+    "whatCouldFail": "Inclòs a la llista RESCCUE / PDISBA’19 de 14 punts crítics, a l’avinguda que segueix l’antiga Riera Blanca. El perill publicat és la inundació del carrer quan el drenatge se satura.",
+    "preventiveAction": "Revisa els embornals de la Riera Blanca i elimina les obstruccions abans de pluja forta.",
+    "geometryNote": "Punt al carrer de la Riera Blanca, al límit de la ciutat."
+  },
+  "hotspot-seat": {
+    "name": "Entorn de SEAT (Zona Franca)",
+    "atlasTerm": "Punt crític publicat",
+    "whatCouldFail": "Inclòs a la llista RESCCUE / PDISBA’19 de 14 punts crítics, al voltant de SEAT a la Zona Franca. El perill publicat és la inundació del carrer quan el drenatge se satura.",
+    "preventiveAction": "Revisa els embornals d’aquesta part de la Zona Franca i elimina les obstruccions abans de pluja forta.",
+    "geometryNote": "Punt a la zona de la Zona Franca anomenada amb SEAT a la llista. No és el contorn d’un edifici."
+  },
+  "hotspot-tapioles": {
+    "atlasTerm": "Punt crític publicat",
+    "whatCouldFail": "Inclòs a la llista RESCCUE / PDISBA’19 de 14 punts crítics. El carrer porta el nom del torrent; el perill publicat és la inundació del carrer quan el drenatge se satura.",
+    "preventiveAction": "Revisa els embornals de Tapioles i elimina les obstruccions abans de pluja forta.",
+    "geometryNote": "Punt al carrer de Tapioles, al Poble-sec."
+  },
+  "stream-rambla-prim": {
+    "name": "Corredor de la Rambla de Prim",
+    "atlasTerm": "Corredor de riera soterrada",
+    "whatCouldFail": "RESCCUE inclou l’entorn de la Rambla de Prim com a punt crític d’inundació. L’avinguda se situa sobre el corredor de drenatge que encara concentra l’escorrentia cap al costat del Besòs, de manera que els embornals surten en càrrega al carrer.",
+    "preventiveAction": "Revisa els embornals de la rambla abans de pluja forta. El dipòsit aprovat és un alleujament futur, no una protecció ja en servei.",
+    "geometryNote": "Traça simplificada de la Rambla de Prim. No és l’eix d’un canal aixecat. Les línies tènues d’altres llocs són rieres de l’ICGC sense nom."
+  },
+  "stream-cartella": {
+    "name": "Corredor Tajo – Cartellà",
+    "atlasTerm": "Corredor de riera soterrada",
+    "whatCouldFail": "RESCCUE anomena el carrer del Tajo i el carrer de Cartellà junts com un sol punt crític d’inundació a Horta. L’escorrentia es concentra en aquests carrers i pot sortir en càrrega a la superfície.",
+    "preventiveAction": "Neteja els embornals dels dos carrers abans de pluja forta.",
+    "geometryNote": "Traça curta que uneix el carrer del Tajo i el carrer de Cartellà. No és l’eix d’un canal aixecat."
+  },
+  "stream-riera-blanca": {
+    "atlasTerm": "Corredor de riera soterrada",
+    "whatCouldFail": "El carrer de la Riera Blanca segueix l’antiga riera pel límit de la ciutat, i RESCCUE encara l’inclou com a punt crític d’inundació. L’aigua en aquesta avinguda és el perill publicat quan el drenatge se satura.",
+    "preventiveAction": "Revisa els embornals de la Riera Blanca abans de pluja forta.",
+    "geometryNote": "Traça simplificada de l’avinguda que porta el nom de la riera. No és l’eix d’un canal aixecat."
+  },
+  "stream-tapioles": {
+    "atlasTerm": "Corredor de riera soterrada",
+    "whatCouldFail": "RESCCUE anomena el torrent de Tapioles com a punt crític al Poble-sec. El carrer és la traça que queda d’aquell torrent, i el perill publicat és aigua al carrer quan entra en càrrega.",
+    "preventiveAction": "Neteja els embornals de Tapioles abans de pluja forta.",
+    "geometryNote": "Traça simplificada del carrer de Tapioles. No és l’eix d’un canal aixecat."
+  },
+  "stream-torre-baro": {
+    "name": "Traces de rieres, Torre Baró",
+    "atlasTerm": "Traça geològica de riera",
+    "whatCouldFail": "El mapa geotècnic de l’ICGC dibuixa línies de riera per Torre Baró. Cap dels 14 punts crítics del clavegueram hi és. La fallada aquí és el torrent i l’escorrentia de vessant, no un punt de càrrega de la llista del clavegueram.",
+    "preventiveAction": "Revisa vessants, murs i drenatge del carrer on aquestes traces troben els carrers, abans de pluja intensa.",
+    "geometryNote": "Totes les línies RIER_LN amb el punt mitjà dins de Torre Baró. El fitxer d’origen no anomena els segments."
+  },
+  "tank-rambla-prim": {
+    "name": "Dipòsit pluvial de la Rambla de Prim",
+    "atlasTerm": "Dipòsit pluvial (aprovat)",
+    "whatCouldFail": "Mitigació, no un mode de fallada. L’Ajuntament va aprovar un dipòsit de 94.000 m³ a la Rambla de Prim per reduir la càrrega del clavegueram a la part baixa de la rambla, el front marítim, la Verneda i la Pau, el Besòs i el Maresme i el Poblenou. A l’aprovació del juliol de 2025, la fase 1 encara estava en construcció, així que aquest mapa no considera que el dipòsit ja protegeixi el carrer.",
+    "preventiveAction": "Fins que estigui en servei, mantén nets els embornals de la rambla abans de pluja forta. Quan funcioni, confirma que regula abans d’una tempesta.",
+    "geometryNote": "Situat a la Rambla de Prim, l’avinguda que el projecte anomena. No és una cambra aixecada. L’ambre vol dir aprovat, encara no comptat com en servei."
+  },
+  "tank-zona-universitaria": {
+    "name": "Dipòsit pluvial de la Zona Universitària",
+    "atlasTerm": "Dipòsit pluvial (en servei)",
+    "whatCouldFail": "Mitigació, no un mode de fallada. La nota municipal del juliol de 2025 compta 15 dipòsits pluvials ja en servei i anomena el de la zona universitària com el més gran. Redueix el cabal punta en aquell costat de la ciutat. No elimina el risc a la resta.",
+    "preventiveAction": "Confirma que el dipòsit està disponible per regular abans d’una tempesta.",
+    "geometryNote": "Situat a la zona universitària que aquella nota anomena. No és la coordenada d’una cambra aixecada."
+  },
+  "slope-torre-baro": {
+    "atlasTerm": "Risc de vessant i torrent",
+    "whatCouldFail": "Torre Baró mira a Collserola. L’escorrentia de vessant, els sediments i les traces de torrent són un mecanisme diferent dels punts crítics del clavegueram del pla, i cap dels 14 punts publicats és aquí. Un mapa només de clavegueram no explica aquest barri.",
+    "preventiveAction": "Revisa vessants, murs de contenció i embornals a la vora de la muntanya abans de pluja intensa.",
+    "geometryNote": "Límit de barri simplificat. No és una corba d’inundació INUNCAT ni un mapa de profunditat."
+  },
+  "slope-sant-genis": {
+    "atlasTerm": "Risc de vessant i torrent",
+    "whatCouldFail": "Sant Genís dels Agudells és a la vora de Collserola. L’escorrentia de vessant i torrent és el perill que la cartografia de protecció civil tracta a part dels 14 punts crítics del clavegueram, i cap d’aquests punts és en aquest barri.",
+    "preventiveAction": "Revisa vessants i embornals a la vora de la muntanya abans de pluja intensa.",
+    "geometryNote": "Límit de barri simplificat. No és una corba d’inundació INUNCAT."
+  },
+  "proof-torre-baro-2026-10": {
+    "name": "Torre Baró: neteja després de les pluges",
+    "whatCouldFail": "El 7 d’octubre de 2026 l’Ajuntament va enviar 13 equips a Torre Baró després de fang, esllavissades, murs caiguts i carrers tallats. Es van reportar una vintena d’incidències, i terra i runa s’havien escampat pel barri. Aquí no hi ha cap punt crític del clavegueram a assenyalar.",
+    "preventiveAction": "Retira la runa i revisa vessants i murs abans de la propera pluja intensa.",
+    "geometryNote": "Plaça dels Eucaliptus, un dels llocs que Betevé va anomenar a la neteja."
+  },
+  "proof-sant-andreu-2026-10": {
+    "name": "Sant Andreu: talls de llum",
+    "whatCouldFail": "Betevé, citant Endesa, va informar d’aigua entrant en cambres de transformadors i equips elèctrics en baixos i soterranis. En les 24 hores anteriors al 7 d’octubre de 2026, Sant Andreu va concentrar 144 d’aquestes incidències. Aquest punt és aquell clúster de districte, sobre un barri que l’atles del clavegueram ja marca.",
+    "preventiveAction": "Revisa el drenatge cap a soterranis i cambres de transformadors del districte abans de la propera pluja forta.",
+    "geometryNote": "Clúster de districte d’aquell informe, no un sol edifici."
+  },
+  "proof-gracia-2026-10": {
+    "name": "Gràcia: talls de llum",
+    "whatCouldFail": "Betevé, citant Endesa, va informar d’aigua entrant en cambres de transformadors i equips elèctrics en baixos i soterranis. En les 24 hores anteriors al 7 d’octubre de 2026, Gràcia va concentrar 108 d’aquestes incidències. El punt és al costat d’un punt crític publicat del clavegueram, no en lloc seu.",
+    "preventiveAction": "Revisa el drenatge cap a soterranis i cambres de transformadors del districte abans de la propera pluja forta.",
+    "geometryNote": "Clúster de districte prop del punt crític de Via Augusta. No és un sol edifici."
+  },
+  "proof-les-corts-2026-10": {
+    "name": "Les Corts: talls de llum",
+    "whatCouldFail": "Betevé, citant Endesa, va informar d’aigua entrant en cambres de transformadors i equips elèctrics en baixos i soterranis. En les 24 hores anteriors al 7 d’octubre de 2026, Les Corts va concentrar 353 d’aquestes incidències, la quota de districte més gran d’aquella actualització.",
+    "preventiveAction": "Revisa el drenatge cap a soterranis i cambres de transformadors del districte abans de la propera pluja forta.",
+    "geometryNote": "Clúster de districte d’aquell informe, no un sol edifici ni el pluviòmetre."
+  },
+  "proof-sant-genis-2026-10": {
+    "name": "Sant Genís: esllavissada a Cànoves",
+    "whatCouldFail": "Betevé va informar d’una esllavissada al carrer de Cànoves que va tallar el carrer, amb un camió de bombers encallat a la runa. Això és una fallada de vessant. No és cap dels 14 punts crítics del clavegueram.",
+    "preventiveAction": "Revisa el vessant sobre el carrer i retira la runa abans de la propera pluja intensa.",
+    "geometryNote": "Carrer de Cànoves, el carrer que aquell informe anomena."
+  },
+  "sig-09": {
+    "name": "la Nova Esquerra de l'Eixample: informes revisats, 4 d’oct. de 2026",
+    "whatCouldFail": "El 4 d’octubre de 2026, 1 informe revisat de Betevé descrivia aigua desbordant als carrers de la Nova Esquerra de l'Eixample. Informes enllaçats, no una mesura de profunditat ni de danys.",
+    "preventiveAction": "Mantén nets els embornals i les reixes i evita els passos baixos mentre corri l’aigua.",
+    "geometryNote": "Punt de l’etiqueta del barri, no el lloc de cada informe."
+  }
+}
