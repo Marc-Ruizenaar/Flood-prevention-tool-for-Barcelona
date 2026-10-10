@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import maplibregl, { type GeoJSONSource, type Map } from "maplibre-gl";
-import "maplibre-gl/dist/maplibre-gl.css";
 
 maplibregl.setMaxParallelImageRequests(16);
 import type { Feature } from "geojson";

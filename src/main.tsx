@@ -1,5 +1,9 @@
 import { lazy, StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
+// maplibre's stylesheet must come before ours: it sets position: relative on the map element and
+// styles.css overrides that with position: absolute. Loading it with the lazy map chunk put it after
+// ours and collapsed the map to zero height in production.
+import "maplibre-gl/dist/maplibre-gl.css";
 import { App } from "./App";
 import "./styles.css";
 
