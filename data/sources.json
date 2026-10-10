@@ -38,7 +38,7 @@
   "relief": {
     "label": "Terrain height, ICGC",
     "primary": "https://www.icgc.cat/en/Geoinformation-and-Maps/Online-services-Geoservices/WMS-and-WCS-Elevations/WMS-Territorial-elevations",
-    "note": "Hillshade and the height on each card are the 2022 AMB lidar terrain model, read at the marked place. The fall is the drop to the lowest ground 250 m away. Not a flood depth."
+    "note": "The height on each card is the 2022 AMB lidar terrain model, read at the marked place. Map contours are traced from the ICGC 5 m terrain model, which is coarser. The fall is the drop to the lowest ground 250 m away. Not a flood depth."
   },
   "rainfall-observed": {
     "label": "Rainfall, observed mention only",

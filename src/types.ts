@@ -56,8 +56,8 @@ export const GROUPS: LayerGroup[] = [
   {
     id: "relief",
     label: "Height of the ground",
-    legend: "Collserola down to the sea. The fall is on each card. Not a flood depth.",
-    swatches: [{ color: "#8d877c", shape: "square" }],
+    legend: "Contour lines in metres, Collserola down to the sea. The fall is on each card. Not a flood depth.",
+    swatches: [{ color: "#9a6b3f", shape: "line" }],
   },
   {
     id: "proof",

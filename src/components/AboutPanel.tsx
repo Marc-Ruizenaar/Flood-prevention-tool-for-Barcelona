@@ -41,8 +41,9 @@ export function AboutPanel({ sources, onClose }: Props) {
             this tool, is pluvial drainage plus the Collserola edge.
           </p>
           <p>
-            The city is a slope, from Collserola down to the sea. The grey relief is the ICGC terrain
-            model, and every card reads the height and the fall at that place. A steep fall sheds rain
+            The city is a slope, from Collserola down to the sea. The brown contour lines trace
+            ground height from the ICGC 5 m terrain model. Every card reads the height and the fall at
+            that place from the finer 2022 lidar model. A steep fall sheds rain
             as runoff. A level street holds it in the drains. The number is ground height, not a flood
             depth.
           </p>
