@@ -26,7 +26,7 @@ export type ZoneCard = {
 
 export type ZoneMap = Record<string, ZoneCard>;
 
-export type GroupId = "relief" | "sewers" | "streams" | "slopes" | "proof";
+export type GroupId = "terrain" | "relief" | "sewers" | "streams" | "slopes" | "proof";
 
 export type ReliefReading = {
   meters: number;
@@ -54,6 +54,12 @@ export type LayerGroup = {
 
 export const GROUPS: LayerGroup[] = [
   {
+    id: "terrain",
+    label: "Where terrain pools water",
+    legend: "Lidar terrain only: hollows and flat lowland across the metro. Not a simulation: no rain, no drains, no depth.",
+    swatches: [{ color: "#2b6cb0", shape: "square" }],
+  },
+  {
     id: "relief",
     label: "Height of the ground",
     legend: "Contour lines in metres, Collserola down to the sea. The fall is on each card. Not a flood depth.",
@@ -68,6 +74,7 @@ export const GROUPS: LayerGroup[] = [
 ];
 
 export const DEFAULT_VISIBILITY: Record<GroupId, boolean> = {
+  terrain: true,
   relief: true,
   sewers: false,
   streams: false,

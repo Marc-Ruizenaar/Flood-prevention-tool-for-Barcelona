@@ -19,3 +19,7 @@ export function dailyAsset(runId: string): string {
 export function mitigationAsset(runId: string): string {
   return `${floodDataBase(runId)}/mitigation.json`;
 }
+
+export function indexAsset(): string {
+  return "/data/flood/index.json";
+}

@@ -3,8 +3,21 @@ import maplibregl, { type GeoJSONSource, type Map } from "maplibre-gl";
 import type { Feature } from "geojson";
 import { useFloodData } from "./lib/data";
 import { FLOOD_CLASSES, FLOOD_COLORS, FLOOD_LABELS, floodColorExpression, streetWidth } from "./lib/modelStyle";
-import { DEPTH_WORDS, insideExtent, metresBetween, nearestPoint, worstStreetNear, type LngLat } from "./lib/nearby";
-import { loadStreets, streetsExtent, type Loaded, type StreetsCollection } from "./lib/sim";
+import { DEPTH_WORDS, metresBetween, nearestPoint, worstStreetNear, type LngLat } from "./lib/nearby";
+import {
+  boxAround,
+  boxOutline,
+  chunksFor,
+  insideAny,
+  loadRunIndex,
+  loadStreets,
+  runBoxes,
+  unionBox,
+  type Bbox,
+  type Loaded,
+  type RunIndex,
+  type StreetsCollection,
+} from "./lib/sim";
 import { DEFAULT_DAY, formatDay } from "./lib/weather";
 
 // The resident view: one question ("what happened near me?"), plain words, and what to do next time.
@@ -29,6 +42,8 @@ const EXAMPLES: Place[] = [
 export function CitizenApp() {
   const data = useFloodData();
   const [streets, setStreets] = useState<Loaded<StreetsCollection>>({ status: "loading" });
+  const [index, setIndex] = useState<RunIndex | null>(null);
+  const [view, setView] = useState<Bbox | null>(null);
   const [place, setPlace] = useState<Place | null>(null);
   const [locating, setLocating] = useState(false);
   const [locateError, setLocateError] = useState<string | null>(null);
@@ -37,10 +52,19 @@ export function CitizenApp() {
   const markerRef = useRef<maplibregl.Marker | null>(null);
 
   useEffect(() => {
-    const ctrl = new AbortController();
-    loadStreets(DEFAULT_DAY, ctrl.signal).then(setStreets).catch(() => undefined);
-    return () => ctrl.abort();
+    loadRunIndex().then(setIndex).catch(() => undefined);
   }, []);
+
+  // Streets for the chunks touching the view (plus the chosen place). Pans inside the same chunks do not reload.
+  const want = place ? unionBox([view, boxAround(place.at, 150)]) : view;
+  const chunkKey = index ? chunksFor(index, DEFAULT_DAY, want).map((c) => c.id).join(",") : "";
+  useEffect(() => {
+    if (!index) return;
+    const ctrl = new AbortController();
+    setStreets({ status: "loading" });
+    loadStreets(DEFAULT_DAY, ctrl.signal, want).then(setStreets).catch(() => undefined);
+    return () => ctrl.abort();
+  }, [chunkKey]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -54,6 +78,12 @@ export function CitizenApp() {
       touchPitch: false,
     });
     mapRef.current = map;
+    const readView = () => {
+      const b = map.getBounds();
+      setView([b.getWest(), b.getSouth(), b.getEast(), b.getNorth()]);
+    };
+    map.on("load", readView);
+    map.on("moveend", readView);
     map.on("load", () => {
       const empty = { type: "FeatureCollection" as const, features: [] };
       map.addSource("streets", { type: "geojson", data: empty });
@@ -102,20 +132,18 @@ export function CitizenApp() {
   useEffect(() => {
     const map = mapRef.current;
     if (!map || streets.status !== "ready") return;
-    const apply = () => {
-      (map.getSource("streets") as GeoJSONSource | undefined)?.setData(streets.data);
-      const extent = streetsExtent(streets.data);
-      if (!extent) return;
-      const [w, s, e, n] = extent;
-      (map.getSource("area") as GeoJSONSource | undefined)?.setData({
-        type: "Feature",
-        properties: {},
-        geometry: { type: "LineString", coordinates: [[w, n], [e, n], [e, s], [w, s], [w, n]] },
-      });
-    };
+    const apply = () => (map.getSource("streets") as GeoJSONSource | undefined)?.setData(streets.data);
     if (map.getSource("streets")) apply();
     else map.once("load", apply);
   }, [streets]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !index) return;
+    const apply = () => (map.getSource("area") as GeoJSONSource | undefined)?.setData(boxOutline(runBoxes(index)));
+    if (map.getSource("area")) apply();
+    else map.once("load", apply);
+  }, [index]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -193,7 +221,7 @@ export function CitizenApp() {
             ×
           </button>
           <p className="kicker">{place.label}</p>
-          <Verdict place={place} streets={streets} reports={reports} zones={data.zones} />
+          <Verdict place={place} streets={streets} boxes={index ? runBoxes(index) : []} reports={reports} zones={data.zones} />
           <h2>Before the next storm</h2>
           <ul className="citizen-advice">
             <li>When heavy rain is forecast, move your car off low streets and out of underpasses.</li>
@@ -217,11 +245,13 @@ export function CitizenApp() {
 function Verdict({
   place,
   streets,
+  boxes,
   reports,
   zones,
 }: {
   place: Place;
   streets: Loaded<StreetsCollection>;
+  boxes: Bbox[];
   reports: Feature[];
   zones: ReturnType<typeof useFloodData>["zones"];
 }) {
@@ -229,7 +259,7 @@ function Verdict({
   if (streets.status === "error") return <p>The simulation did not load. Try again in a moment.</p>;
 
   const day = formatDay(DEFAULT_DAY);
-  if (!insideExtent(streetsExtent(streets.data), place.at)) {
+  if (!insideAny(boxes, place.at)) {
     const report = nearestPoint(reports, place.at, 2000);
     const id = String(report?.feature.properties?.id ?? "");
     const card = zones?.[id];

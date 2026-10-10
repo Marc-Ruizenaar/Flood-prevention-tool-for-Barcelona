@@ -1,5 +1,9 @@
 import type { FeatureCollection, LineString, Point } from "geojson";
-import { dailyAsset, hotspotsAsset, mitigationAsset, streetsAsset } from "./fixtures";
+import { dailyAsset, hotspotsAsset, indexAsset, mitigationAsset, streetsAsset } from "./fixtures";
+import { chunksFor, mergeRanked, type Bbox, type RunIndex } from "./chunks";
+
+export type { Bbox, RunChunk, RunIndex } from "./chunks";
+export { boxAround, boxOutline, chunksFor, insideAny, runBoxes, unionBox } from "./chunks";
 
 export type Quantity = { value: number | null; unit: string; kind: string };
 export type FloodClass = "dry" | "low" | "moderate" | "high" | "severe";
@@ -63,6 +67,9 @@ export type FloodLayerMeta = {
   timezone?: string;
   synthetic?: boolean;
   street_network_stub?: boolean;
+  // Hoisted from the segments by scripts/slim-flood.mjs; the same for every segment of a run.
+  uncertainty_status?: string;
+  data_quality?: string;
 };
 
 export type StreetsCollection = FeatureCollection<LineString, StreetProps> & { properties?: FloodLayerMeta };
@@ -217,7 +224,7 @@ function isAbort(error: unknown): boolean {
   return typeof error === "object" && error !== null && "name" in error && (error as { name: string }).name === "AbortError";
 }
 
-async function fetchJson<T>(url: string, signal: AbortSignal): Promise<T> {
+async function fetchJson<T>(url: string, signal?: AbortSignal): Promise<T> {
   let response: Response;
   try {
     response = await fetch(url, {
@@ -246,8 +253,12 @@ async function fetchJson<T>(url: string, signal: AbortSignal): Promise<T> {
   return (await response.json()) as T;
 }
 
+function simulationFor(id: string, path: string): string {
+  return `${apiBase()}/simulations/${encodeURIComponent(id)}${path}`;
+}
+
 function simulation(path: string): string {
-  return `${apiBase()}/simulations/${encodeURIComponent(runId())}${path}`;
+  return simulationFor(runId(), path);
 }
 
 /** Set VITE_USE_FLOOD_API=true to read streets/hotspots from the live backend instead of static JSON. */
@@ -255,76 +266,97 @@ export function useFloodApi(): boolean {
   return envValue("VITE_USE_FLOOD_API", "") === "true";
 }
 
-async function loadStatic<T>(url: string, signal: AbortSignal): Promise<T> {
-  return fetchJson<T>(url, signal);
+const FALLBACK_INDEX = (): RunIndex => ({ runs: [{ id: runId(), days: [...MODEL_DAYS], bbox: null }] });
+let indexPromise: Promise<RunIndex> | null = null;
+
+/** Every simulated area (chunk) with bundled output. API mode serves one run with no box, so it always loads. */
+export function loadRunIndex(): Promise<RunIndex> {
+  if (useFloodApi()) return Promise.resolve(FALLBACK_INDEX());
+  indexPromise ??= fetchJson<RunIndex>(indexAsset()).catch(() => FALLBACK_INDEX());
+  return indexPromise;
 }
 
-async function loadStreetsStatic(date: string, signal: AbortSignal): Promise<Loaded<StreetsCollection>> {
-  try {
-    const data = await loadStatic<StreetsCollection>(streetsAsset(runId(), date), signal);
-    return { status: "ready", source: "fixture", data };
-  } catch (error) {
-    if (isAbort(error)) throw error;
-    if (error instanceof ApiError && error.kind === "missing") {
-      return {
-        status: "ready",
-        source: "empty",
-        data: EMPTY_STREETS,
-        note: `No bundled streets for ${date}. Run node scripts/sync-flood-fixtures.mjs.`,
-      };
-    }
-    return {
-      status: "error",
-      message: error instanceof Error ? error.message : "Could not load streets.",
-    };
+// ponytail: chunk files are immutable per build, so one fetch per URL for the session; pans never refetch.
+const chunkCache = new Map<string, Promise<unknown>>();
+function cached<T>(url: string): Promise<T> {
+  let pending = chunkCache.get(url);
+  if (!pending) {
+    pending = fetchJson<T>(url).catch((error: unknown) => {
+      chunkCache.delete(url);
+      throw error;
+    });
+    chunkCache.set(url, pending);
   }
+  return pending as Promise<T>;
 }
 
-async function loadHotspotsStatic(date: string, signal: AbortSignal): Promise<Loaded<HotspotsCollection>> {
-  try {
-    const data = await loadStatic<HotspotsCollection>(hotspotsAsset(runId(), date), signal);
-    return { status: "ready", source: "fixture", data };
-  } catch (error) {
-    if (isAbort(error)) throw error;
-    if (error instanceof ApiError && error.kind === "missing") {
-      return {
-        status: "ready",
-        source: "empty",
-        data: EMPTY_HOTSPOTS,
-        note: `No bundled hotspots for ${date}. Run node scripts/sync-flood-fixtures.mjs.`,
-      };
-    }
-    return {
-      status: "error",
-      message: error instanceof Error ? error.message : "Could not load hotspots.",
-    };
+async function loadChunks<T>(
+  day: string,
+  view: Bbox | null,
+  signal: AbortSignal,
+  urlFor: (id: string) => string,
+  merge: (parts: T[]) => T,
+  empty: T,
+  what: string,
+): Promise<Loaded<T>> {
+  const index = await loadRunIndex();
+  if (signal.aborted) throw new DOMException("aborted", "AbortError");
+  const chunks = chunksFor(index, day, view);
+  const missingNote = `No bundled ${what} for ${day}. Run node scripts/sync-flood-fixtures.mjs.`;
+  if (!chunks.length) {
+    const anyForDay = index.runs.some((run) => run.days.includes(day));
+    return { status: "ready", source: "empty", data: empty, note: anyForDay ? undefined : missingNote };
   }
-}
-
-async function loadCollection<T>(url: string, signal: AbortSignal, empty: T): Promise<Loaded<T>> {
-  try {
-    return { status: "ready", source: "api", data: await fetchJson<T>(url, signal) };
-  } catch (error) {
-    if (isAbort(error)) throw error;
-    if (error instanceof ApiError && error.kind === "offline") {
+  const results = await Promise.allSettled(chunks.map((chunk) => cached<T>(urlFor(chunk.id))));
+  if (signal.aborted) throw new DOMException("aborted", "AbortError");
+  const parts = results.flatMap((r) => (r.status === "fulfilled" ? [r.value] : []));
+  const failed = results.flatMap((r) => (r.status === "rejected" ? [r.reason as unknown] : []));
+  if (!parts.length) {
+    const error = failed[0];
+    if (error instanceof ApiError && error.kind === "missing") return { status: "ready", source: "empty", data: empty, note: missingNote };
+    if (error instanceof ApiError && error.kind === "offline" && useFloodApi()) {
       return { status: "ready", source: "empty", data: empty, note: "The flood API is offline." };
     }
-    return { status: "error", message: error instanceof Error ? error.message : "Could not load this layer." };
+    return { status: "error", message: error instanceof Error ? error.message : `Could not load ${what}.` };
   }
+  return {
+    status: "ready",
+    source: useFloodApi() ? "api" : "fixture",
+    data: merge(parts),
+    note: failed.length ? `${failed.length} of ${chunks.length} simulated areas did not load.` : undefined,
+  };
 }
 
-export function loadStreets(date: string, signal: AbortSignal): Promise<Loaded<StreetsCollection>> {
-  if (useFloodApi()) {
-    return loadCollection(simulation(`/streets?date=${date}`), signal, EMPTY_STREETS);
-  }
-  return loadStreetsStatic(date, signal);
+/** Streets for `day` from the chunks touching `view` (all chunks when view is null), merged into one collection. */
+export function loadStreets(day: string, signal: AbortSignal, view: Bbox | null = null): Promise<Loaded<StreetsCollection>> {
+  const urlFor = (id: string) => (useFloodApi() ? simulationFor(id, `/streets?date=${day}`) : streetsAsset(id, day));
+  return loadChunks<StreetsCollection>(
+    day,
+    view,
+    signal,
+    urlFor,
+    (parts) => ({ type: "FeatureCollection", properties: parts[0]?.properties, features: parts.flatMap((p) => p.features) }),
+    EMPTY_STREETS,
+    "streets",
+  );
 }
 
-export function loadHotspots(date: string, signal: AbortSignal): Promise<Loaded<HotspotsCollection>> {
-  if (useFloodApi()) {
-    return loadCollection(simulation(`/hotspots?date=${date}&limit=10`), signal, EMPTY_HOTSPOTS);
-  }
-  return loadHotspotsStatic(date, signal);
+/** Hotspots for `day` from the chunks touching `view`, re-ranked by score across chunks. */
+export function loadHotspots(day: string, signal: AbortSignal, view: Bbox | null = null): Promise<Loaded<HotspotsCollection>> {
+  const urlFor = (id: string) => (useFloodApi() ? simulationFor(id, `/hotspots?date=${day}&limit=10`) : hotspotsAsset(id, day));
+  return loadChunks<HotspotsCollection>(
+    day,
+    view,
+    signal,
+    urlFor,
+    (parts) => ({ type: "FeatureCollection", properties: parts[0]?.properties, features: mergeRanked(parts.map((p) => p.features)) }),
+    EMPTY_HOTSPOTS,
+    "hotspots",
+  );
+}
+
+async function loadStatic<T>(url: string, signal: AbortSignal): Promise<T> {
+  return fetchJson<T>(url, signal);
 }
 
 export async function loadDaily(signal: AbortSignal): Promise<Loaded<DailySummary[]>> {

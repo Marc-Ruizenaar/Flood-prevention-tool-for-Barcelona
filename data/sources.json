@@ -50,5 +50,11 @@
     "primary": "https://analisi.transparenciacatalunya.cat/Medi-Ambient/Dades-meteorol-giques-di-ries-de-la-XEMA/7bvh-jvq2",
     "secondary": "https://beteve.cat/medi-ambient/temps-barcelona-divendres-9-octubre-refrescada-tardor/",
     "note": "Daily accumulated rainfall at Barcelona – el Raval, Observatori Fabra and Zona Universitària. The map uses the highest of the three. The file publishes with about two days of delay."
+  },
+  "terrain-pooling": {
+    "label": "Where terrain pools water",
+    "primary": "https://www.icgc.cat/",
+    "secondary": "https://geoserveis.icgc.cat/servei/catalunya/contextmaps-terreny-5m-rgb/wmts/",
+    "note": "Terrain diagnostic from the ICGC 5 m terrain model, read as terrain-RGB tiles at zoom 12 and coarsened to about 143 m cells. Priority-flood depression depth and slope only. No rain, no drains, not a simulation."
   }
 }

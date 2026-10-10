@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { FeatureCollection, Point } from "geojson";
 import { AboutPanel } from "./components/AboutPanel";
 import { FloodLegend } from "./components/FloodLegend";
@@ -12,17 +12,23 @@ import type { CityAction } from "./lib/cityActions";
 import { WeatherPanel } from "./components/WeatherPanel";
 import { reportShowsOn, useFloodData } from "./lib/data";
 import {
+  chunksFor,
   dayKey,
+  insideAny,
   isAbortError,
   loadDaily,
   loadHotspots,
   loadMitigation,
+  loadRunIndex,
   loadStreets,
+  runBoxes,
   streetsExtent,
+  type Bbox,
   type DailySummary,
   type HotspotsCollection,
   type Loaded,
   type MitigationReport,
+  type RunIndex,
   type StreetsCollection,
 } from "./lib/sim";
 import {
@@ -51,14 +57,13 @@ function hasReportsOn(date: string, signals?: FeatureCollection): boolean {
   return (signals?.features ?? []).some((f) => Array.isArray(f.properties?.days) && reportShowsOn(f.properties?.days, date));
 }
 
-// Reported places (proof dots and reviewed reports) that sit outside the simulated streets' extent.
-function blindSpotCount(extent: [number, number, number, number], reports: FeatureCollection[]) {
-  const [w, s, e, n] = extent;
+// Reported places (proof dots and reviewed reports) that sit outside every simulated area.
+function blindSpotCount(boxes: Bbox[], reports: FeatureCollection[]) {
   const points = reports
     .flatMap((collection) => collection.features)
     .filter((feature) => feature.geometry?.type === "Point")
-    .map((feature) => (feature.geometry as Point).coordinates);
-  const outside = points.filter(([x, y]) => x < w || x > e || y < s || y > n).length;
+    .map((feature) => (feature.geometry as Point).coordinates as [number, number]);
+  const outside = points.filter((p) => !insideAny(boxes, p)).length;
   return { outside, total: points.length };
 }
 
@@ -78,6 +83,8 @@ export function App() {
   const [modelMitigation, setModelMitigation] = useState<Loaded<MitigationReport>>({ status: "loading" });
   const [weatherOpen, setWeatherOpen] = useState(false);
   const [day, setDay] = useState<string>(DEFAULT_DAY);
+  const [index, setIndex] = useState<RunIndex | null>(null);
+  const [view, setView] = useState<Bbox | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const dragRef = useRef<{ y: number; swiped: boolean }>({ y: 0, swiped: false });
   const mapRef = useRef<MapHandle>(null);
@@ -110,10 +117,25 @@ export function App() {
   }, [data.ready, data.zones]);
 
   useEffect(() => {
+    let cancelled = false;
+    loadRunIndex()
+      .then((next) => {
+        if (!cancelled) setIndex(next);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Same chunk set means no reload, so panning inside the loaded areas is free.
+  const chunkKey = index ? chunksFor(index, day, view).map((c) => c.id).join(",") : "";
+
+  useEffect(() => {
     const ctrl = new AbortController();
     setModelStreets({ status: "loading" });
     setModelHotspots({ status: "loading" });
-    void Promise.all([loadStreets(day, ctrl.signal), loadHotspots(day, ctrl.signal)])
+    void Promise.all([loadStreets(day, ctrl.signal, view), loadHotspots(day, ctrl.signal, view)])
       .then(([streets, hotspots]) => {
         if (ctrl.signal.aborted) return;
         setModelStreets(streets);
@@ -125,7 +147,9 @@ export function App() {
         setModelHotspots({ status: "error", message: "Could not load hotspots." });
       });
     return () => ctrl.abort();
-  }, [day]);
+    // `view` is read through chunkKey: a new view only matters when it changes the chunk set.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [day, chunkKey]);
 
   useEffect(() => {
     const ctrl = new AbortController();
@@ -218,10 +242,16 @@ export function App() {
   }
 
   const zone = selectedId && data.zones ? data.zones[selectedId] : undefined;
-  const extent = modelStreets.status === "ready" ? streetsExtent(modelStreets.data) : null;
-  const blindSpot = extent
+  // Run boxes from the index; in API mode the index has no boxes, so fall back to the loaded streets' extent.
+  const boxes = useMemo<Bbox[]>(() => {
+    const fromIndex = index ? runBoxes(index) : [];
+    if (fromIndex.length > 0) return fromIndex;
+    const extent = modelStreets.status === "ready" ? streetsExtent(modelStreets.data) : null;
+    return extent ? [extent] : [];
+  }, [index, modelStreets]);
+  const blindSpot = boxes.length > 0
     ? blindSpotCount(
-        extent,
+        boxes,
         [data.collections["proof-oct2026"], data.collections.signals].filter(
           (collection): collection is FeatureCollection => Boolean(collection),
         ),
@@ -418,6 +448,8 @@ export function App() {
           modelStreets={modelStreets.status === "ready" ? modelStreets.data : null}
           modelHotspots={modelHotspots.status === "ready" ? modelHotspots.data : null}
           onTiltChange={setTilted}
+          modelBoxes={boxes}
+          onViewChange={setView}
         />
       ) : (
         <div className="map map-pending" />

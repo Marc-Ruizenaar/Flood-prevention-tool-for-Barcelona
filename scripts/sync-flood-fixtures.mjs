@@ -1,7 +1,9 @@
 /**
- * Pull streets, hotspots, daily, and mitigation from the flood API into data/flood/{runId}/,
- * then copy data/ → public/data/ (same as predev/prebuild).
- * Run while the backend is up: node scripts/sync-flood-fixtures.mjs
+ * Pull streets, hotspots, daily, and mitigation from the flood API into data/flood/{runId}/
+ * for each run (chunk), slim the street files and rebuild data/flood/index.json, then copy
+ * data/ → public/data/ (same as predev/prebuild).
+ * Run while the backend is up: RUN_ID=<run-id> node scripts/sync-flood-fixtures.mjs
+ * Several areas at once: RUN_IDS=<id-a>,<id-b> node scripts/sync-flood-fixtures.mjs
  */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -9,17 +11,8 @@ import { spawnSync } from "node:child_process";
 
 const API = (process.env.VITE_API_URL || process.env.API_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
 const RUN_ID = process.env.VITE_RUN_ID || process.env.RUN_ID || "urgell-2026-10-02_03";
+const RUN_IDS = (process.env.RUN_IDS || RUN_ID).split(",").map((s) => s.trim()).filter(Boolean);
 const FALLBACK_DAYS = ["2026-10-02", "2026-10-03", "2026-10-04", "2026-10-05", "2026-10-06", "2026-10-07"];
-
-const root = join(process.cwd(), "data", "flood", RUN_ID);
-const streetsDir = join(root, "streets");
-const hotspotsDir = join(root, "hotspots");
-mkdirSync(streetsDir, { recursive: true });
-mkdirSync(hotspotsDir, { recursive: true });
-
-function sim(path) {
-  return `${API}/simulations/${encodeURIComponent(RUN_ID)}${path}`;
-}
 
 const FETCH_MS = Number(process.env.SYNC_FETCH_MS || 120_000);
 
@@ -47,22 +40,34 @@ async function getJson(url, { optional = false } = {}) {
   }
 }
 
+function slimFlood() {
+  const slimScript = join(process.cwd(), "scripts", "slim-flood.mjs");
+  const result = spawnSync(process.execPath, [slimScript], { stdio: "inherit" });
+  if (result.status !== 0) {
+    throw new Error("slim-flood.mjs failed: data/flood/index.json was not rebuilt.");
+  }
+}
+
 function copyToPublic() {
   const copyScript = join(process.cwd(), "scripts", "copy-data.mjs");
   const result = spawnSync(process.execPath, [copyScript], { stdio: "inherit" });
   if (result.status !== 0) {
-    throw new Error("copy-data.mjs failed — public/data was not updated.");
+    throw new Error("copy-data.mjs failed: public/data was not updated.");
   }
 }
 
-function write(name, data) {
-  const path = join(root, name);
-  writeFileSync(path, `${JSON.stringify(data)}\n`);
-  console.log("wrote", path);
-}
+async function syncRun(runId) {
+  const root = join(process.cwd(), "data", "flood", runId);
+  mkdirSync(join(root, "streets"), { recursive: true });
+  mkdirSync(join(root, "hotspots"), { recursive: true });
+  const sim = (path) => `${API}/simulations/${encodeURIComponent(runId)}${path}`;
+  const write = (name, data) => {
+    const path = join(root, name);
+    writeFileSync(path, `${JSON.stringify(data)}\n`);
+    console.log("wrote", path);
+  };
 
-async function main() {
-  console.log(`Syncing ${RUN_ID} from ${API}…`);
+  console.log(`Syncing ${runId} from ${API}…`);
 
   let days = FALLBACK_DAYS;
   try {
@@ -88,7 +93,11 @@ async function main() {
   } else {
     console.warn("No mitigation.json (endpoint slow or unavailable). Model panel mitigation stays empty.");
   }
+}
 
+async function main() {
+  for (const runId of RUN_IDS) await syncRun(runId);
+  slimFlood();
   copyToPublic();
   console.log("Done. public/data updated.");
 }

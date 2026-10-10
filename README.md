@@ -29,6 +29,12 @@ npm run qa:urls
 
 Canonical data lives in `data/`. The npm scripts copy it to `public/data` so the static build serves the same paths.
 
+### Simulation chunks
+
+The flood model runs one area at a time. Each run is a chunk under `data/flood/<run-id>/`, and `data/flood/index.json` lists them with their bounding boxes. The app loads the index, then only the chunks that touch the map view, nearest first and at most 6. The dashed outlines show every chunk, loaded or not. So far only the Urgell/Raval box has been run; the rest of the metro area needs the backend inputs (DEM, land cover, XEMA rain), which are not in this repo.
+
+To add an area, run the backend for that box, then `RUN_ID=<run-id> npm run sync:flood`. That also slims the street files (per-segment boilerplate hoisted to the collection, coordinates to 6 decimals, about 3x smaller, 2.6 MB to 0.8 MB per day) and rebuilds the index. `npm run slim:flood` redoes that on the bundled data. The run layout, the index fields and how to switch a run off without touching code are in `data/flood/README.md`. Under the chunks sits a dim city-wide terrain layer (`data/terrain-pooling.png`, lidar hollows and flat lowland, not a simulation); delete `data/terrain-pooling.json` to turn it off.
+
 A fresh checkout builds without the backend. Two things fill in only when you generate them locally:
 
 - `npm run pulse` and `npm run attention` add the Bluesky and Wikipedia blocks to the Weather panel (needs network).
@@ -54,7 +60,7 @@ The round rain button opens the storm week (station totals, Bluesky chatter, Wik
 
 ## Offline
 
-The production build registers a service worker. After one online load, a reload can use the cached app, GeoJSON, and basemap tiles already seen. External tiles that were never viewed are not in the cache.
+The production build registers a service worker. After one online load, a reload can use the cached app, GeoJSON, and basemap tiles already seen. Flood chunks are cached as they are viewed, not on install, so a chunk and basemap tiles that were never viewed are not in the cache.
 
 ## Sources
 

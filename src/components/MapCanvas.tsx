@@ -6,7 +6,7 @@ import type { Feature, FeatureCollection, Geometry } from "geojson";
 import { HotspotCard } from "./HotspotCard";
 import { reportShowsOn, type GeoFile } from "../lib/data";
 import { floodColorExpression, streetWidth } from "../lib/modelStyle";
-import { streetsExtent, type HotspotProps, type HotspotsCollection, type StreetsCollection } from "../lib/sim";
+import { boxOutline, unionBox, type Bbox, type HotspotProps, type HotspotsCollection, type StreetsCollection } from "../lib/sim";
 import { dayByDate } from "../lib/weather";
 import type { GroupId } from "../types";
 
@@ -27,6 +27,8 @@ type Props = {
   modelStreets?: StreetsCollection | null;
   modelHotspots?: HotspotsCollection | null;
   onTiltChange?: (tilted: boolean) => void;
+  modelBoxes?: Bbox[];
+  onViewChange?: (view: Bbox) => void;
 };
 
 const TILT = 45;
@@ -61,6 +63,7 @@ function hotspotColumns(collection: HotspotsCollection | null): FeatureCollectio
 }
 
 const LAYER_GROUPS: { group: GroupId; ids: string[] }[] = [
+  { group: "terrain", ids: ["terrain-pooling"] },
   { group: "relief", ids: ["contour-line", "contour-label"] },
   { group: "proof", ids: ["proof-halo", "proof-circle", "proof-label"] },
 ];
@@ -134,7 +137,19 @@ function boundsOf(geometry: Geometry): [[number, number], [number, number]] | nu
 }
 
 export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
-  { collections, visibility, selectedId, day, focusNonce, onSelect, modelStreets = null, modelHotspots = null, onTiltChange },
+  {
+    collections,
+    visibility,
+    selectedId,
+    day,
+    focusNonce,
+    onSelect,
+    modelStreets = null,
+    modelHotspots = null,
+    onTiltChange,
+    modelBoxes = [],
+    onViewChange,
+  },
   ref,
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -144,6 +159,9 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
   onSelectRef.current = onSelect;
   const onTiltChangeRef = useRef(onTiltChange);
   onTiltChangeRef.current = onTiltChange;
+  const onViewChangeRef = useRef(onViewChange);
+  onViewChangeRef.current = onViewChange;
+  const fittedRef = useRef(false);
   const visibilityRef = useRef(visibility);
   visibilityRef.current = visibility;
   const dayRef = useRef(day);
@@ -225,6 +243,12 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
     mapRef.current = map;
     // The button and two-finger tilt on a phone both end here, so the button always matches the map.
     map.on("pitchend", () => onTiltChangeRef.current?.(map.getPitch() > 5));
+    const emitView = () => {
+      const b = map.getBounds();
+      onViewChangeRef.current?.([b.getWest(), b.getSouth(), b.getEast(), b.getNorth()]);
+    };
+    map.on("load", emitView);
+    map.on("moveend", emitView);
 
     map.on("load", () => {
       const empty: FeatureCollection = { type: "FeatureCollection", features: [] };
@@ -278,6 +302,31 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
         },
         firstLabel,
       );
+      // City-wide terrain pooling raster (lidar only, no simulation). Sits above the basemap fill and
+      // under contours, buildings and every model layer, so simulated streets stay sharp on top.
+      // Delete data/terrain-pooling.json to turn the layer off: a failed fetch adds nothing and logs nothing.
+      fetch("/data/terrain-pooling.json", { cache: import.meta.env.DEV ? "no-store" : "no-cache" })
+        .then((response) => (response.ok ? response.json() : Promise.reject(response.status)))
+        .then((terrain: { image: string; bounds: [number, number, number, number] }) => {
+          if (map.getLayer("terrain-pooling") || !terrain?.image || !terrain?.bounds) return;
+          const [w, s, e, n] = terrain.bounds;
+          map.addSource("terrain-pooling", {
+            type: "image",
+            url: `/data/${terrain.image}`,
+            coordinates: [[w, n], [e, n], [e, s], [w, s]],
+          });
+          map.addLayer(
+            {
+              id: "terrain-pooling",
+              type: "raster",
+              source: "terrain-pooling",
+              layout: { visibility: visibilityRef.current.terrain ? "visible" : "none" },
+              paint: { "raster-opacity": 0.75, "raster-resampling": "nearest" },
+            },
+            map.getLayer("contour-line") ? "contour-line" : firstLabel,
+          );
+        })
+        .catch(() => undefined);
       // Buildings carry the texture in the dense grid. Height grows in from z13 so the city view stays flat.
       map.addLayer(
         {
@@ -626,19 +675,27 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       streetsSource.setData(streets);
       hotspotsSource.setData(hotspots);
       (map.getSource("model-hotspot-columns") as GeoJSONSource | undefined)?.setData(hotspotColumns(hotspots));
-      const extent = streetsExtent(streets);
-      const [w, s, e, n] = extent ?? [0, 0, 0, 0];
-      (map.getSource("model-area") as GeoJSONSource | undefined)?.setData({
-        type: "FeatureCollection",
-        features: extent
-          ? [{ type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: [[w, n], [e, n], [e, s], [w, s], [w, n]] } }]
-          : [],
-      });
-      if (!extent) return;
-      map.fitBounds([[w, s], [e, n]], { padding: pad(), maxZoom: 17, duration: 700 });
     };
     applyModelDataRef.current();
   }, [modelStreets, modelHotspots]);
+
+  // One dashed rectangle per simulated area, from the run index rather than the loaded streets.
+  // The map fits the union once, the first time boxes arrive; after that the viewport drives loading.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const apply = () => {
+      const source = map.getSource("model-area") as GeoJSONSource | undefined;
+      if (!source) return;
+      source.setData(boxOutline(modelBoxes));
+      const all = unionBox(modelBoxes);
+      if (!all || fittedRef.current) return;
+      fittedRef.current = true;
+      map.fitBounds([[all[0], all[1]], [all[2], all[3]]], { padding: pad(), maxZoom: 17, duration: 700 });
+    };
+    if (map.getSource("model-area")) apply();
+    else map.once("idle", apply);
+  }, [modelBoxes]);
 
   useEffect(() => {
     if (!selectedId || focusNonce === 0) return;

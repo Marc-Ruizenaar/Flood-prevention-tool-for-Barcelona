@@ -1,0 +1,60 @@
+{
+  "kind": "terrain_diagnostic",
+  "label": "Where terrain pools water",
+  "source": "ICGC 5 m terrain model (terrain-RGB tiles, zoom 12)",
+  "sourceUrl": "https://www.icgc.cat/",
+  "image": "terrain-pooling.png",
+  "bounds": [
+    1.899948,
+    41.200356,
+    2.399483,
+    41.620062
+  ],
+  "cellMeters": 143.3,
+  "classes": {
+    "low": {
+      "alpha": 70,
+      "rgb": [
+        43,
+        108,
+        176
+      ],
+      "rule": "depression >= 0.05 m, or flat lowland (slope < 0.01 and elevation < 15 m)"
+    },
+    "moderate": {
+      "alpha": 120,
+      "rgb": [
+        43,
+        108,
+        176
+      ],
+      "rule": "depression >= 0.2 m"
+    },
+    "high": {
+      "alpha": 175,
+      "rgb": [
+        43,
+        108,
+        176
+      ],
+      "rule": "depression >= 0.5 m"
+    }
+  },
+  "thresholds": {
+    "seaElevationMeters": 0.5,
+    "depressionHighMeters": 0.5,
+    "depressionModerateMeters": 0.2,
+    "depressionLowMeters": 0.05,
+    "flatSlope": 0.01,
+    "lowlandMeters": 15
+  },
+  "method": "Priority-flood sink filling on ~143 m cells gives the depression depth (filled minus original elevation) and a central-difference slope per cell; cells are classed by depth, with flat lowland added at the low tier. Terrain shape only, no rain, no drainage and no runoff: a diagnostic of where ground can hold water, not a simulation of flooding.",
+  "counts": {
+    "low": 4265,
+    "moderate": 648,
+    "high": 2775,
+    "none": 51499,
+    "sea": 35679
+  },
+  "generated": "2026-10-10T11:43:08.371Z"
+}

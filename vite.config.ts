@@ -21,7 +21,17 @@ export default defineConfig({
       workbox: {
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         globPatterns: ["**/*.{js,css,html,svg,json,geojson,woff,woff2}"],
+        // Flood chunks load on demand per map view, so cache them as they are fetched, not on install.
+        globIgnores: ["**/data/flood/**"],
         runtimeCaching: [
+          {
+            urlPattern: /\/data\/flood\//,
+            handler: "StaleWhileRevalidate",
+            options: {
+              cacheName: "flood",
+              expiration: { maxEntries: 120, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            },
+          },
           {
             urlPattern: /^https:\/\/tiles\.openfreemap\.org\/.*/i,
             handler: "CacheFirst",
