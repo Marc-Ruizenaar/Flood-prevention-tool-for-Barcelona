@@ -44,6 +44,12 @@ On a phone, production build.
 4. Tap the Torre Baró dot. The card is an observed impact with its source, and the ground reading shows why slope water hits there.
 5. Close on one line: most of the places that got hit sit outside anything modelled. Run the model where the reports are, before the next storm.
 
+Then the other audience, about 30 seconds more:
+
+6. Tap the round house button, or open `/citizen`. Same storm, asked the way a resident would: "Is my street at risk?"
+7. Tap **La Rambla**: "Water reached above the knee near here", in words, with four things to do before the next storm.
+8. Tap **Torre Baró**: "We have not simulated this area yet", plus the city's report from that street. The resident sees the same blind spot the city does.
+
 The round rain button opens the storm week (station totals, Bluesky chatter, Wikipedia attention). Share any card with `?zone=<id>`, for example `?zone=proof-torre-baro-2026-10`.
 
 ## Offline
