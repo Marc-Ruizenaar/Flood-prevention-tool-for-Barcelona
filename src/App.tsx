@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { t } from "./lib/i18n";
+import { LangSwitch } from "./components/LangSwitch";
 import type { FeatureCollection, Point } from "geojson";
 import { AboutPanel } from "./components/AboutPanel";
 import { FloodLegend } from "./components/FloodLegend";
@@ -143,8 +145,8 @@ export function App() {
       })
       .catch((error: unknown) => {
         if (ctrl.signal.aborted || isAbortError(error)) return;
-        setModelStreets({ status: "error", message: "Could not load streets." });
-        setModelHotspots({ status: "error", message: "Could not load hotspots." });
+        setModelStreets({ status: "error", message: t("Could not load streets.") });
+        setModelHotspots({ status: "error", message: t("Could not load hotspots.") });
       });
     return () => ctrl.abort();
     // `view` is read through chunkKey: a new view only matters when it changes the chunk set.
@@ -165,14 +167,14 @@ export function App() {
         }
       } catch (error) {
         if (ctrl.signal.aborted || isAbortError(error)) return;
-        setModelDaily({ status: "error", message: "Could not load the daily summary." });
+        setModelDaily({ status: "error", message: t("Could not load the daily summary.") });
       }
       try {
         const mitigation = await loadMitigation(ctrl.signal);
         if (!ctrl.signal.aborted) setModelMitigation(mitigation);
       } catch (error) {
         if (ctrl.signal.aborted || isAbortError(error)) return;
-        setModelMitigation({ status: "error", message: "Could not load mitigation." });
+        setModelMitigation({ status: "error", message: t("Could not load mitigation.") });
       }
     })();
     return () => ctrl.abort();
@@ -274,12 +276,14 @@ export function App() {
           <div className="brand">
             <span className="mark" aria-hidden="true" />
             <div className="brand-copy">
-              <p className="kicker">Next rain · Barcelona</p>
+              <p className="kicker">{t("Next rain · Barcelona")}</p>
               <h1>{formatDay(day)}</h1>
               <p className="rain-now">{rainCaption(gauges[day], rainLive)}</p>
-              <p className="purpose">Where water collected, and where to act before the next storm.</p>
+              <p className="purpose">{t("Where water collected, and where to act before the next storm.")}</p>
             </div>
-            <div className="when" role="group" aria-label="Which day">
+            <div className="switches">
+            <LangSwitch />
+            <div className="when" role="group" aria-label={t("Which day")}>
               {APP_DAYS.map((date) => (
                 <button
                   key={date}
@@ -291,10 +295,11 @@ export function App() {
                 </button>
               ))}
             </div>
+            </div>
           </div>
         </header>
 
-        <section className={`panel${panelOpen ? " is-open" : ""}`} aria-label="Layers and priorities">
+        <section className={`panel${panelOpen ? " is-open" : ""}`} aria-label={t("Layers and priorities")}>
           <button
             type="button"
             className="panel-handle"
@@ -315,15 +320,13 @@ export function App() {
             }}
           >
             <span className="handle" aria-hidden="true" />
-            <span className="panel-title">Where to act first</span>
-            <span className="panel-hint">{panelOpen ? "Show map" : "See list"}</span>
+            <span className="panel-title">{t("Where to act first")}</span>
+            <span className="panel-hint">{panelOpen ? t("Show map") : t("See list")}</span>
           </button>
           {blindSpot && blindSpot.outside > 0 ? (
             <button type="button" className="panel-claim" onClick={showBlindSpot}>
-              <strong>
-                {blindSpot.outside} of {blindSpot.total}
-              </strong>{" "}
-              places that reported flooding are outside the simulated area. <span>Show them</span>
+              <strong>{t("{n} of {total}", { n: blindSpot.outside, total: blindSpot.total })}</strong>{" "}
+              {t("places that reported flooding are outside the simulated area.")} <span>{t("Show them")}</span>
             </button>
           ) : null}
 
@@ -350,7 +353,7 @@ export function App() {
           <div className="panel-body">
             <CityFocusPanel streets={modelStreets} hotspots={modelHotspots} onFocus={focusCityAction} />
             <details className="panel-more">
-              <summary>How the model ran</summary>
+              <summary>{t("How the model ran")}</summary>
               <ModelPanel
                 day={day}
                 onDay={selectDay}
@@ -369,7 +372,7 @@ export function App() {
         <button
           type="button"
           className="round tilt"
-          aria-label="3D view"
+          aria-label={t("3D view")}
           aria-pressed={tilted}
           onClick={() => mapRef.current?.toggleTilt()}
         >
@@ -378,7 +381,7 @@ export function App() {
         <button
           type="button"
           className="round"
-          aria-label="Weather for the storm week"
+          aria-label={t("Weather for the storm week")}
           aria-pressed={weatherOpen}
           onClick={() => {
             setAboutOpen(false);
@@ -393,7 +396,7 @@ export function App() {
         <button
           type="button"
           className="round"
-          aria-label="About and sources"
+          aria-label={t("About and sources")}
           onClick={() => {
             setWeatherOpen(false);
             setAboutOpen(true);
@@ -404,7 +407,7 @@ export function App() {
             <path d="M12 11v6M12 7.5v.5" />
           </svg>
         </button>
-        <a className="round" href="/citizen" aria-label="Resident view: is my street at risk?" title="Resident view">
+        <a className="round" href="/citizen" aria-label={t("Resident view: is my street at risk?")} title={t("Resident view")}>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M4 11l8-7 8 7" />
             <path d="M6 10v10h12V10" />
@@ -415,7 +418,7 @@ export function App() {
       <button
         type="button"
         className="round recenter"
-        aria-label="Show the whole city"
+        aria-label={t("Show the whole city")}
         onClick={() => mapRef.current?.reset()}
       >
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -426,15 +429,15 @@ export function App() {
 
       {data.fatal ? (
         <div className="banner banner-bad" role="alert">
-          The fact cards did not load. {data.fatal}
+          {t("The fact cards did not load.")} {data.fatal}
         </div>
       ) : null}
       {!data.fatal && data.failed.length > 0 ? (
         <div className="banner" role="status">
-          Some layers did not load: {data.failed.join(", ")}. The rest of the map is still available.
+          {t("Some layers did not load: {list}. The rest of the map is still available.", { list: data.failed.join(", ") })}
         </div>
       ) : null}
-      {!data.ready && !data.fatal ? <div className="banner">Loading published layers…</div> : null}
+      {!data.ready && !data.fatal ? <div className="banner">{t("Loading published layers…")}</div> : null}
 
       {data.ready && data.zones ? (
         <MapCanvas

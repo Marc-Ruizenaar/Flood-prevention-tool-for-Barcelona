@@ -1,3 +1,4 @@
+import { t } from "../lib/i18n";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import maplibregl, { type GeoJSONSource, type Map } from "maplibre-gl";
@@ -457,7 +458,7 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
         layout: {
           "symbol-placement": "line",
           "symbol-spacing": 2000,
-          "text-field": "Simulated area",
+          "text-field": t("Simulated area"),
           "text-font": ["Noto Sans Regular"],
           "text-size": 12,
           "text-offset": [0, -0.8],

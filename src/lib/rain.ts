@@ -1,3 +1,4 @@
+import { t } from "./i18n";
 import type { GroupId } from "../types";
 
 export type Gauge = {
@@ -52,9 +53,9 @@ export function atlasLocked(mm: number | null): boolean {
 export function rainCaption(gauge: Gauge | undefined, live: boolean | null): string {
   const peak = peakOf(gauge);
   if (!peak) {
-    return live === false ? "Station file did not load" : "No daily total published yet";
+    return live === false ? t("Station file did not load") : t("No daily total published yet");
   }
-  return `${formatMm(peak.mm)} mm at ${peak.name} · ${live === false ? "saved XEMA copy" : "XEMA"}`;
+  return `${t("{mm} mm at {name}", { mm: formatMm(peak.mm), name: peak.name })} · ${live === false ? t("saved XEMA copy") : "XEMA"}`;
 }
 
 export async function fetchGauges(): Promise<Record<string, Gauge>> {

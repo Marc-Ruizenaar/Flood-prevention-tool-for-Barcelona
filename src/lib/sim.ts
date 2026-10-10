@@ -1,3 +1,4 @@
+import { locale } from "./i18n";
 import type { FeatureCollection, LineString, Point } from "geojson";
 import { dailyAsset, hotspotsAsset, indexAsset, mitigationAsset, streetsAsset } from "./fixtures";
 import { chunksFor, mergeRanked, type Bbox, type RunIndex } from "./chunks";
@@ -156,8 +157,8 @@ export function dayLabels(iso: string): { short: string; long: string } {
   const [year, month, day] = iso.split("-").map(Number);
   const date = new Date(Date.UTC(year, month - 1, day));
   return {
-    short: new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", timeZone: "UTC" }).format(date),
-    long: new Intl.DateTimeFormat("en-GB", {
+    short: new Intl.DateTimeFormat(locale, { weekday: "short", day: "numeric", timeZone: "UTC" }).format(date),
+    long: new Intl.DateTimeFormat(locale, {
       weekday: "long",
       day: "numeric",
       month: "long",

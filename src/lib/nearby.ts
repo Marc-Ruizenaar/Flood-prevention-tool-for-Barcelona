@@ -1,3 +1,4 @@
+import { t } from "./i18n";
 import type { Feature, Point } from "geojson";
 import type { FloodClass, StreetProps, StreetsCollection } from "./sim";
 
@@ -5,11 +6,11 @@ export type LngLat = [number, number];
 
 // Plain words for each flood class, for people who do not think in metres.
 export const DEPTH_WORDS: Record<FloodClass, string> = {
-  dry: "dry",
-  low: "ankle-deep",
-  moderate: "up to mid-shin",
-  high: "around knee height",
-  severe: "above the knee",
+  dry: t("dry"),
+  low: t("ankle-deep"),
+  moderate: t("up to mid-shin"),
+  high: t("around knee height"),
+  severe: t("above the knee"),
 };
 
 // ponytail: flat-earth metres, fine at city scale (error well under 1% across Barcelona).

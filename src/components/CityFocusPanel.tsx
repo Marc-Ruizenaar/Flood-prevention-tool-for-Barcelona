@@ -1,3 +1,4 @@
+import { t } from "../lib/i18n";
 import { useMemo } from "react";
 import {
   actionCategoryLabel,
@@ -29,11 +30,11 @@ export function CityFocusPanel({ streets, hotspots, onFocus }: CityFocusPanelPro
 
   return (
     <aside className="model-panel city-focus-panel" data-testid="city-focus-panel">
-      <p className="model-note">From the simulated run, not live orders. Tap a row to see it on the map.</p>
-      {loading ? <p className="model-notice">Building checklist from model layers…</p> : null}
+      <p className="model-note">{t("From the simulated run, not live orders. Tap a row to see it on the map.")}</p>
+      {loading ? <p className="model-notice">{t("Building checklist from model layers…")}</p> : null}
       {error ? <p className="model-notice">{error}</p> : null}
       {actions && actions.length === 0 ? (
-        <p className="model-notice">No priority actions for this day in the model output.</p>
+        <p className="model-notice">{t("No priority actions for this day in the model output.")}</p>
       ) : null}
       {actions && actions.length > 0 ? (
         <ol className="city-action-list">

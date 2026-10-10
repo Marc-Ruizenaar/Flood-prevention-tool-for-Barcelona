@@ -1,3 +1,4 @@
+import { t } from "./i18n";
 import type { ExpressionSpecification } from "maplibre-gl";
 import type { FloodClass } from "./sim";
 
@@ -12,11 +13,11 @@ export const FLOOD_COLORS: Record<FloodClass, string> = {
 };
 
 export const FLOOD_LABELS: Record<FloodClass, string> = {
-  dry: "Dry < 0.05 m",
-  low: "Low 0.05–0.15 m",
-  moderate: "Moderate 0.15–0.30 m",
-  high: "High 0.30–0.50 m",
-  severe: "Severe ≥ 0.50 m",
+  dry: t("Dry < 0.05 m"),
+  low: t("Low 0.05–0.15 m"),
+  moderate: t("Moderate 0.15–0.30 m"),
+  high: t("High 0.30–0.50 m"),
+  severe: t("Severe ≥ 0.50 m"),
 };
 
 export function floodColorExpression(): ExpressionSpecification {

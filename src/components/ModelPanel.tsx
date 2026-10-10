@@ -1,3 +1,4 @@
+import { t } from "../lib/i18n";
 import {
   dayKey,
   dayLabels,
@@ -47,7 +48,7 @@ export function ModelPanel({ day, onDay, streets, hotspots, daily, mitigation }:
     <aside className="model-panel" data-testid="model-panel">
       <p className="kicker">Flood model · {runId()}</p>
       <h2>{dayLabels(day).long}</h2>
-      <div className="model-days" role="group" aria-label="Model day">
+      <div className="model-days" role="group" aria-label={t("Model day")}>
         {MODEL_DAYS.map((iso) => {
           const enabled = available == null || available.includes(iso);
           return (
@@ -68,7 +69,7 @@ export function ModelPanel({ day, onDay, streets, hotspots, daily, mitigation }:
           {note}
         </p>
       ))}
-      <h3>Daily summary</h3>
+      <h3>{t("Daily summary")}</h3>
       {daily.status === "error" ? <p className="model-notice">{daily.message}</p> : null}
       {row ? (
         <>
@@ -93,7 +94,7 @@ export function ModelPanel({ day, onDay, streets, hotspots, daily, mitigation }:
           ) : null}
         </>
       ) : null}
-      <h3>Mitigation comparison</h3>
+      <h3>{t("Mitigation comparison")}</h3>
       {mitigation.status === "error" ? <p className="model-notice">{mitigation.message}</p> : null}
       {mitigation.status === "ready" ? (
         <>
@@ -102,7 +103,7 @@ export function ModelPanel({ day, onDay, streets, hotspots, daily, mitigation }:
             <table className="model-compare">
               <tbody>
                 <tr>
-                  <th>Baseline</th>
+                  <th>{t("Baseline")}</th>
                   <td>{formatQuantity(reportDay.baseline.flooded_street_length, false)}</td>
                   <td>{formatQuantity(reportDay.baseline.peak_depth, false)}</td>
                 </tr>

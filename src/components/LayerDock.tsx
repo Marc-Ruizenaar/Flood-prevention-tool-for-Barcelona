@@ -1,3 +1,4 @@
+import { t } from "../lib/i18n";
 import { atlasLocked, formatMm } from "../lib/rain";
 import type { GroupId, LayerGroup } from "../types";
 import { GROUPS } from "../types";
@@ -39,13 +40,13 @@ export function LayerDock({
           const unavailable = files.length > 0 && missing.length === files.length;
           const locked = group.id === "proof" && !hasReports && atlasLocked(mm);
           const legend = unavailable
-            ? "This layer did not load."
+            ? t("This layer did not load.")
             : locked
               ? mm == null
-                ? `Off on ${dayLabel}. No daily total published yet.`
-                : `Off on ${dayLabel}. ${formatMm(mm)} mm is under 10, so this stays hidden.`
+                ? t("Off on {day}. No daily total published yet.", { day: dayLabel })
+                : t("Off on {day}. {mm} mm is under 10, so this stays hidden.", { day: dayLabel, mm: formatMm(mm) })
               : group.id === "proof"
-                ? (proofLegend ?? `Reports dated ${dayLabel} only.`)
+                ? (proofLegend ?? t("Reports dated {day} only.", { day: dayLabel }))
                 : group.legend;
           // ponytail: legend moves to hover and screen readers so the chips fit one row on a phone
           return (
@@ -66,7 +67,7 @@ export function LayerDock({
               <span className="layer-name">{group.label}</span>
               <span className="sr-only">
                 {legend}
-                {missing.length > 0 && !unavailable ? " Part of this layer did not load." : ""}
+                {missing.length > 0 && !unavailable ? t(" Part of this layer did not load.") : ""}
               </span>
             </button>
           );

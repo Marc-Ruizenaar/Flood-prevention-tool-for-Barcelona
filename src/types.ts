@@ -1,3 +1,4 @@
+import { t } from "./lib/i18n";
 export type Mechanism =
   | "street_overflow"
   | "basement"
@@ -55,20 +56,20 @@ export type LayerGroup = {
 export const GROUPS: LayerGroup[] = [
   {
     id: "terrain",
-    label: "Where terrain pools water",
-    legend: "Lidar terrain only: hollows and flat lowland across the metro. Not a simulation: no rain, no drains, no depth.",
+    label: t("Where terrain pools water"),
+    legend: t("Lidar terrain only: hollows and flat lowland across the metro. Not a simulation: no rain, no drains, no depth."),
     swatches: [{ color: "#2b6cb0", shape: "square" }],
   },
   {
     id: "relief",
-    label: "Height of the ground",
-    legend: "Contour lines in metres, Collserola down to the sea. The fall is on each card. Not a flood depth.",
+    label: t("Height of the ground"),
+    legend: t("Contour lines in metres, Collserola down to the sea. The fall is on each card. Not a flood depth."),
     swatches: [{ color: "#9a6b3f", shape: "line" }],
   },
   {
     id: "proof",
-    label: "Reported impacts",
-    legend: "Oct 2026 proof and reviewed official and press reports. Off until you compare.",
+    label: t("Reported impacts"),
+    legend: t("Oct 2026 proof and reviewed official and press reports. Off until you compare."),
     swatches: [{ color: "#1c1917", shape: "dot" }],
   },
 ];

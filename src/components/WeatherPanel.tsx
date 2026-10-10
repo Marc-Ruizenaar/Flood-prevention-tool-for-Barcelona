@@ -1,3 +1,4 @@
+import { t } from "../lib/i18n";
 import { useEffect, useState } from "react";
 import { formatMm, peakOf, RAIN_SOURCE_URL, type Gauge } from "../lib/rain";
 import { formatDay, shortDay, type DayWeather } from "../lib/weather";
@@ -33,16 +34,15 @@ export function WeatherPanel({
         onClick={(event) => event.stopPropagation()}
       >
         <header className="sheet-bar">
-          <h2 id="weather-title">2–3 October</h2>
+          <h2 id="weather-title">{t("2–3 October")}</h2>
           <button type="button" className="close" onClick={onClose}>
-            Close
+            {t("Close")}
           </button>
         </header>
         <div className="sheet-body">
           <p>
-            Each day is looked up in Meteocat’s daily station file, at el Raval, Fabra and Zona
-            Universitària. Street depth is the flood model, not these station totals.
-            {rainLive === false ? " The live file did not load, so this is the saved copy." : ""}
+            {t("Each day is looked up in Meteocat’s daily station file, at el Raval, Fabra and Zona Universitària. Street depth is the flood model, not these station totals.")}
+            {rainLive === false ? t(" The live file did not load, so this is the saved copy.") : ""}
           </p>
           <RainPulse day={day} />
           <Attention day={day} />
@@ -60,15 +60,13 @@ export function WeatherPanel({
                     onClick={() => onSelectDay(entry.date)}
                   >
                     <span className="day-kicker">
-                      {shortDay(entry.date)} · {entry.stance === "measured" ? "Measured" : "Outlook"}
+                      {shortDay(entry.date)} · {entry.stance === "measured" ? t("Measured") : t("Outlook")}
                     </span>
                     <span className="day-title">{formatDay(entry.date)}</span>
                     <span className="day-condition">{entry.condition}</span>
                     {peak && gauge ? (
                       <span className="day-reading">
-                        <strong>
-                          {formatMm(peak.mm)} mm at {peak.name}
-                        </strong>
+                        <strong>{t("{mm} mm at {name}", { mm: formatMm(peak.mm), name: peak.name })}</strong>
                         <span>
                           el Raval {formatMm(gauge.raval)} · Fabra {formatMm(gauge.fabra)} · Zona
                           Universitària {formatMm(gauge.universitaria)}
@@ -86,7 +84,7 @@ export function WeatherPanel({
                     {gauge ? (
                       <li key="xema">
                         <a href={RAIN_SOURCE_URL} target="_blank" rel="noopener noreferrer">
-                          Meteocat XEMA daily rainfall
+                          {t("Meteocat XEMA daily rainfall")}
                         </a>
                       </li>
                     ) : null}
@@ -211,7 +209,7 @@ function RainPulse({ day }: { day: string }) {
 
   return (
     <section className="pulse">
-      <h3>Rain chatter on Bluesky</h3>
+      <h3>{t("Rain chatter on Bluesky")}</h3>
       {pulse.replay ? <p className="geometry-note">Rain posts per day in the replay: {weekLine}.</p> : null}
       {ofDay.length > 0 ? (
         <p>
@@ -249,7 +247,7 @@ function RainPulse({ day }: { day: string }) {
         Citywide only. Counts, never posts or people. It says when, not where.
         {Number.isNaN(generated.getTime()) ? "" : ` Updated ${pulseTime.format(generated)}.`}
         {hours.length > 0 ? ` Bars: one per hour, hatched means under ${min}.` : ""}{" "}
-        <a href="/data-notice.html">How this is counted</a>
+        <a href="/data-notice.html">{t("How this is counted")}</a>
       </p>
     </section>
   );
@@ -295,7 +293,7 @@ function Attention({ day }: { day: string }) {
 
   return (
     <section className="pulse">
-      <h3>Public attention</h3>
+      <h3>{t("Public attention")}</h3>
       <ul className="day-meta">
         {lines.map(({ s, text }) => (
           <li key={s.id}>
@@ -306,7 +304,7 @@ function Attention({ day }: { day: string }) {
           </li>
         ))}
       </ul>
-      <p className="geometry-note">Counts of page views and uploads. No person is counted.</p>
+      <p className="geometry-note">{t("Counts of page views and uploads. No person is counted.")}</p>
     </section>
   );
 }

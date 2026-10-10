@@ -1,3 +1,5 @@
+import { lang, locale, t } from "./i18n";
+
 export type DayWeather = {
   date: string;
   condition: string;
@@ -13,7 +15,9 @@ export const APP_DAYS = ["2026-10-02", "2026-10-03"] as const;
 
 export const DEFAULT_DAY = "2026-10-03";
 
-const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const dayName = (date: Date, weekday: "long" | "short") =>
+  new Intl.DateTimeFormat(locale, { weekday, timeZone: "UTC" }).format(date);
+const monthName = (date: Date) => new Intl.DateTimeFormat(locale, { month: "long", timeZone: "UTC" }).format(date);
 
 export const PROOF_DAY: Record<string, string> = {
   "proof-sant-genis-2026-10": "2026-10-03",
@@ -63,7 +67,7 @@ const DAYS: DayWeather[] = [
       },
     ],
     reportIds: [...STORM_PROOF_IDS, "proof-sant-genis-2026-10"],
-    proofLegend: "Impacts from this rain, reported in the days after 3 October.",
+    proofLegend: t("Impacts from this rain, reported in the days after 3 October."),
   },
 ];
 
@@ -82,11 +86,11 @@ export function listedDays(): DayWeather[] {
 export function formatDay(iso: string): string {
   const [year, month, day] = iso.split("-").map(Number);
   const date = new Date(Date.UTC(year, month - 1, day));
-  return `${WEEKDAYS[date.getUTCDay()]} ${day} October`;
+  return locale === "en-GB" ? `${dayName(date, "long")} ${day} October` : `${dayName(date, "long")} ${day} ${lang === "ca" ? "d’" : "de "}${monthName(date)}`;
 }
 
 export function shortDay(iso: string): string {
   const [year, month, day] = iso.split("-").map(Number);
   const date = new Date(Date.UTC(year, month - 1, day));
-  return `${WEEKDAYS[date.getUTCDay()].slice(0, 3)} ${day}`;
+  return `${dayName(date, "short").replace(".", "")} ${day}`;
 }

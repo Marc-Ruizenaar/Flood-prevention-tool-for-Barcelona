@@ -1,3 +1,4 @@
+import { t } from "./i18n";
 import type { ReliefReading } from "../types";
 
 export type ReliefBand = "steep" | "sloping" | "flat";
@@ -9,9 +10,9 @@ export function reliefBand(relief: ReliefReading): ReliefBand {
 }
 
 export const RELIEF_BAND_LABEL: Record<ReliefBand, string> = {
-  steep: "Steep fall",
-  sloping: "Downhill",
-  flat: "Nearly level",
+  steep: t("Steep fall"),
+  sloping: t("Downhill"),
+  flat: t("Nearly level"),
 };
 
 export function reliefCopy(relief: ReliefReading, mitigation: boolean): string {

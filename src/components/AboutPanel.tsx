@@ -1,3 +1,4 @@
+import { t } from "../lib/i18n";
 import type { SourceEntry } from "../lib/data";
 
 type Props = {
@@ -26,33 +27,19 @@ export function AboutPanel({ sources, onClose }: Props) {
         onClick={(event) => event.stopPropagation()}
       >
         <header className="sheet-bar">
-          <h2 id="about-title">About this map</h2>
+          <h2 id="about-title">{t("About this map")}</h2>
           <button type="button" className="close" onClick={onClose}>
-            Close
+            {t("Close")}
           </button>
         </header>
         <div className="sheet-body">
-          <p>
-            Street flooding on this map comes from the neighbourhood flood model, for the days that were
-            simulated. Black dots are impacts reported after the October rains.
-          </p>
-          <p>
-            River flood (ACA, T100) and coastal flood sit in other plans. This storm’s geography, and
-            this tool, is pluvial drainage plus the Collserola edge.
-          </p>
-          <p>
-            The city is a slope, from Collserola down to the sea. The brown contour lines trace
-            ground height from the ICGC 5 m terrain model. Every card reads the height and the fall at
-            that place from the finer 2022 lidar model. A steep fall sheds rain
-            as runoff. A level street holds it in the drains. The number is ground height, not a flood
-            depth.
-          </p>
+          <p>{t("Street flooding on this map comes from the neighbourhood flood model, for the days that were simulated. Black dots are impacts reported after the October rains.")}</p>
+          <p>{t("River flood (ACA, T100) and coastal flood sit in other plans. This storm’s geography, and this tool, is pluvial drainage plus the Collserola edge.")}</p>
+          <p>{t("The city is a slope, from Collserola down to the sea. The brown contour lines trace ground height from the ICGC 5 m terrain model. Every card reads the height and the fall at that place from the finer 2022 lidar model. A steep fall sheds rain as runoff. A level street holds it in the drains. The number is ground height, not a flood depth.")}</p>
           <section>
-            <h3>What was measured</h3>
+            <h3>{t("What was measured")}</h3>
             <p>
-              The city reported that 3 October 2026 was the rainiest day in Barcelona’s record, with a
-              maximum of 206 litres per square metre and a citywide mean of 152.3. That figure is an
-              observation, quoted here, and it is not a layer on the map.{" "}
+              {t("The city reported that 3 October 2026 was the rainiest day in Barcelona’s record, with a maximum of 206 litres per square metre and a citywide mean of 152.3. That figure is an observation, quoted here, and it is not a layer on the map.")}{" "}
               <a
                 href="https://ajuntament.barcelona.cat/gracia/es/noticias/activada-la-emergencia-por-riesgo-de-inundaciones-41745"
                 target="_blank"
@@ -63,7 +50,7 @@ export function AboutPanel({ sources, onClose }: Props) {
             </p>
           </section>
           <section>
-            <h3>Sources by layer</h3>
+            <h3>{t("Sources by layer")}</h3>
             <ul className="about-sources">
               {entries.map((entry) => (
                 <li key={entry.primary}>
@@ -76,8 +63,7 @@ export function AboutPanel({ sources, onClose }: Props) {
             </ul>
           </section>
           <p className="geometry-note">
-            Every tappable place has a source link. Weather looks up each day in the Meteocat station
-            file, at el Raval, Fabra and Zona Universitària. The map covers 2–3 October only.
+            {t("Every tappable place has a source link. Weather looks up each day in the Meteocat station file, at el Raval, Fabra and Zona Universitària. The map covers 2–3 October only.")}
           </p>
         </div>
       </article>

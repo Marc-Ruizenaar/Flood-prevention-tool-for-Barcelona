@@ -19,6 +19,8 @@ import {
   type StreetsCollection,
 } from "./lib/sim";
 import { DEFAULT_DAY, formatDay } from "./lib/weather";
+import { t } from "./lib/i18n";
+import { LangSwitch } from "./components/LangSwitch";
 
 // The resident view: one question ("what happened near me?"), plain words, and what to do next time.
 // Same simulated streets as the city view, without the checklist, 3D or model internals.
@@ -29,7 +31,7 @@ const CITY_BOUNDS: [[number, number], [number, number]] = [
 ];
 const CITY_CENTRE: LngLat = [2.17, 41.39];
 // One word per class so the legend stays on one line on a phone.
-const LEGEND_WORDS = { dry: "Dry", low: "Ankle", moderate: "Shin", high: "Knee", severe: "Over knee" } as const;
+const LEGEND_WORDS = { dry: t("Dry"), low: t("Ankle"), moderate: t("Shin"), high: t("Knee"), severe: t("Over knee") } as const;
 const ADVICE_URL = "https://dsp.interior.gencat.cat/handle/20.500.14007/3307";
 
 type Place = { at: LngLat; label: string };
@@ -114,7 +116,7 @@ export function CitizenApp() {
         layout: {
           "symbol-placement": "line",
           "symbol-spacing": 2000,
-          "text-field": "Simulated area",
+          "text-field": t("Simulated area"),
           "text-font": ["Noto Sans Regular"],
           "text-size": 12,
           "text-offset": [0, -0.8],
@@ -122,7 +124,7 @@ export function CitizenApp() {
         paint: { "text-color": "#142028", "text-halo-color": "#f6f1e7", "text-halo-width": 1.5 },
       });
     });
-    map.on("click", (event) => setPlace({ at: [event.lngLat.lng, event.lngLat.lat], label: "The place you tapped" }));
+    map.on("click", (event) => setPlace({ at: [event.lngLat.lng, event.lngLat.lat], label: t("The place you tapped") }));
     return () => {
       map.remove();
       mapRef.current = null;
@@ -157,7 +159,7 @@ export function CitizenApp() {
 
   function locateMe() {
     if (!navigator.geolocation) {
-      setLocateError("This browser cannot share a location. Tap the map instead.");
+      setLocateError(t("This browser cannot share a location. Tap the map instead."));
       return;
     }
     setLocating(true);
@@ -167,14 +169,14 @@ export function CitizenApp() {
         setLocating(false);
         const at: LngLat = [position.coords.longitude, position.coords.latitude];
         if (metresBetween(at, CITY_CENTRE) > 20000) {
-          setLocateError("You seem to be outside Barcelona. Tap the map or try an example.");
+          setLocateError(t("You seem to be outside Barcelona. Tap the map or try an example."));
           return;
         }
-        setPlace({ at, label: "Your location" });
+        setPlace({ at, label: t("Your location") });
       },
       () => {
         setLocating(false);
-        setLocateError("Could not get your location. Tap the map instead.");
+        setLocateError(t("Could not get your location. Tap the map instead."));
       },
       { enableHighAccuracy: true, timeout: 10000 },
     );
@@ -190,12 +192,12 @@ export function CitizenApp() {
       <div ref={containerRef} className="map" />
 
       <header className="citizen-card">
-        <p className="kicker">Next rain · Barcelona · For residents</p>
-        <h1>Is my street at risk?</h1>
-        <p className="purpose">See how deep the water got near you on {formatDay(DEFAULT_DAY)}, and what to do before the next storm.</p>
+        <p className="kicker">{t("Next rain · Barcelona · For residents")}</p>
+        <h1>{t("Is my street at risk?")}</h1>
+        <p className="purpose">{t("See how deep the water got near you on {day}, and what to do before the next storm.", { day: formatDay(DEFAULT_DAY) })}</p>
         <div className="citizen-actions">
           <button type="button" className="citizen-primary" onClick={locateMe} disabled={locating}>
-            {locating ? "Finding you…" : "Use my location"}
+            {locating ? t("Finding you…") : t("Use my location")}
           </button>
           {EXAMPLES.map((example) => (
             <button key={example.label} type="button" className="citizen-example" onClick={() => setPlace(example)}>
@@ -203,8 +205,8 @@ export function CitizenApp() {
             </button>
           ))}
         </div>
-        <p className="citizen-hint">{locateError ?? "Or tap anywhere on the map."}</p>
-        <ul className="flood-legend-list citizen-legend" aria-label="Water depth, in plain words">
+        <p className="citizen-hint">{locateError ?? t("Or tap anywhere on the map.")}</p>
+        <ul className="flood-legend-list citizen-legend" aria-label={t("Water depth, in plain words")}>
           {FLOOD_CLASSES.map((floodClass) => (
             <li key={floodClass} title={FLOOD_LABELS[floodClass]}>
               <span style={{ background: FLOOD_COLORS[floodClass] }} aria-hidden />
@@ -212,25 +214,26 @@ export function CitizenApp() {
             </li>
           ))}
         </ul>
-        <a className="citizen-switch" href="/">City staff view →</a>
+        <a className="citizen-switch" href="/">{t("City staff view →")}</a>
+        <LangSwitch />
       </header>
 
       {place ? (
         <section className="citizen-result" aria-live="polite">
-          <button type="button" className="close" aria-label="Close" onClick={() => setPlace(null)}>
+          <button type="button" className="close" aria-label={t("Close")} onClick={() => setPlace(null)}>
             ×
           </button>
           <p className="kicker">{place.label}</p>
           <Verdict place={place} streets={streets} boxes={index ? runBoxes(index) : []} reports={reports} zones={data.zones} />
-          <h2>Before the next storm</h2>
+          <h2>{t("Before the next storm")}</h2>
           <ul className="citizen-advice">
-            <li>When heavy rain is forecast, move your car off low streets and out of underpasses.</li>
-            <li>Keep drains, downpipes and the ground-floor or basement door clear, and have something ready to block water.</li>
-            <li>Never walk or drive through a flooded street. Go into a building and wait.</li>
-            <li>Follow Protecció Civil alerts. In an emergency, call 112.</li>
+            <li>{t("When heavy rain is forecast, move your car off low streets and out of underpasses.")}</li>
+            <li>{t("Keep drains, downpipes and the ground-floor or basement door clear, and have something ready to block water.")}</li>
+            <li>{t("Never walk or drive through a flooded street. Go into a building and wait.")}</li>
+            <li>{t("Follow Protecció Civil alerts. In an emergency, call 112.")}</li>
           </ul>
           <p className="citizen-source">
-            Advice from{" "}
+            {t("Advice from")}{" "}
             <a href={ADVICE_URL} target="_blank" rel="noreferrer">
               Protecció Civil de Catalunya, Consells d'autoprotecció: Inundacions
             </a>
@@ -255,8 +258,8 @@ function Verdict({
   reports: Feature[];
   zones: ReturnType<typeof useFloodData>["zones"];
 }) {
-  if (streets.status === "loading") return <p>Loading the simulation…</p>;
-  if (streets.status === "error") return <p>The simulation did not load. Try again in a moment.</p>;
+  if (streets.status === "loading") return <p>{t("Loading the simulation…")}</p>;
+  if (streets.status === "error") return <p>{t("The simulation did not load. Try again in a moment.")}</p>;
 
   const day = formatDay(DEFAULT_DAY);
   if (!insideAny(boxes, place.at)) {
@@ -265,16 +268,18 @@ function Verdict({
     const card = zones?.[id];
     return (
       <>
-        <h2>We have not simulated this area yet</h2>
-        <p>The street simulation only covers the dashed area in the centre. Outside it, we cannot say how deep the water got.</p>
+        <h2>{t("We have not simulated this area yet")}</h2>
+        <p>{t("The street simulation only covers the dashed area in the centre. Outside it, we cannot say how deep the water got.")}</p>
         {report ? (
           <p className="citizen-report">
             <strong>
               {report.metres < 150
-                ? "Reported here:"
-                : `Reported ${report.metres < 1000 ? `${Math.round(report.metres / 50) * 50} m` : `${(report.metres / 1000).toFixed(1)} km`} from here:`}
+                ? t("Reported here:")
+                : t("Reported {dist} from here:", {
+                    dist: report.metres < 1000 ? `${Math.round(report.metres / 50) * 50} m` : `${(report.metres / 1000).toFixed(1)} km`,
+                  })}
             </strong>{" "}
-            {String(report.feature.properties?.name ?? "a flood report")}.
+            {String(report.feature.properties?.name ?? t("a flood report"))}.
             {card?.sourceUrl ? (
               <>
                 {" "}
@@ -285,7 +290,7 @@ function Verdict({
             ) : null}
           </p>
         ) : (
-          <p>No reports near here either. That does not mean it stayed dry.</p>
+          <p>{t("No reports near here either. That does not mean it stayed dry.")}</p>
         )}
       </>
     );
@@ -295,9 +300,9 @@ function Verdict({
   if (!worst || worst.street.flood_class === "dry") {
     return (
       <>
-        <h2>Streets near here stayed dry</h2>
-        <p>In the simulation of {day}, no street within 100 m held water. A different storm could behave differently.</p>
-        <p className="citizen-caveat">A computer simulation of one storm, not a forecast, and not yet checked against every street.</p>
+        <h2>{t("Streets near here stayed dry")}</h2>
+        <p>{t("In the simulation of {day}, no street within 100 m held water. A different storm could behave differently.", { day })}</p>
+        <p className="citizen-caveat">{t("A computer simulation of one storm, not a forecast, and not yet checked against every street.")}</p>
       </>
     );
   }
@@ -306,13 +311,17 @@ function Verdict({
   return (
     <>
       <h2>
-        Water reached <span className="citizen-depth">{DEPTH_WORDS[floodClass]}</span> near here
+        {t("Water reached")} <span className="citizen-depth">{DEPTH_WORDS[floodClass]}</span> {t("near here")}
       </h2>
       <p>
-        {FLOOD_LABELS[floodClass]} on {worst.street.name ?? "a nearby street"}
-        {worst.metres > 10 ? `, ${Math.round(worst.metres)} m away` : ""}, in the simulation of {day}.
+        {t("{label} on {street}{away}, in the simulation of {day}.", {
+          label: FLOOD_LABELS[floodClass],
+          street: worst.street.name ?? t("a nearby street"),
+          away: worst.metres > 10 ? t(", {m} m away", { m: Math.round(worst.metres) }) : "",
+          day,
+        })}
       </p>
-      <p className="citizen-caveat">A computer simulation of one storm, not a forecast, and not yet checked against every street.</p>
+      <p className="citizen-caveat">{t("A computer simulation of one storm, not a forecast, and not yet checked against every street.")}</p>
     </>
   );
 }

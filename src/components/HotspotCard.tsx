@@ -1,3 +1,4 @@
+import { t } from "../lib/i18n";
 import { explainHotspotProblem } from "../lib/hotspotStory";
 import { FLOOD_LABELS } from "../lib/modelStyle";
 import { formatDepth, formatMinutes, formatQuantity, formatWhen, hasToken, type Explanation, type HotspotProps } from "../lib/sim";
@@ -32,7 +33,7 @@ const STEPS: { key: BudgetKey; label: string }[] = [
 const DIRECTIONS = ["N", "E", "S", "W"] as const;
 
 export function HotspotCard({ properties }: { properties: HotspotProps }) {
-  const street = properties.nearest_street?.name || properties.nearest_street?.segment_id || "Unnamed street";
+  const street = properties.nearest_street?.name || properties.nearest_street?.segment_id || t("Unnamed street");
   const rain = properties.local_rainfall;
   const explanation = properties.explanation;
   const best = explanation?.best_mitigation;
@@ -44,12 +45,12 @@ export function HotspotCard({ properties }: { properties: HotspotProps }) {
   return (
     <article className="hotspot-card" data-testid="hotspot-popup">
       <p className="kicker">
-        Hotspot {properties.rank}
+        {t("Hotspot {n}", { n: properties.rank })}
         {FLOOD_LABELS[properties.flood_class] ? ` · ${FLOOD_LABELS[properties.flood_class]}` : ""}
       </p>
       <h2>{street}</h2>
 
-      <section className="hotspot-story" aria-label="Why this is a problem">
+      <section className="hotspot-story" aria-label={t("Why this is a problem")}>
         <p className="hotspot-lead">{story.lead}</p>
         <ul className="hotspot-reasons">
           {story.reasons.map((reason) => (
@@ -65,16 +66,16 @@ export function HotspotCard({ properties }: { properties: HotspotProps }) {
         ) : null}
       </section>
 
-      <h3>What the model measured</h3>
+      <h3>{t("What the model measured")}</h3>
       <dl className="model-facts">
-        <dt>Rainfall</dt>
+        <dt>{t("Rainfall")}</dt>
         <dd>
           {rain?.label ? <span className="model-note">{rain.label}</span> : null}
           <span>Gauge day total: {formatQuantity(rain?.day_total)}</span>
           {rain?.day_total?.value == null && rain?.reason ? <span className="model-note">{rain.reason}</span> : null}
           <span>Model forcing: {formatQuantity(properties.model_forcing_rain)}</span>
         </dd>
-        <dt>Peak depth</dt>
+        <dt>{t("Peak depth")}</dt>
         <dd>
           {formatDepth(properties.peak_depth_m)} at {formatWhen(properties.peak_time_local)}
           {properties.peak_time_resolution ? <span className="model-note">{properties.peak_time_resolution}</span> : null}
@@ -97,7 +98,7 @@ export function HotspotCard({ properties }: { properties: HotspotProps }) {
       </dl>
 
       <details className="hotspot-budget">
-        <summary>Water budget (technical)</summary>
+        <summary>{t("Water budget (technical)")}</summary>
         {explanation?.budget_period ? <p className="model-note">{explanation.budget_period}</p> : null}
         {explanation ? (
           <ol className="model-steps">
@@ -113,7 +114,7 @@ export function HotspotCard({ properties }: { properties: HotspotProps }) {
         )}
       </details>
 
-      <h3>Best mitigation</h3>
+      <h3>{t("Best mitigation")}</h3>
       {best ? (
         <p>
           <strong>{best.scenario}</strong>
