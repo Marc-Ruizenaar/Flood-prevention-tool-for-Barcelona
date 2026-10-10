@@ -27,3 +27,11 @@ export function floodColorExpression(): ExpressionSpecification {
     FLOOD_COLORS.dry,
   ] as unknown as ExpressionSpecification;
 }
+
+// Depth sets width, zoom scales it, so the city view stays readable instead of one red mass.
+// `extra` widens it for the dark casing drawn underneath.
+export function streetWidth(extra = 0): ExpressionSpecification {
+  const depth = ["coalesce", ["to-number", ["get", "max_depth_m"]], 0];
+  const at = (shallow: number, deep: number) => ["interpolate", ["linear"], depth, 0, shallow + extra, 0.5, deep + extra];
+  return ["interpolate", ["linear"], ["zoom"], 12, at(0.75, 3), 15, at(2, 8), 17, at(4, 16)] as unknown as ExpressionSpecification;
+}

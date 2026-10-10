@@ -5,7 +5,7 @@ import mlcontour from "maplibre-contour";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import { HotspotCard } from "./HotspotCard";
 import { reportShowsOn, type GeoFile } from "../lib/data";
-import { floodColorExpression } from "../lib/modelStyle";
+import { floodColorExpression, streetWidth } from "../lib/modelStyle";
 import { streetsExtent, type HotspotProps, type HotspotsCollection, type StreetsCollection } from "../lib/sim";
 import { dayByDate } from "../lib/weather";
 import type { GroupId } from "../types";
@@ -45,14 +45,6 @@ const dem = new mlcontour.DemSource({
   worker: true,
 });
 dem.setupMaplibre(maplibregl);
-
-// Depth sets width, zoom scales it, so the city view stays readable instead of one red mass.
-// `extra` widens it for the dark casing drawn underneath.
-function streetWidth(extra = 0): maplibregl.ExpressionSpecification {
-  const depth = ["coalesce", ["to-number", ["get", "max_depth_m"]], 0];
-  const at = (shallow: number, deep: number) => ["interpolate", ["linear"], depth, 0, shallow + extra, 0.5, deep + extra];
-  return ["interpolate", ["linear"], ["zoom"], 12, at(0.75, 3), 15, at(2, 8), 17, at(4, 16)] as unknown as maplibregl.ExpressionSpecification;
-}
 
 // Square footprint around each simulated hotspot, so it can stand up as a column in 3D.
 function hotspotColumns(collection: HotspotsCollection | null): FeatureCollection {
