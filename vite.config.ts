@@ -7,7 +7,8 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.svg"],
+      injectRegister: "script-defer",
+      includeAssets: ["favicon.svg", "fonts/*.woff2", "robots.txt"],
       manifest: {
         name: "Next rain — Barcelona",
         short_name: "Next rain",

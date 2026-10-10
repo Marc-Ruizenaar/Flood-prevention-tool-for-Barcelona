@@ -1,3 +1,11 @@
+/* Self-hosted so index.html can preload the three the start screen paints with (static paths, no hash).
+   Latin only: Catalan and Spanish, including l·l, sit inside the Latin range. */
+@font-face { font-family: Fraunces; font-style: normal; font-weight: 500; font-display: swap; src: url(/fonts/fraunces-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family: Fraunces; font-style: italic; font-weight: 600; font-display: swap; src: url(/fonts/fraunces-latin-600-italic.woff2) format("woff2"); }
+@font-face { font-family: Outfit; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/outfit-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: Outfit; font-style: normal; font-weight: 500; font-display: swap; src: url(/fonts/outfit-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family: Outfit; font-style: normal; font-weight: 600; font-display: swap; src: url(/fonts/outfit-latin-600-normal.woff2) format("woff2"); }
+
 :root {
   --ink: #142028;
   --ink-soft: rgba(20, 32, 40, 0.78);

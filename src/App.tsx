@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { t } from "./lib/i18n";
 import { LangSwitch } from "./components/LangSwitch";
 import type { FeatureCollection, Point } from "geojson";
@@ -6,7 +6,7 @@ import { AboutPanel } from "./components/AboutPanel";
 import { FloodLegend } from "./components/FloodLegend";
 import { FactSheet } from "./components/FactSheet";
 import { LayerDock } from "./components/LayerDock";
-import { MapCanvas, type MapHandle } from "./components/MapCanvas";
+import type { MapHandle } from "./components/MapCanvas";
 import { BuildReport } from "./components/BuildReport";
 import { CityFocusPanel } from "./components/CityFocusPanel";
 import { ModelPanel } from "./components/ModelPanel";
@@ -52,6 +52,11 @@ import {
   shortDay,
 } from "./lib/weather";
 import { DEFAULT_VISIBILITY, groupForZone, type GroupId } from "./types";
+
+// maplibre is most of the bundle. Fetch it right away, but in its own chunk, so the start screen
+// paints from a small first download while the map code arrives behind it.
+const mapChunk = import("./components/MapCanvas");
+const MapCanvas = lazy(() => mapChunk.then((m) => ({ default: m.MapCanvas })));
 
 // A reviewed signal dot dated this day counts as a report, so it unlocks the layer like a proof dot.
 function hasReportsOn(date: string, signals?: FeatureCollection): boolean {
@@ -482,6 +487,7 @@ export function App() {
       {!data.ready && !data.fatal ? <div className="banner">{t("Loading published layers…")}</div> : null}
 
       {data.ready && data.zones ? (
+        <Suspense fallback={<div className="map map-pending" />}>
         <MapCanvas
           ref={mapRef}
           collections={data.collections}
@@ -498,6 +504,7 @@ export function App() {
           onReady={() => setMapReady(true)}
           waitForEnter={intro !== "done"}
         />
+        </Suspense>
       ) : (
         <div className="map map-pending" />
       )}
