@@ -152,7 +152,9 @@ export function dayLabels(iso: string): { short: string; long: string } {
 export function formatNumber(value: number): string {
   const abs = Math.abs(value);
   if (abs !== 0 && (abs < 0.001 || abs >= 1_000_000)) return value.toExponential(2);
-  return value.toLocaleString("en-GB", { maximumFractionDigits: 3 });
+  // Model output is not millimetre-accurate, so big numbers lose decimals they cannot back up.
+  const digits = abs >= 1000 ? 0 : abs >= 1 ? 1 : 3;
+  return value.toLocaleString("en-GB", { maximumFractionDigits: digits });
 }
 
 export function formatQuantity(q: Quantity | null | undefined, withKind = true): string {
@@ -164,7 +166,10 @@ export function formatQuantity(q: Quantity | null | undefined, withKind = true):
 
 export function formatDepth(value: number | null | undefined): string {
   if (value == null) return "—";
-  return `${value.toFixed(3)} m`;
+  if (value < 0.05) return "under 5 cm";
+  const cm = Math.round(value * 20) * 5;
+  if (cm < 100) return `${cm} cm`;
+  return `${value.toFixed(1)} m`;
 }
 
 export function formatMinutes(value: number | null | undefined): string {
