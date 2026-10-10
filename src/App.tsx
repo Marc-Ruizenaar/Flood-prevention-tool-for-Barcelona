@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { t } from "./lib/i18n";
 import { LangSwitch } from "./components/LangSwitch";
 import type { FeatureCollection, Point } from "geojson";
@@ -6,7 +6,7 @@ import { AboutPanel } from "./components/AboutPanel";
 import { FloodLegend } from "./components/FloodLegend";
 import { FactSheet } from "./components/FactSheet";
 import { LayerDock } from "./components/LayerDock";
-import { MapCanvas, type MapHandle } from "./components/MapCanvas";
+import type { MapHandle } from "./components/MapCanvas";
 import { BuildReport } from "./components/BuildReport";
 import { CityFocusPanel } from "./components/CityFocusPanel";
 import { ModelPanel } from "./components/ModelPanel";
@@ -53,6 +53,11 @@ import {
 } from "./lib/weather";
 import { DEFAULT_VISIBILITY, groupForZone, type GroupId } from "./types";
 
+// maplibre is most of the bundle. Fetch it right away, but in its own chunk, so the start screen
+// paints from a small first download while the map code arrives behind it.
+const mapChunk = import("./components/MapCanvas");
+const MapCanvas = lazy(() => mapChunk.then((m) => ({ default: m.MapCanvas })));
+
 // A reviewed signal dot dated this day counts as a report, so it unlocks the layer like a proof dot.
 function hasReportsOn(date: string, signals?: FeatureCollection): boolean {
   if (dayByDate(date).reportIds.length > 0) return true;
@@ -92,7 +97,19 @@ export function App() {
   const dragRef = useRef<{ y: number; swiped: boolean }>({ y: 0, swiped: false });
   const mapRef = useRef<MapHandle>(null);
   const topbarRef = useRef<HTMLElement>(null);
-  const [tilted, setTilted] = useState(true);
+  // Start screen: a deep link (?zone=) skips it and lands on the zone as before.
+  const [intro, setIntro] = useState<"wait" | "leaving" | "done">(() =>
+    new URLSearchParams(window.location.search).has("zone") ? "done" : "wait",
+  );
+  const [mapReady, setMapReady] = useState(false);
+  const [slow, setSlow] = useState(false);
+  const [tilted, setTilted] = useState(intro === "done");
+
+  // ponytail: after 8 s let people in regardless; a stuck fetch should not block the demo.
+  useEffect(() => {
+    const id = window.setTimeout(() => setSlow(true), 8000);
+    return () => window.clearTimeout(id);
+  }, []);
 
   // The top card's height depends on the language, so the floating buttons follow the measured height.
   useEffect(() => {
@@ -274,6 +291,23 @@ export function App() {
       )
     : null;
 
+  const loadingStep = !mapReady
+    ? t("Loading the map…")
+    : !data.ready
+      ? t("Loading published layers…")
+      : modelStreets.status === "loading"
+        ? t("Loading the simulation…")
+        : null;
+  const canStart = loadingStep === null || slow || Boolean(data.fatal);
+
+  function start() {
+    if (intro !== "wait") return;
+    setIntro("leaving");
+    mapRef.current?.enter();
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.setTimeout(() => setIntro("done"), reduced ? 0 : 700);
+  }
+
   function showBlindSpot() {
     setPanelOpen(false);
     if (!hasReportsOn(day, data.collections.signals) && atlasLocked(peakOf(gauges[day])?.mm ?? null)) {
@@ -453,6 +487,7 @@ export function App() {
       {!data.ready && !data.fatal ? <div className="banner">{t("Loading published layers…")}</div> : null}
 
       {data.ready && data.zones ? (
+        <Suspense fallback={<div className="map map-pending" />}>
         <MapCanvas
           ref={mapRef}
           collections={data.collections}
@@ -466,7 +501,10 @@ export function App() {
           onTiltChange={setTilted}
           modelBoxes={boxes}
           onViewChange={setView}
+          onReady={() => setMapReady(true)}
+          waitForEnter={intro !== "done"}
         />
+        </Suspense>
       ) : (
         <div className="map map-pending" />
       )}
@@ -525,6 +563,26 @@ export function App() {
       ) : null}
 
       {aboutOpen ? <AboutPanel sources={data.sources} onClose={() => setAboutOpen(false)} /> : null}
+
+      {intro !== "done" ? (
+        <div className={`intro${intro === "leaving" ? " is-leaving" : ""}`} aria-busy={!canStart}>
+          <div className="intro-card">
+            <span className="mark" aria-hidden="true" />
+            <div>
+              <p className="kicker">{t("Next rain · Barcelona")}</p>
+              <h1>{t("Where water collected, and where to act before the next storm.")}</h1>
+              <button type="button" className="intro-start" onClick={start} disabled={!canStart} autoFocus>
+                {t("Start")}
+              </button>
+              <p className="intro-status" role="status">
+                {loadingStep ?? t("Ready")}
+                <span className={`intro-bar${loadingStep ? " is-busy" : ""}`} aria-hidden="true" />
+              </p>
+              <p className="intro-sub">{formatDay(day)} · {rainCaption(gauges[day], rainLive)}</p>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

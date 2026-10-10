@@ -2,6 +2,9 @@ import { t } from "../lib/i18n";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import maplibregl, { type GeoJSONSource, type Map } from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
+
+maplibregl.setMaxParallelImageRequests(16);
 import mlcontour from "maplibre-contour";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import { HotspotCard } from "./HotspotCard";
@@ -16,6 +19,8 @@ export type MapHandle = {
   reset: () => void;
   focusSimulation: (coordinates: [number, number], cellId?: string | null) => void;
   toggleTilt: () => void;
+  // The one camera move from the start screen into the simulated area (flat city -> tilted model).
+  enter: () => void;
 };
 
 type Props = {
@@ -30,6 +35,9 @@ type Props = {
   onTiltChange?: (tilted: boolean) => void;
   modelBoxes?: Bbox[];
   onViewChange?: (view: Bbox) => void;
+  onReady?: () => void;
+  // True while a start screen covers the map: start flat and wide, and hold the model-area fit for enter().
+  waitForEnter?: boolean;
 };
 
 const TILT = 45;
@@ -151,6 +159,8 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
     onTiltChange,
     modelBoxes = [],
     onViewChange,
+    onReady,
+    waitForEnter = false,
   },
   ref,
 ) {
@@ -164,6 +174,11 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
   const onViewChangeRef = useRef(onViewChange);
   onViewChangeRef.current = onViewChange;
   const fittedRef = useRef(false);
+  const enteredRef = useRef(!waitForEnter);
+  const modelBoxesRef = useRef(modelBoxes);
+  modelBoxesRef.current = modelBoxes;
+  const onReadyRef = useRef(onReady);
+  onReadyRef.current = onReady;
   const visibilityRef = useRef(visibility);
   visibilityRef.current = visibility;
   const dayRef = useRef(day);
@@ -226,6 +241,16 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       if (!map) return;
       map.easeTo({ pitch: map.getPitch() > 5 ? 0 : TILT, duration: 500 });
     },
+    enter() {
+      const map = mapRef.current;
+      if (!map || enteredRef.current) return;
+      enteredRef.current = true;
+      fittedRef.current = true;
+      const all = unionBox(modelBoxesRef.current);
+      const bounds: [[number, number], [number, number]] = all ? [[all[0], all[1]], [all[2], all[3]]] : CITY_BOUNDS;
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      map.fitBounds(bounds, { padding: pad(), maxZoom: 17, pitch: TILT, duration: reduced ? 0 : 2400, essential: true });
+    },
   }));
 
   useEffect(() => {
@@ -236,7 +261,7 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       bounds: CITY_BOUNDS,
       fitBoundsOptions: { padding: pad() },
       attributionControl: { compact: true },
-      pitch: TILT,
+      pitch: waitForEnter ? 0 : TILT,
       maxPitch: 60,
       dragRotate: false,
       pitchWithRotate: false,
@@ -251,6 +276,7 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
     };
     map.on("load", emitView);
     map.on("moveend", emitView);
+    map.once("load", () => onReadyRef.current?.());
 
     map.on("load", () => {
       const empty: FeatureCollection = { type: "FeatureCollection", features: [] };
@@ -691,7 +717,7 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       if (!source) return;
       source.setData(boxOutline(modelBoxes));
       const all = unionBox(modelBoxes);
-      if (!all || fittedRef.current) return;
+      if (!all || fittedRef.current || !enteredRef.current) return;
       fittedRef.current = true;
       map.fitBounds([[all[0], all[1]], [all[2], all[3]]], { padding: pad(), maxZoom: 17, duration: 700 });
     };

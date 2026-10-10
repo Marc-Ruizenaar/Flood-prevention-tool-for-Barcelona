@@ -1,3 +1,11 @@
+/* Self-hosted so index.html can preload the three the start screen paints with (static paths, no hash).
+   Latin only: Catalan and Spanish, including l·l, sit inside the Latin range. */
+@font-face { font-family: Fraunces; font-style: normal; font-weight: 500; font-display: swap; src: url(/fonts/fraunces-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family: Fraunces; font-style: italic; font-weight: 600; font-display: swap; src: url(/fonts/fraunces-latin-600-italic.woff2) format("woff2"); }
+@font-face { font-family: Outfit; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/outfit-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: Outfit; font-style: normal; font-weight: 500; font-display: swap; src: url(/fonts/outfit-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family: Outfit; font-style: normal; font-weight: 600; font-display: swap; src: url(/fonts/outfit-latin-600-normal.woff2) format("woff2"); }
+
 :root {
   --ink: #142028;
   --ink-soft: rgba(20, 32, 40, 0.78);
@@ -37,6 +45,72 @@ button, a { font: inherit; }
 .map {
   position: absolute;
   inset: 0;
+}
+
+/* Start screen: covers the map while it warms up behind it, then fades out as the camera moves in. */
+.intro {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  /* Anchored from the top, not centred: content that arrives later (the day line) grows downward and shifts nothing. */
+  padding: max(22vh, 96px) 24px 24px;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(224, 122, 47, 0.22), transparent 32%),
+    radial-gradient(circle at 80% 90%, rgba(224, 122, 47, 0.12), transparent 30%),
+    var(--ink);
+  color: var(--paper);
+  transition: opacity 0.7s ease;
+}
+.intro.is-leaving { opacity: 0; pointer-events: none; }
+.intro-card { display: flex; gap: 16px; align-items: stretch; max-width: 460px; width: 100%; opacity: 0; }
+html.fonts-ready .intro-card { animation: rise 0.6s ease both; }
+.intro-card .mark { width: 10px; height: auto; }
+.intro-card .kicker { color: rgba(246, 241, 231, 0.7); }
+.intro-card h1 {
+  margin: 6px 0 18px;
+  font-family: Fraunces, Palatino, serif;
+  font-weight: 500;
+  font-size: clamp(26px, 6vw, 38px);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+.intro-sub { margin: 14px 0 0; font-size: 14px; color: rgba(246, 241, 231, 0.78); }
+/* The static card in index.html carries every language; the html lang (set inline there) picks one. */
+.intro [lang] { display: none; }
+html[lang="en"] .intro [lang="en"], html[lang="ca"] .intro [lang="ca"], html[lang="es"] .intro [lang="es"] { display: revert; }
+.intro-start {
+  min-height: 52px;
+  padding: 0 32px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(#e07a2f, #c2410c);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(224, 122, 47, 0.35);
+  transition: transform 0.25s ease, opacity 0.25s ease, box-shadow 0.25s ease;
+}
+.intro-start:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 16px 36px rgba(224, 122, 47, 0.45); }
+.intro-start:disabled { opacity: 0.45; cursor: progress; box-shadow: none; }
+.intro-start:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; }
+.intro-status { margin: 14px 0 0; font-size: 13px; color: rgba(246, 241, 231, 0.7); }
+.intro-bar { display: block; position: relative; height: 2px; margin-top: 8px; border-radius: 2px; background: rgba(246, 241, 231, 0.15); overflow: hidden; }
+.intro-bar::after { content: ""; position: absolute; inset: 0; background: #e07a2f; transform: none; }
+.intro-bar.is-busy::after { width: 40%; animation: intro-sweep 1.2s ease-in-out infinite; }
+@keyframes intro-sweep { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+
+/* Resident view: the basemap fades in once loaded instead of popping. */
+.citizen .map { opacity: 0; transition: opacity 0.5s ease; }
+.citizen .map.is-ready { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .intro, .intro-card, .intro-start, .citizen .map { transition: none; animation: none; }
+  html.fonts-ready .intro-card { opacity: 1; }
+  .intro-bar.is-busy::after { animation: none; width: 100%; opacity: 0.5; }
 }
 
 .map-pending {
