@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import type { FeatureCollection } from "geojson";
 import { AboutPanel } from "./components/AboutPanel";
 import { FactSheet } from "./components/FactSheet";
 import { LayerDock } from "./components/LayerDock";
@@ -19,6 +20,12 @@ import {
 import { dayByDate, daysForWeek, DEFAULT_DAY, formatDay, PROOF_DAY, weekDates } from "./lib/weather";
 import { DEFAULT_VISIBILITY, groupForZone, type GroupId } from "./types";
 
+// A reviewed signal dot dated this day counts as a report, so it unlocks the layer like a proof dot.
+function hasReportsOn(date: string, signals?: FeatureCollection): boolean {
+  if (dayByDate(date).reportIds.length > 0) return true;
+  return (signals?.features ?? []).some((f) => (f.properties?.days as string[] | undefined)?.includes(date));
+}
+
 export function App() {
   const data = useFloodData();
   const [gauges, setGauges] = useState<Record<string, Gauge>>(RAIN_SNAPSHOT);
@@ -35,8 +42,8 @@ export function App() {
   const mapRef = useRef<MapHandle>(null);
   const dayRef = useRef(day);
   dayRef.current = day;
-  const packRef = useRef({ zones: data.zones, relief: data.relief });
-  packRef.current = { zones: data.zones, relief: data.relief };
+  const packRef = useRef({ zones: data.zones, relief: data.relief, signals: data.collections.signals });
+  packRef.current = { zones: data.zones, relief: data.relief, signals: data.collections.signals };
 
   useEffect(() => {
     let cancelled = false;
@@ -52,7 +59,7 @@ export function App() {
           if (!zones || !relief) {
             return layersForRain(
               peakOf(merged[currentDay])?.mm ?? null,
-              dayByDate(currentDay).reportIds.length > 0,
+              hasReportsOn(currentDay, packRef.current.signals),
               current,
             );
           }
@@ -67,7 +74,7 @@ export function App() {
             sewers: false,
             streams: false,
             slopes: false,
-            proof: dayByDate(currentDay).reportIds.length > 0,
+            proof: hasReportsOn(currentDay, packRef.current.signals),
           };
           for (const place of reading.places) next[place.group] = true;
           return next;
@@ -134,7 +141,7 @@ export function App() {
   }
 
   function visibilityFor(date: string, source: Record<string, Gauge>, current: Record<GroupId, boolean>) {
-    const reports = dayByDate(date).reportIds.length > 0;
+    const reports = hasReportsOn(date, data.collections.signals);
     if (!data.zones || !data.relief) {
       return layersForRain(peakOf(source[date])?.mm ?? null, reports, current);
     }
@@ -271,7 +278,7 @@ export function App() {
         failed={data.failed}
         dayLabel={formatDay(day)}
         mm={peakOf(gauges[day])?.mm ?? null}
-        hasReports={dayByDate(day).reportIds.length > 0}
+        hasReports={hasReportsOn(day, data.collections.signals)}
         proofLegend={dayByDate(day).proofLegend}
         reading={
           data.zones && data.relief
