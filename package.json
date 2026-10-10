@@ -16,7 +16,8 @@
     "preqa": "node scripts/signals-build.mjs",
     "signals": "node scripts/signals.mjs",
     "signals:build": "node scripts/signals-build.mjs",
-    "signals:check": "node --test scripts/signals.test.mjs"
+    "signals:check": "node --test scripts/signals.test.mjs",
+    "pulse": "node scripts/pulse.mjs"
   },
   "dependencies": {
     "@fontsource/fraunces": "^5.2.9",

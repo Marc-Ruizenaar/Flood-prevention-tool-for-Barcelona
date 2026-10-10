@@ -195,15 +195,21 @@ async function jev(text, candidates) {
 }
 
 // ---------- commands ----------
+function pulseHigh() {
+  try { const p = read("data/pulse.json"); return p.level === "high" && now - Date.parse(p.generated_at) < 90 * 60e3; } catch { return false; }
+}
+
 async function ingest() {
   const rows = loadInbox();
   const rain = await rainNow();
   const warn = await warningNow(rain.rain3h);
   const { s6, stale } = signalTerms(rows);
   const tick = Math.floor((now.getUTCHours() * 60 + now.getUTCMinutes()) / 30);
-  const cad = cadence({ rain3h: rain.rain3h, warning: warn.warning, anySignal6h: Object.keys(s6).length > 0, tick, knobs: config.knobs });
+  // A fresh "high" Bluesky pulse (scripts/pulse.mjs) only makes this tick read the feeds. It never feeds priority or the map.
+  const pulse = pulseHigh();
+  const cad = cadence({ rain3h: rain.rain3h, warning: warn.warning, anySignal6h: Object.keys(s6).length > 0 || pulse, tick, knobs: config.knobs });
   const errors = [rain.error, ...warn.errors].filter(Boolean);
-  const report = { now: iso(now), mode: cad.mode, rain3h_mm: rain.rain3h, warning: warn.warning, sources: {}, new_pending: 0, dropped_health: 0, errors };
+  const report = { now: iso(now), mode: cad.mode, pulse_high: pulse, rain3h_mm: rain.rain3h, warning: warn.warning, sources: {}, new_pending: 0, dropped_health: 0, errors };
 
   if (has("scheduled") && !cad.fullRun) {
     report.skipped = "calm: feeds are read every 4th tick";

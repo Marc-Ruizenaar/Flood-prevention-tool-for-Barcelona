@@ -637,3 +637,29 @@ a { color: var(--vermilion); }
 
   .app.sheet-open .maplibregl-ctrl-top-right { right: 432px; }
 }
+
+.pulse-bars {
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 2px;
+  height: 36px;
+  margin: 8px 0 6px;
+  align-items: end;
+}
+
+.pulse-cell {
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  border-bottom: 1px solid var(--line);
+}
+
+.pulse-cell > span {
+  display: block;
+  width: 100%;
+  background: var(--ink-soft);
+}
+
+.pulse-cell.is-hidden {
+  background: repeating-linear-gradient(135deg, var(--line) 0 2px, transparent 2px 5px);
+}

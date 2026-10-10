@@ -1,0 +1,4 @@
+{
+ "note": "Accounts excluded from the pulse count: SHA-256 of the account DID, written by npm run pulse -- --optout <handle|did>. No handle or DID is stored.",
+ "did_sha256": []
+}

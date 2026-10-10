@@ -1,0 +1,13 @@
+{
+ "note": "Bluesky rain chatter pulse (scripts/pulse.mjs). Citywide hourly counts only. Off by default: the conditions in the vault's signals/legal.md point 4 (balancing test, public notice with a contact, opt-out intake) are drafted, not done. See vault ideas/water/signals/pulse.md.",
+ "enabled": false,
+ "hours": 12,
+ "minCount": 5,
+ "highAt": 15,
+ "highAtNote": "ASSUMPTION: untested threshold. The 2024-2025 backtest used daily counts, not 3-hour sums.",
+ "groups": {
+  "rain": ["Barcelona pluja", "Barcelona lluvia"],
+  "flood": ["Barcelona inundació", "Barcelona inundación"]
+ },
+ "userAgent": "next-rain-hackathon/0.1 (citywide counts only; notice: data-notice.html)"
+}
