@@ -374,6 +374,13 @@ export function App() {
             <path d="M12 11v6M12 7.5v.5" />
           </svg>
         </button>
+        <a className="round" href="/citizen" aria-label="Resident view: is my street at risk?" title="Resident view">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 11l8-7 8 7" />
+            <path d="M6 10v10h12V10" />
+            <path d="M10 20v-5h4v5" />
+          </svg>
+        </a>
       </div>
       <button
         type="button"
