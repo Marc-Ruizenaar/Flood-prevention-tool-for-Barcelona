@@ -46,7 +46,7 @@ button, a { font: inherit; }
 
 /* Phone first: map full-bleed, one top card, round map buttons, one peeking sheet.
    At 960px the card and sheet stack into a left rail. pad() in MapCanvas mirrors these sizes. */
-:root { --peek: 164px; }
+:root { --peek: 200px; }
 
 .rail { display: contents; }
 
@@ -133,7 +133,7 @@ h1 {
 }
 
 .when button:focus-visible, .close:focus-visible, .layer-toggle:focus-visible, .round:focus-visible,
-.panel-handle:focus-visible, .related-btn:focus-visible, .city-action-row:focus-visible, a:focus-visible {
+.panel-handle:focus-visible, .panel-claim:focus-visible, .related-btn:focus-visible, .city-action-row:focus-visible, a:focus-visible {
   outline: 2px solid #e07a2f;
   outline-offset: 2px;
 }
@@ -246,6 +246,22 @@ h1 {
 }
 
 .panel-hint { font-size: 13px; font-weight: 600; color: var(--vermilion); }
+
+.panel-claim {
+  flex: none;
+  width: 100%;
+  padding: 0 16px 8px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.panel-claim strong { color: var(--ink); }
+.panel-claim span { color: var(--vermilion); font-weight: 600; white-space: nowrap; }
 
 .dock {
   flex: none;
