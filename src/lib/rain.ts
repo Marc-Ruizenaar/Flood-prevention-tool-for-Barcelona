@@ -1,5 +1,6 @@
 import { t } from "./i18n";
 import type { GroupId } from "../types";
+import { TODAY } from "./weather";
 
 export type Gauge = {
   raval: number;
@@ -58,27 +59,34 @@ export function rainCaption(gauge: Gauge | undefined, live: boolean | null): str
   return `${t("{mm} mm at {name}", { mm: formatMm(peak.mm), name: peak.name })} · ${live === false ? t("saved XEMA copy") : "XEMA"}`;
 }
 
-export async function fetchGauges(): Promise<Record<string, Gauge>> {
-  const params = new URLSearchParams({
-    $select: "codi_estacio,data_lectura,valor",
-    $where:
-      "codi_variable='1300' AND codi_estacio in('X4','D5','X8') AND data_lectura >= '2026-10-02T00:00:00.000' AND data_lectura <= '2026-10-03T00:00:00.000'",
-    $limit: "40",
-  });
-  const response = await fetch(
-    `https://analisi.transparenciacatalunya.cat/resource/7bvh-jvq2.json?${params}`,
-  );
+type Row = { codi_estacio: string; data_lectura: string; valor: string };
+
+// The daily file calls the value `valor`, the half-hourly one `valor_lectura`; both come back as `valor`.
+async function xema(resource: string, valueColumn: string, where: string, limit: number): Promise<Row[]> {
+  const params = new URLSearchParams({ $select: `codi_estacio,data_lectura,${valueColumn} as valor`, $where: where, $limit: String(limit) });
+  const response = await fetch(`https://analisi.transparenciacatalunya.cat/resource/${resource}.json?${params}`);
   if (!response.ok) throw new Error(`XEMA ${response.status}`);
-  const rows = (await response.json()) as { codi_estacio: string; data_lectura: string; valor: string }[];
+  return (await response.json()) as Row[];
+}
+
+/** Daily totals (variable 1300) for the storm days, plus today summed from half-hourly readings (variable 35). */
+export async function fetchGauges(today = TODAY): Promise<Record<string, Gauge>> {
+  const stations = "codi_estacio in('X4','D5','X8')";
+  const [daily, live] = await Promise.all([
+    xema("7bvh-jvq2", "valor", `codi_variable='1300' AND ${stations} AND data_lectura >= '2026-10-02T00:00:00.000' AND data_lectura <= '${today}T00:00:00.000'`, 100),
+    // ponytail: a failed live call just leaves today without a reading; the daily file still loads.
+    xema("nzvn-apee", "valor_lectura", `codi_variable='35' AND ${stations} AND data_lectura >= '${today}T00:00:00.000'`, 200).catch(() => [] as Row[]),
+  ]);
   const draft = new Map<string, Partial<Gauge>>();
-  for (const row of rows) {
-    const date = row.data_lectura.slice(0, 10);
+  const add = (date: string, code: string, value: number, sum: boolean) => {
+    const key = STATIONS.find(([c]) => c === code)?.[1];
+    if (!key || !Number.isFinite(value)) return;
     const gauge = draft.get(date) ?? {};
-    const value = Number(row.valor);
-    const key = STATIONS.find(([code]) => code === row.codi_estacio)?.[1];
-    if (key && Number.isFinite(value)) gauge[key] = value;
+    gauge[key] = sum ? (gauge[key] ?? 0) + value : value;
     draft.set(date, gauge);
-  }
+  };
+  for (const row of daily) add(row.data_lectura.slice(0, 10), row.codi_estacio, Number(row.valor), false);
+  for (const row of live) add(today, row.codi_estacio, Number(row.valor), true);
   const gauges: Record<string, Gauge> = {};
   for (const [date, gauge] of draft) {
     if (

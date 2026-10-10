@@ -11,7 +11,9 @@ export type DayWeather = {
   proofLegend?: string;
 };
 
-export const APP_DAYS = ["2026-10-02", "2026-10-03"] as const;
+// ponytail: today is a fixed date for the demo; swap for new Date() when the app runs past the hackathon.
+export const TODAY = "2026-10-10";
+export const APP_DAYS = ["2026-10-02", "2026-10-03", TODAY] as const;
 
 export const DEFAULT_DAY = "2026-10-03";
 
@@ -43,7 +45,7 @@ const DAYS: DayWeather[] = [
     summary: t("About 15 mm at each of the three city stations — a wet Friday, but well below Saturday’s record. No October proof is dated this day."),
     sources: [
       {
-        label: "Aiguats d’octubre de 2026",
+        label: t("October 2026 floods (Wikipedia)"),
         url: "https://ca.wikipedia.org/wiki/Aiguats_d%27octubre_de_2026_a_Catalunya",
       },
     ],
@@ -56,16 +58,29 @@ const DAYS: DayWeather[] = [
     summary: t("The heaviest day at the three city stations. The city also reported a maximum of 206 litres per square metre and a citywide mean of 152.3. Can Bruixa recorded 207 litres through Saturday. The October proof is on for this rain: the landslide reported on Sunday, and the Torre Baró cleanup and transformer-room cuts reported on Wednesday."),
     sources: [
       {
-        label: "Distrito de Gràcia, Ajuntament de Barcelona",
+        label: t("Gràcia district, Ajuntament de Barcelona"),
         url: "https://ajuntament.barcelona.cat/gracia/es/noticias/activada-la-emergencia-por-riesgo-de-inundaciones-41745",
       },
       {
-        label: "Betevé — Can Bruixa",
+        label: t("Betevé: Can Bruixa"),
         url: "https://beteve.cat/medi-ambient/aiguats-mes-200-litres-barcelona-episodi-pluja-historica/",
       },
     ],
-    reportIds: [...STORM_PROOF_IDS, "proof-sant-genis-2026-10"],
+    reportIds: STORM_PROOF_IDS,
     proofLegend: t("Impacts from this rain, reported in the days after 3 October."),
+  },
+  {
+    date: TODAY,
+    condition: t("Today, live"),
+    stance: "outlook",
+    summary: t("Rain so far today, summed from Meteocat’s half-hourly station readings. No flood model has run for today, so the street layers stay empty."),
+    sources: [
+      {
+        label: t("Meteocat XEMA half-hourly readings"),
+        url: "https://analisi.transparenciacatalunya.cat/Medi-Ambient/Dades-meteorol-giques-de-la-XEMA/nzvn-apee",
+      },
+    ],
+    reportIds: [],
   },
 ];
 
@@ -88,6 +103,7 @@ export function formatDay(iso: string): string {
 }
 
 export function shortDay(iso: string): string {
+  if (iso === TODAY) return t("Today");
   const [year, month, day] = iso.split("-").map(Number);
   const date = new Date(Date.UTC(year, month - 1, day));
   return `${dayName(date, "short").replace(".", "")} ${day}`;
