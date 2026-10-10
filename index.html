@@ -49,6 +49,16 @@
         new Promise(function (r) { setTimeout(r, 400); }),
       ]).then(function () { document.documentElement.classList.add("fonts-ready"); });
     </script>
+    <script>
+      // Offline support (see README). When a newer worker takes over, reload once so the open tab
+      // shows the new build instead of the shell it loaded with. The flag stops a reload loop.
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.addEventListener("controllerchange", function () {
+          if (navigator.serviceWorker.controller && !window.__reloading) { window.__reloading = true; location.reload(); }
+        });
+        window.addEventListener("load", function () { navigator.serviceWorker.register("/sw.js", { scope: "/" }); });
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

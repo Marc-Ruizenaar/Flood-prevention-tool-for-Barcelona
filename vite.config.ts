@@ -7,7 +7,8 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      injectRegister: "script-defer",
+      // Registered by hand in index.html so the page reloads once when a new worker takes over.
+      injectRegister: null,
       includeAssets: ["favicon.svg", "fonts/*.woff2", "robots.txt"],
       manifest: {
         name: "Next rain — Barcelona",
@@ -20,11 +21,23 @@ export default defineConfig({
         icons: [{ src: "favicon.svg", sizes: "any", type: "image/svg+xml" }],
       },
       workbox: {
+        // A new worker takes over on its first load instead of waiting for every tab to close;
+        // without this a deploy stayed invisible to returning visitors until a second reload.
+        skipWaiting: true,
+        clientsClaim: true,
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         globPatterns: ["**/*.{js,css,html,svg,json,geojson,woff,woff2}"],
         // Flood chunks load on demand per map view, so cache them as they are fetched, not on install.
-        globIgnores: ["**/data/flood/**"],
+        // index.html is not precached: online, the page itself is always fetched fresh (NetworkFirst below),
+        // so a deploy shows on the next visit; offline, the last fetched copy still serves.
+        globIgnores: ["**/data/flood/**", "**/index.html"],
+        navigateFallback: null,
         runtimeCaching: [
+          {
+            urlPattern: ({ request }) => request.mode === "navigate",
+            handler: "NetworkFirst",
+            options: { cacheName: "pages", networkTimeoutSeconds: 3 },
+          },
           {
             urlPattern: /\/data\/flood\//,
             handler: "StaleWhileRevalidate",
