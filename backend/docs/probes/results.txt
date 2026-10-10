@@ -1,0 +1,22 @@
+xema_nokey | https://api.meteo.cat/xema/v1/estacions/metadades | 403 application/json 23
+xema_data_nokey | https://api.meteo.cat/xema/v1/variables/mesurades/35/2026/10/03?codiEstacio=X4 | 403 application/json 23
+xema_opendata | https://analisi.transparenciacatalunya.cat/resource/nzvn-apee.json?$limit=1&$where=data_lectura>='2026-10-03T00:00:00' | 429 application/json;charset=utf-8 73
+xema_opendata_last | https://analisi.transparenciacatalunya.cat/resource/nzvn-apee.json?$order=data_lectura%20DESC&$limit=1 | 429 application/json;charset=utf-8 73
+xema_stations | https://analisi.transparenciacatalunya.cat/resource/yqwd-vj5e.json?$limit=2 | 200 application/json;charset=utf-8 1172
+icgc_wcs | https://geoserveis.icgc.cat/servei/catalunya/mde/wcs?SERVICE=WCS&REQUEST=GetCapabilities | 404 text/html; charset=iso-8859-1 281
+icgc_wms_mde | https://geoserveis.icgc.cat/servei/catalunya/mde/wms?SERVICE=WMS&REQUEST=GetCapabilities | 404 text/html; charset=iso-8859-1 281
+icgc_dl | https://www.icgc.cat/ca/Descarregues/Elevacions/Model-d-elevacions-del-terreny-de-Catalunya | 404 text/html; charset=UTF-8 161972
+bcn_ckan | https://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search?q=clavegueram&rows=5 | 000  0
+bcn_ckan_pluvio | https://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search?q=pluviometre&rows=5 | 000  0
+catastro_inspire | https://ovc.catastro.meh.es/INSPIRE/wfsBU.aspx?service=WFS&request=GetCapabilities | 400 text/html 2189
+corine | https://image.discomap.eea.europa.eu/arcgis/rest/services/Corine/CLC2018_WM/MapServer?f=json | 200 application/json; charset=UTF-8 8848
+siose | https://servicios.idee.es/wms-inspire/ocupacion-suelo?SERVICE=WMS&REQUEST=GetCapabilities | 200 text/xml 21712
+soilgrids | https://rest.isric.org/soilgrids/v2.0/properties/query?lon=2.17&lat=41.39&property=sand&depth=0-5cm&value=mean | 200 application/json 355
+aemet | https://opendata.aemet.es/opendata/api/valores/climatologicos/diarios/datos/fechaini/2026-10-03T00:00:00UTC/fechafin/2026-10-07T23:59:59UTC/estacion/0076 | 200 text/plain; charset=UTF-8 0
+xema_opendata_last | https://analisi.transparenciacatalunya.cat/resource/nzvn-apee.json?$order=data_lectura%20DESC&$limit=1 | 200 application/json;charset=utf-8 65
+xema_opendata_oct | https://analisi.transparenciacatalunya.cat/resource/nzvn-apee.json?$limit=3&$where=data_lectura%20between%20'2026-10-03T00:00:00'%20and%20'2026-10-08T00:00:00'%20and%20codi_variable='35' | 200 application/json;charset=utf-8 433
+icgc_wms | https://geoserveis.icgc.cat/icc_mdt/wms/service?SERVICE=WMS&REQUEST=GetCapabilities | 404 text/html; charset=iso-8859-1 281
+icgc_wcs2 | https://geoserveis.icgc.cat/servei/catalunya/elevacions/wcs?SERVICE=WCS&REQUEST=GetCapabilities | 404 text/html; charset=iso-8859-1 281
+bcn_ckan | https://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search?q=clavegueram&rows=5 | 000  0
+catastro_bu | https://ovc.catastro.meh.es/INSPIRE/wfsBU.aspx?service=WFS&version=2.0.0&request=GetCapabilities | 000  0
+ign_mdt | https://servicios.idee.es/wcs-inspire/mdt?SERVICE=WCS&REQUEST=GetCapabilities | 200 text/xml 12162

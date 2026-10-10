@@ -1,0 +1,210 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "stub-ew-0",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            2.16271169230936,
+            41.395445725355266
+          ],
+          [
+            2.1649842624175912,
+            41.39546224033744
+          ]
+        ]
+      },
+      "properties": {
+        "segment_id": "stub-ew-0",
+        "name": "Synthetic street row 0",
+        "date": "2026-10-03",
+        "max_depth_m": 0.00511333684874466,
+        "p95_depth_m": 0.004911051791761234,
+        "minutes_above_0.10m": 0.0,
+        "minutes_above_0.30m": 0.0,
+        "flood_class": "dry",
+        "drainage_scenario_spread": {
+          "max_depth_m": {
+            "low": 0.006466848892991575,
+            "mid": 0.00511333684874466,
+            "high": 0.0034146756069535133
+          },
+          "range_m": 0.0030521732860380613,
+          "baseline_scenario": "mid",
+          "unit": "m",
+          "kind": "assumption"
+        },
+        "uncertainty_status": "UNVALIDATED: synthetic, not calibrated",
+        "data_quality": "SYNTHETIC run; SYNTHETIC stub street network",
+        "aggregation_method": "Cells crossed by the segment (sampled every dx/2 along it). Per snapshot in the local day: max depth over those cells. max_depth_m = max over time; p95_depth_m = 95th percentile of all cell x snapshot depths; minutes_above_X = snapshots with segment max > X times the snapshot interval.",
+        "units": {
+          "depth": "m",
+          "time": "min"
+        },
+        "kind": "simulated",
+        "cells_sampled": 20
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "stub-ew-2",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            2.1627140040664314,
+            41.39526559225827
+          ],
+          [
+            2.164986567901865,
+            41.39528210713645
+          ]
+        ]
+      },
+      "properties": {
+        "segment_id": "stub-ew-2",
+        "name": "Synthetic street row 2",
+        "date": "2026-10-03",
+        "max_depth_m": 0.2142777562964464,
+        "p95_depth_m": 0.01677729258332586,
+        "minutes_above_0.10m": 412.06666666666666,
+        "minutes_above_0.30m": 0.0,
+        "flood_class": "moderate",
+        "drainage_scenario_spread": {
+          "max_depth_m": {
+            "low": 0.2172416637826992,
+            "mid": 0.2142777562964464,
+            "high": 0.21033724236370202
+          },
+          "range_m": 0.006904421418997192,
+          "baseline_scenario": "mid",
+          "unit": "m",
+          "kind": "assumption"
+        },
+        "uncertainty_status": "UNVALIDATED: synthetic, not calibrated",
+        "data_quality": "SYNTHETIC run; SYNTHETIC stub street network",
+        "aggregation_method": "Cells crossed by the segment (sampled every dx/2 along it). Per snapshot in the local day: max depth over those cells. max_depth_m = max over time; p95_depth_m = 95th percentile of all cell x snapshot depths; minutes_above_X = snapshots with segment max > X times the snapshot interval.",
+        "units": {
+          "depth": "m",
+          "time": "min"
+        },
+        "kind": "simulated",
+        "cells_sampled": 20
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "stub-ew-4",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            2.1627163158024936,
+            41.395085459155496
+          ],
+          [
+            2.164988873365187,
+            41.3951019739297
+          ]
+        ]
+      },
+      "properties": {
+        "segment_id": "stub-ew-4",
+        "name": "Synthetic street row 4",
+        "date": "2026-10-03",
+        "max_depth_m": 0.006497932920345485,
+        "p95_depth_m": 0.006393102730983842,
+        "minutes_above_0.10m": 0.0,
+        "minutes_above_0.30m": 0.0,
+        "flood_class": "dry",
+        "drainage_scenario_spread": {
+          "max_depth_m": {
+            "low": 0.008176430928397205,
+            "mid": 0.006497932920345485,
+            "high": 0.0043690861940221684
+          },
+          "range_m": 0.0038073447343750363,
+          "baseline_scenario": "mid",
+          "unit": "m",
+          "kind": "assumption"
+        },
+        "uncertainty_status": "UNVALIDATED: synthetic, not calibrated",
+        "data_quality": "SYNTHETIC run; SYNTHETIC stub street network",
+        "aggregation_method": "Cells crossed by the segment (sampled every dx/2 along it). Per snapshot in the local day: max depth over those cells. max_depth_m = max over time; p95_depth_m = 95th percentile of all cell x snapshot depths; minutes_above_X = snapshots with segment max > X times the snapshot interval.",
+        "units": {
+          "depth": "m",
+          "time": "min"
+        },
+        "kind": "simulated",
+        "cells_sampled": 20
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "stub-ns-10",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            2.163907781603972,
+            41.39545442304527
+          ],
+          [
+            2.163913552703639,
+            41.39500409015507
+          ]
+        ]
+      },
+      "properties": {
+        "segment_id": "stub-ns-10",
+        "name": "Synthetic street col 10",
+        "date": "2026-10-03",
+        "max_depth_m": 0.2142777562964464,
+        "p95_depth_m": 0.21427775497031,
+        "minutes_above_0.10m": 412.06666666666666,
+        "minutes_above_0.30m": 0.0,
+        "flood_class": "moderate",
+        "drainage_scenario_spread": {
+          "max_depth_m": {
+            "low": 0.2172416637826992,
+            "mid": 0.2142777562964464,
+            "high": 0.21033724236370202
+          },
+          "range_m": 0.006904421418997192,
+          "baseline_scenario": "mid",
+          "unit": "m",
+          "kind": "assumption"
+        },
+        "uncertainty_status": "UNVALIDATED: synthetic, not calibrated",
+        "data_quality": "SYNTHETIC run; SYNTHETIC stub street network",
+        "aggregation_method": "Cells crossed by the segment (sampled every dx/2 along it). Per snapshot in the local day: max depth over those cells. max_depth_m = max over time; p95_depth_m = 95th percentile of all cell x snapshot depths; minutes_above_X = snapshots with segment max > X times the snapshot interval.",
+        "units": {
+          "depth": "m",
+          "time": "min"
+        },
+        "kind": "simulated",
+        "cells_sampled": 6
+      }
+    }
+  ],
+  "properties": {
+    "run_id": "synthetic-demo",
+    "date": "2026-10-03",
+    "timezone": "Europe/Madrid",
+    "crs": "EPSG:4326",
+    "synthetic": true,
+    "street_network_stub": true,
+    "flood_class_thresholds_m": {
+      "dry": 0.0,
+      "low": 0.05,
+      "moderate": 0.15,
+      "high": 0.3,
+      "severe": 0.5
+    },
+    "flood_class_kind": "assumption"
+  },
+  "label": "SYNTHETIC example: generated from synthetic run 'synthetic-demo' (python -m bcnflood.api.synthetic, run_grid, drainage scenario mid as baseline) with a stub street network. NOT Barcelona data."
+}

@@ -25,11 +25,18 @@ export function AboutPanel({ sources, onClose }: Props) {
           <p>
             A briefing map of where the next heavy rain is already described in Barcelona’s published
             layers: sewer stress, buried streams, and slopes. It does not predict a storm, a depth, or
-            a cost.
+            a cost. On a buried stream, a red dot is a published critical point that sits on that
+            stream. Those dots use the RESCCUE list, not the October reports.
           </p>
           <p>
             River flood (ACA, T100) and coastal flood sit in other plans. This storm’s geography, and
             this tool, is pluvial drainage plus the Collserola edge.
+          </p>
+          <p>
+            The city is a slope, from Collserola down to the sea. The grey relief is the ICGC terrain
+            model, and every card reads the height and the fall at that place. A steep fall sheds rain
+            as runoff. A level street holds it in the drains. The number is ground height, not a flood
+            depth.
           </p>
           <section>
             <h3>What was measured</h3>
@@ -61,7 +68,10 @@ export function AboutPanel({ sources, onClose }: Props) {
           </section>
           <p className="geometry-note">
             Every tappable place has a source link. Outlines are simplified traces for a phone briefing,
-            not official flood contours. The October proof stays off until you turn it on.
+            not official flood contours. Weather looks up each day in the Meteocat station file. The
+            highest of el Raval, Fabra and Zona Universitària decides the map: under 10 mm the flood
+            spots stay off, from 10 mm the sewers, from 40 mm the slopes, from 100 mm the buried streams.
+            Past is 3–7 October. This week is 5–11 October.
           </p>
         </div>
       </article>

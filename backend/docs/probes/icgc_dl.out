@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="ca" dir="ltr" prefix="og: https://ogp.me/ns#">
+  <head>
+        <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+          w[l] = w[l] || [];
+          w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+          var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+          j.async = true;
+          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+          f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-K8H9WWZ');</script> <!-- End Google Tag Manager -->
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K8H9WWZ" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe>
+  </noscript> <!-- End Google Tag Manager (noscript) -->
+
+
+
+    <meta charset="utf-8" />
+<link rel="canonical" href="http://www.icgc.cat/ca" />
+<meta name="robots" content="index, follow" />
+<link rel="shortlink" href="http://www.icgc.cat/ca" />
+<meta name="Generator" content="Drupal 10 (https://www.drupal.org)" />
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta http-equiv="x-ua-compatible" content="ie=edge" />
+<link rel="icon" href="/themes/custom/icgc_web/favicon.ico" type="image/vnd.microsoft.icon" />
+
+    <title>Pàgina no trobada | icgc</title>
+    <link rel="stylesheet" media="all" href="/core/assets/vendor/jquery.ui/themes/base/core.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/assets/vendor/jquery.ui/themes/base/autocomplete.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/assets/vendor/jquery.ui/themes/base/menu.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/align.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/fieldgroup.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/container-inline.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/clearfix.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/details.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/hidden.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/item-list.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/js.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/nowrap.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/position-container.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/reset-appearance.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/resize.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/system-status-counter.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/system-status-report-counters.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/system-status-report-general-info.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/system/css/components/tablesort.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/misc/components/progress.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/misc/components/ajax-progress.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/misc/components/autocomplete-loading.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/../themes/contrib/bootstrap_barrio/components/menu/menu.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/modules/views/css/views.module.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/core/assets/vendor/jquery.ui/themes/base/theme.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/modules/contrib/better_exposed_filters/css/better_exposed_filters.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/modules/contrib/search_api_autocomplete/css/search_api_autocomplete.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/variables.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/user.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/progress.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/affix.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/book.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/contextual.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/feed-icon.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/field.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/header.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/help.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/icons.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/image-button.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/item-list.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/list-group.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/media.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/page.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/search-form.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/shortcut.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/sidebar.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/site-footer.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/skip-link.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/table.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/tabledrag.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/tableselect.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/tablesort-indicator.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/ui.widget.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/tabs.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/toolbar.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/vertical-tabs.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/views.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/webform.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/ui-dialog.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="//cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" media="all" href="/themes/custom/icgc_web/css/bootstrap.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/custom/icgc_web/css/bootstrap-grid.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/custom/icgc_web/css/bootstrap-reboot.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/custom/icgc_web/css/slick.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/custom/icgc_web/css/slick-theme.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/custom/icgc_web/css/style.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/custom/icgc_web/css/ide.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/colors/messages/messages-white.css?tm9zdl" />
+<link rel="stylesheet" media="all" href="/themes/contrib/bootstrap_barrio/css/components/form.css?tm9zdl" />
+<link rel="stylesheet" media="print" href="/themes/contrib/bootstrap_barrio/css/print.css?tm9zdl" />
+
+    <script type="application/json" data-drupal-selector="drupal-settings-json">{"path":{"baseUrl":"\/","pathPrefix":"ca\/","currentPath":"","currentPathIsAdmin":false,"isFront":false,"currentLanguage":"ca"},"pluralDelimiter":"\u0003","suppressDeprecationErrors":true,"ajaxPageState":{"libraries":"eJx1kGtywyAMhC-EzZE0Am8ILiAPkuvk9rUznrRp2j96fCvQjgLM0Am3RRQTXXLZW_W8mpCuoWZz4e-RhIbOxQURU-u8UODes_iL9PpOU5HAZVC7l9zSu16hyglK2zUbXBT5yFB_5ln7GKe2446d1UUamun4-5thqGiryzFF2hD8t368fuLde2Sjho0maE4_pVefTz4rKbjH67HpLHnJ7oR7ScfRDm8FBv8Pd3pXQ_WBFe4zY1P_iCPPfHsBVaa14AvvS6Sn","theme":"icgc_web","theme_token":null},"ajaxTrustedUrl":{"\/ca\/busqueda-searchapi":true},"cookies":{"cookiesjsr":{"config":{"cookie":{"name":"cookiesjsr","expires":31536000000,"domain":"","sameSite":"Lax","secure":false},"library":{"libBasePath":"https:\/\/cdn.jsdelivr.net\/gh\/jfeltkamp\/cookiesjsr@1\/dist","libPath":"https:\/\/cdn.jsdelivr.net\/gh\/jfeltkamp\/cookiesjsr@1\/dist\/cookiesjsr.min.js","scrollLimit":0},"callback":{"method":"post","url":"\/ca\/cookies\/consent\/callback.json","headers":[]},"interface":{"openSettingsHash":"#editCookieSettings","showDenyAll":true,"denyAllOnLayerClose":false,"settingsAsLink":false,"availableLangs":["ca","es","en"],"defaultLang":"ca","groupConsent":true,"cookieDocs":true}},"services":{"functional":{"id":"functional","services":[{"key":"functional","type":"functional","name":"Required functional","info":{"value":"\u003Ctable\u003E\r\n\t\u003Cthead\u003E\r\n\t\t\u003Ctr\u003E\r\n\t\t\t\u003Cth width=\u002215%\u0022\u003ECookie name\u003C\/th\u003E\r\n\t\t\t\u003Cth width=\u002215%\u0022\u003EDefault expiration time\u003C\/th\u003E\r\n\t\t\t\u003Cth\u003EDescription\u003C\/th\u003E\r\n\t\t\u003C\/tr\u003E\r\n\t\u003C\/thead\u003E\r\n\t\u003Ctbody\u003E\r\n\t\t\u003Ctr\u003E\r\n\t\t\t\u003Ctd\u003E\u003Ccode dir=\u0022ltr\u0022 translate=\u0022no\u0022\u003ESSESS\u0026lt;ID\u0026gt;\u003C\/code\u003E\u003C\/td\u003E\r\n\t\t\t\u003Ctd\u003E1 month\u003C\/td\u003E\r\n\t\t\t\u003Ctd\u003EIf you are logged in to this website, a session cookie is required to identify and connect your browser to your user account in the server backend of this website.\u003C\/td\u003E\r\n\t\t\u003C\/tr\u003E\r\n\t\t\u003Ctr\u003E\r\n\t\t\t\u003Ctd\u003E\u003Ccode dir=\u0022ltr\u0022 translate=\u0022no\u0022\u003Ecookiesjsr\u003C\/code\u003E\u003C\/td\u003E\r\n\t\t\t\u003Ctd\u003E1 year\u003C\/td\u003E\r\n\t\t\t\u003Ctd\u003EWhen you visited this website for the first time, you were asked for your permission to use several services (including those from third parties) that require data to be saved in your browser (cookies, local storage). Your decisions about each service (allow, deny) are stored in this cookie and are reused each time you visit this website.\u003C\/td\u003E\r\n\t\t\u003C\/tr\u003E\r\n\t\u003C\/tbody\u003E\r\n\u003C\/table\u003E\r\n","format":"full_html"},"uri":"","needConsent":false}],"weight":1}},"translation":{"_core":{"default_config_hash":"mUJKQSDG3sP9nqK30DYQcTzI17uSvfer8AJE1mMr-VM"},"langcode":"ca","bannerText":"Utilitzem galetes per oferir-te una millor experi\u00e8ncia, analitzar el tr\u00e0nsit i personalitzar el contingut mostrat. Pots acceptar totes les galetes o configurar-les.","privacyPolicy":"Pol\u00edtica de Privacitat","privacyUri":"","imprint":"Imprint","imprintUri":"","cookieDocs":"Documentaci\u00f3 sobre Galetes","cookieDocsUri":"\/cookies\/documentation","officialWebsite":"Official website","denyAll":"Denega-les","alwaysActive":"Sempre activa","settings":"Configura-les","acceptAll":"Accepta-les totes","requiredCookies":"Galetes Requerides","cookieSettings":"Configura-les","close":"Tancar","readMore":"Llegir m\u00e9s","allowed":"Perm\u00e8s","denied":"Denegat","settingsAllServices":"Configuraci\u00f3 per tots els serveis","saveSettings":"Save","default_langcode":"en","disclaimerText":"Tota la informaci\u00f3 de les galetes est\u00e0 subjecta a canvis pels prove\u00efdors de serveis. Actualitzem aquesta informaci\u00f3 regularment.","disclaimerTextPosition":"above","processorDetailsLabel":"Detalls Companyia Processadora","processorLabel":"Companyia","processorWebsiteUrlLabel":"Web de la Companyia ","processorPrivacyPolicyUrlLabel":"Pol\u00edtica de Privacitat de la Companyia","processorCookiePolicyUrlLabel":"Pol\u00edtica de Cookies de la Companyia","processorContactLabel":"Detalls del Contacte de Protecci\u00f3 de Dades","placeholderAcceptAllText":"Accepta Totes les Galetes","functional":{"title":"Functional","details":"Cookies are small text files that are placed by your browser on your device in order to store certain information. Using the information that is stored and returned, a website can recognize that you have previously accessed and visited it using the browser on your end device. We use this information to arrange and display the website optimally in accordance with your preferences. Within this process, only the cookie itself is identified on your device. Personal data is only stored following your express consent or where this is absolutely necessary to enable use the service provided by us and accessed by you."}}},"cookiesTexts":{"_core":{"default_config_hash":"mUJKQSDG3sP9nqK30DYQcTzI17uSvfer8AJE1mMr-VM"},"langcode":"ca","bannerText":"Utilitzem galetes per oferir-te una millor experi\u00e8ncia, analitzar el tr\u00e0nsit i personalitzar el contingut mostrat. Pots acceptar totes les galetes o configurar-les.","privacyPolicy":"Pol\u00edtica de Privacitat","privacyUri":"","imprint":"Imprint","imprintUri":"","cookieDocs":"Documentaci\u00f3 sobre Galetes","cookieDocsUri":"\/cookies\/documentation","officialWebsite":"Official website","denyAll":"Denega-les","alwaysActive":"Sempre activa","settings":"Configura-les","acceptAll":"Accepta-les totes","requiredCookies":"Galetes Requerides","cookieSettings":"Configura-les","close":"Tancar","readMore":"Llegir m\u00e9s","allowed":"Perm\u00e8s","denied":"Denegat","settingsAllServices":"Configuraci\u00f3 per tots els serveis","saveSettings":"Save","default_langcode":"en","disclaimerText":"Tota la informaci\u00f3 de les galetes est\u00e0 subjecta a canvis pels prove\u00efdors de serveis. Actualitzem aquesta informaci\u00f3 regularment.","disclaimerTextPosition":"above","processorDetailsLabel":"Detalls Companyia Processadora","processorLabel":"Companyia","processorWebsiteUrlLabel":"Web de la Companyia ","processorPrivacyPolicyUrlLabel":"Pol\u00edtica de Privacitat de la Companyia","processorCookiePolicyUrlLabel":"Pol\u00edtica de Cookies de la Companyia","processorContactLabel":"Detalls del Contacte de Protecci\u00f3 de Dades","placeholderAcceptAllText":"Accepta Totes les Galetes"},"services":{"functional":{"uuid":"031f8a30-6076-4e7f-881d-9448b42ce6cb","langcode":"ca","status":true,"dependencies":[],"_core":{"default_config_hash":"J07Vty2ycKmvEz3msQ90z8a105_hT2mIjXKIy7JsOX0"},"id":"functional","label":"Required functional","group":"functional","info":{"value":"\u003Ctable\u003E\r\n\t\u003Cthead\u003E\r\n\t\t\u003Ctr\u003E\r\n\t\t\t\u003Cth width=\u002215%\u0022\u003ECookie name\u003C\/th\u003E\r\n\t\t\t\u003Cth width=\u002215%\u0022\u003EDefault expiration time\u003C\/th\u003E\r\n\t\t\t\u003Cth\u003EDescription\u003C\/th\u003E\r\n\t\t\u003C\/tr\u003E\r\n\t\u003C\/thead\u003E\r\n\t\u003Ctbody\u003E\r\n\t\t\u003Ctr\u003E\r\n\t\t\t\u003Ctd\u003E\u003Ccode dir=\u0022ltr\u0022 translate=\u0022no\u0022\u003ESSESS\u0026lt;ID\u0026gt;\u003C\/code\u003E\u003C\/td\u003E\r\n\t\t\t\u003Ctd\u003E1 month\u003C\/td\u003E\r\n\t\t\t\u003Ctd\u003EIf you are logged in to this website, a session cookie is required to identify and connect your browser to your user account in the server backend of this website.\u003C\/td\u003E\r\n\t\t\u003C\/tr\u003E\r\n\t\t\u003Ctr\u003E\r\n\t\t\t\u003Ctd\u003E\u003Ccode dir=\u0022ltr\u0022 translate=\u0022no\u0022\u003Ecookiesjsr\u003C\/code\u003E\u003C\/td\u003E\r\n\t\t\t\u003Ctd\u003E1 year\u003C\/td\u003E\r\n\t\t\t\u003Ctd\u003EWhen you visited this website for the first time, you were asked for your permission to use several services (including those from third parties) that require data to be saved in your browser (cookies, local storage). Your decisions about each service (allow, deny) are stored in this cookie and are reused each time you visit this website.\u003C\/td\u003E\r\n\t\t\u003C\/tr\u003E\r\n\t\u003C\/tbody\u003E\r\n\u003C\/table\u003E\r\n","format":"full_html"},"consentRequired":false,"purpose":"","processor":"","processorContact":"","processorUrl":"","processorPrivacyPolicyUrl":"","processorCookiePolicyUrl":"","placeholderMainText":"This content is blocked because Required functional cookies have not been accepted.","placeholderAcceptText":"Only accept Required functional cookies."}},"groups":{"functional":{"uuid":"f533173b-9e31-4e79-a51c-6c1adb7a25ec","langcode":"ca","status":true,"dependencies":[],"_core":{"default_config_hash":"aHm4Q63Ge97tcktTa_qmUqJMir45iyGY2lEvvqPW68g"},"id":"functional","label":"Functional","weight":1,"title":"Functional","details":"Cookies are small text files that are placed by your browser on your device in order to store certain information. Using the information that is stored and returned, a website can recognize that you have previously accessed and visited it using the browser on your end device. We use this information to arrange and display the website optimally in accordance with your preferences. Within this process, only the cookie itself is identified on your device. Personal data is only stored following your express consent or where this is absolutely necessary to enable use the service provided by us and accessed by you."},"marketing":{"uuid":"8aa8d4f3-587b-4743-bb9f-547ea8c45647","langcode":"ca","status":true,"dependencies":[],"_core":{"default_config_hash":"JkP6try0AxX_f4RpFEletep5NHSlVB1BbGw0snW4MO8"},"id":"marketing","label":"Marketing","weight":20,"title":"Marketing","details":"Customer communication and marketing tools."},"performance":{"uuid":"50fa5362-fb4e-4963-9c87-c60ff9f99cd1","langcode":"ca","status":true,"dependencies":[],"_core":{"default_config_hash":"Jv3uIJviBj7D282Qu1ZpEQwuOEb3lCcDvx-XVHeOJpw"},"id":"performance","label":"Performance","weight":30,"title":"Performance Cookies","details":"Performance cookies collect aggregated information about how our website is used. The purpose of this is to improve its attractiveness, content and functionality. These cookies help us to determine whether, how often and for how long particular sub-pages of our website are accessed and which content users are particularly interested in. Search terms, country, region and (where applicable) the city from which the website is accessed are also recorded, as is the proportion of mobile devices that are used to access the website. We use this information to compile statistical reports that help us tailor the content of our website to your needs and optimize our offer."},"social":{"uuid":"254cb40a-5c5a-4db6-96a6-36f6b268abc7","langcode":"ca","status":true,"dependencies":[],"_core":{"default_config_hash":"vog2tbqqQHjVkue0anA0RwlzvOTPNTvP7_JjJxRMVAQ"},"id":"social","label":"Social Plugins","weight":20,"title":"Social Plugins","details":"Comments managers facilitate the filing of comments and fight against spam."},"tracking":{"uuid":"19af833d-0009-42c2-8cb5-dc9078816a92","langcode":"ca","status":true,"dependencies":[],"_core":{"default_config_hash":"_gYDe3qoEc6L5uYR6zhu5V-3ARLlyis9gl1diq7Tnf4"},"id":"tracking","label":"Tracking","weight":10,"title":"Tracking cookies","details":"Marketing cookies come from external advertising companies (\u0022third-party cookies\u0022) and are used to collect information about the websites visited by the user. The purpose of this is to create and display target group-oriented content and advertising for the user."},"video":{"uuid":"b6cd1deb-8dfe-42ca-a694-9ba6f0196de3","langcode":"ca","status":true,"dependencies":[],"_core":{"default_config_hash":"w1WnCmP2Xfgx24xbx5u9T27XLF_ZFw5R0MlO-eDDPpQ"},"id":"video","label":"Videos","weight":40,"title":"Video","details":"Video sharing services help to add rich media on the site and increase its visibility."}}},"views":{"ajax_path":"\/ca\/views\/ajax","ajaxViews":{"views_dom_id:ace238e1eec408a209b1388499b271c7da4b58cd12fd331eaac38ddb79113ad7":{"view_name":"busqueda_searchapi","view_display_id":"block_1","view_args":"webicgc_ddev_site","view_path":"\/ca\/Descarregues\/Elevacions\/Model-d-elevacions-del-terreny-de-Catalunya","view_base_path":"busqueda-searchapi","view_dom_id":"ace238e1eec408a209b1388499b271c7da4b58cd12fd331eaac38ddb79113ad7","pager_element":0}}},"search_api_autocomplete":{"busqueda_searchapi":{"delay":1500,"auto_submit":true,"min_length":3}},"user":{"uid":0,"permissionsHash":"db65b42682f2bf42829da4258109471ce8f773de68b00b2f43874a00f6c6b945"}}</script>
+<script src="https://icgc-web-pro.s3.eu-central-1.amazonaws.com/produccio/s3fs-public/languages/ca_PJjWkUgEsgS0Vn_LnkeHmCLcFu5nuSF5wtYzrJqkjsQ.js?tm9zdl"></script>
+<script src="/core/misc/drupalSettingsLoader.js?v=10.3.9"></script>
+<script src="/core/misc/drupal.js?v=10.3.9"></script>
+<script src="/core/misc/drupal.init.js?v=10.3.9"></script>
+<script src="/core/misc/debounce.js?v=10.3.9"></script>
+<script src="/core/misc/announce.js?v=10.3.9"></script>
+<script src="/core/misc/message.js?v=10.3.9"></script>
+<script src="/themes/contrib/bootstrap_barrio/js/messages.js?tm9zdl"></script>
+<script src="/modules/contrib/cookies/js/cookiesjsr.conf.js?v=10.3.9" defer></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700" rel="stylesheet" type="text/css">
+  </head>
+  <body class="layout-no-sidebars path-ca body-content">
+      <!-- Google Tag Manager -->
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K8H9WWZ" height="0" width="0"
+              style="display:none;visibility:hidden"></iframe>
+    </noscript> <!-- End Google Tag Manager (noscript) -->
+        <a href="#main-content" class="visually-hidden focusable skip-link">
+      Vés al contingut
+    </a>
+    
+      <div class="dialog-off-canvas-main-canvas" data-off-canvas-main-canvas>
+    
+<div id="page-wrapper">
+  <div id="page">
+    <header id="header" class="header" role="banner" aria-label="Capçalera del lloc">
+        <div id="container-menu-1" class="menu-mainmenu">
+  <div class="container">
+      <section class="row region region-top-header-form">
+    <nav role="navigation" aria-labelledby="block-mainmenuide-menu" id="block-mainmenuide" class="block block-menu navigation menu--main-menu-ide">
+            
+  <h2 class="visually-hidden" id="block-mainmenuide-menu">Menú principal ICGC</h2>
+  
+
+        
+
+<nav class="navbar navbar-expand-lg navbar-light">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Mostra o amaga el menú de navegació">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="clearfix nav navbar-nav">
+                                                <li class="nav-item">
+                          <a href="/ca/Inici-ICGC" class="nav-link nav-link--ca-inici-icgc" title="Inici" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/1369">Inici</a>
+                      </li>
+                                                              <li class="nav-item menu-item--expanded dropdown">
+                          <a href="/ca/Geoinformacio-i-mapes" class="nav-link nav-link--ca-geoinformacio-i-mapes dropdown-toggle" title="Geoinformació i mapes" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-drupal-link-system-path="node/21931">Geoinformació i mapes</a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis" title="Geoinformació en línia (Geoserveis)" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21658">Geoinformació en línia (Geoserveis)</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Servei-de-Mapa-Base" title="Servei de Mapa Base" class="nav-link nav-link--ca-geoinformacio-i-mapes-servei-de-mapa-base" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23639">Servei de Mapa Base</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis/WMS-Batimetria" title="WMS Batimetria" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis-wms-batimetria" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23732">WMS Batimetria</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis/WMS-Elevacions" title="WMS Elevacions" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis-wms-elevacions" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21843">WMS Elevacions</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis/WMS-Linia-de-costa" title="WMS Línia de costa" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis-wms-linia-de-costa" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23733">WMS Línia de costa</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis/WMS-Ortoimatges" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis-wms-ortoimatges" title="WMS Ortoimatges" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21841">WMS Ortoimatges</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis/WMS-Ortoimatges/WMS-Ortofoto-Territorial" title="WMS Ortofoto Territorial" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis-wms-ortoimatges-wms-ortofoto-territorial" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/18807">WMS Ortofoto Territorial</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis/WMS-Topografics/WMS-Referencial-Topografic-Territorial" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis-wms-topografics-wms-referencial-topografic-territorial" title="WMS Topogràfic Territorial" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20375">WMS Topogràfic Territorial</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis/WMS-Vegetacio" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis-wms-vegetacio" title="WMS Vegetació" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21844">WMS Vegetació</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis/WMS-Geoindex" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis-wms-geoindex" title="WMS Geoíndex" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21719">WMS Geoíndex</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes" title="Dades i Productes" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21914">Dades i Productes</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Bessons-digitals/Besso-Digital-Urba-de-Catalunya" title="Bessó Digital Urbà de Catalunya" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-bessons-digitals-besso-digital-urba-de-catalunya" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/24015">Bessó Digital Urbà de Catalunya</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Geoinformacio-urbana" title="Geoinformació urbana" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-geoinformacio-urbana" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/24025">Geoinformació urbana</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Geoinformacio-tematica/Cartografia-de-sols/Perfils-de-sols" title="Perfils de sòls" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-geoinformacio-tematica-cartografia-de-sols-perfils-de-sols" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/24024">Perfils de sòls</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Elevacions" title="Elevacions" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-elevacions" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/24018">Elevacions</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Elevacions/Elevacions-territorial/LiDAR-Territorial" title="LiDAR Territorial" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-elevacions-elevacions-territorial-lidar-territorial" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23636">LiDAR Territorial</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Imatge/Ortofoto-Territorial" title="Ortofoto Territorial" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-imatge-ortofoto-territorial" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23568">Ortofoto Territorial</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Geoinformacio-cartografica" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-geoinformacio-cartografica" title="Geoinformació cartogràfica" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21919">Geoinformació cartogràfica</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Geoinformacio-geologica-i-geofisica" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-geoinformacio-geologica-i-geofisica" title="Geoinformació geològica i geofísica" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21918">Geoinformació geològica i geofísica</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Geoinformacio-tematica" title="Geoinformació temàtica" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-geoinformacio-tematica" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21920">Geoinformació temàtica</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Imatge" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-imatge" title="Imatge" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21922">Imatge</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/Geoinformacio-i-mapes/Mapes" class="nav-link nav-link--ca-geoinformacio-i-mapes-mapes" title="Mapes" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21913">Mapes</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Mapes/GeoAI-Cubes-entrenant-lIntelligencia-Artificial-dobservacio-de-la-Terra" title="GeoAI-Cubes: entrenant l’Intel.ligència Artificial d’observació de la Terra" class="nav-link nav-link--ca-geoinformacio-i-mapes-mapes-geoai-cubes-entrenant-lintelligencia-artificial-dobservacio-de-la-terra" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/24008">GeoAI-Cubes: entrenant l’Intel.ligència Artificial d’observació de la Terra</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Mapes/Mapes-de-comarques" title="Mapes de comarques" class="nav-link nav-link--ca-geoinformacio-i-mapes-mapes-mapes-de-comarques" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/18787">Mapes de comarques</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Mapes/Mapes-de-comunicacions" title="Mapes de comunicacions" class="nav-link nav-link--ca-geoinformacio-i-mapes-mapes-mapes-de-comunicacions" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/18786">Mapes de comunicacions</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Mapes/Mapes-municipals" class="nav-link nav-link--ca-geoinformacio-i-mapes-mapes-mapes-municipals" title="Mapes municipals (delimitació)" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20389">Mapes municipals (delimitació)</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Geoinformacio-cartografica/Referencial-Topografic-Territorial" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-geoinformacio-cartografica-referencial-topografic-territorial" title="Referencial Topogràfic Territorial" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22578">Referencial Topogràfic Territorial</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Mapes/Mapa-de-cobertes-del-sol-de-Catalunya" class="nav-link nav-link--ca-geoinformacio-i-mapes-mapes-mapa-de-cobertes-del-sol-de-catalunya" title="Mapa de cobertes" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/19812">Mapa de cobertes</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Mapes/Mapes-antics" title="Mapes antics" class="nav-link nav-link--ca-geoinformacio-i-mapes-mapes-mapes-antics" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21906">Mapes antics</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="https://ebotiga.icgc.cat/" target="_blank" class="nav-link nav-link-https--ebotigaicgccat- external-link" title="Comprar un mapa " id="navbarDropdownMenuLink" role="button" aria-expanded="false">Comprar un mapa</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <span class="nav-link nav-link-" title="ꜜ Destacats" id="navbarDropdownMenuLink" role="button" aria-expanded="false">ꜜ Destacats</span>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/Visor-de-descarregues" class="nav-link nav-link--ca-eines-i-visors-visors-visor-de-descarregues" id="navbarDropdownMenuLink" role="button" aria-expanded="false" title="Visor de descàrregues" data-drupal-link-system-path="node/19826">Visor de descàrregues</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Obsolescencia-daplicacions-productes-i-serveis" title="Obsolescència d&#039;aplicacions, productes i serveis" class="nav-link nav-link--ca-geoinformacio-i-mapes-obsolescencia-daplicacions-productes-i-serveis" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23318">Obsolescència d&#039;aplicacions, productes i serveis</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item flex-rows-break">
+                          <a href="/ca/Geoinformacio-i-mapes" class="nav-link nav-link--ca-geoinformacio-i-mapes" title="Ves a Geoinformació i mapes" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21931">Ves a Geoinformació i mapes</a>
+                      </li>
+      </ul>
+    
+              </li>
+                                                              <li class="nav-item menu-item--expanded dropdown">
+                          <a href="/ca/Eines-i-visors" class="nav-link nav-link--ca-eines-i-visors dropdown-toggle" title="Eines i visors" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-drupal-link-system-path="node/21930">Eines i visors</a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/Eines-i-visors/Eines" class="nav-link nav-link--ca-eines-i-visors-eines" title="Eines" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21828">Eines</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/ContextMaps" class="nav-link nav-link--ca-eines-i-visors-visors-contextmaps" title="ContextMaps" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20139">ContextMaps</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Eines/Connector-QGIS-Open-ICGC" class="nav-link nav-link--ca-eines-i-visors-eines-connector-qgis-open-icgc" title="Connector QGIS Open ICGC" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22547">Connector QGIS Open ICGC</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Eines/Instamaps" title="Instamaps" class="nav-link nav-link--ca-eines-i-visors-eines-instamaps" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23690">Instamaps</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="https://eines.icgc.cat/storymaps/html/editor.html" class="nav-link nav-link-https--einesicgccat-storymaps-html-editorhtml external-link" title="StoryMaps " id="navbarDropdownMenuLink" role="button" aria-expanded="false">StoryMaps</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Eines/Transforma-coordenades-i-formats" class="nav-link nav-link--ca-eines-i-visors-eines-transforma-coordenades-i-formats" id="navbarDropdownMenuLink" role="button" aria-expanded="false" title="Transforma coordenada i format" data-drupal-link-system-path="node/19755">Transforma coordenada i format</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/Eines-i-visors/Visors" class="nav-link nav-link--ca-eines-i-visors-visors" id="navbarDropdownMenuLink" role="button" aria-expanded="false" title="Visors" data-drupal-link-system-path="node/21829">Visors</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/VISSIR" title="VISSIR 4" class="nav-link nav-link--ca-eines-i-visors-visors-vissir" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23968">VISSIR 4</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/Catalunya-Digital-3D-Carrers" title="Visor 3D Carrers" class="nav-link nav-link--ca-eines-i-visors-visors-catalunya-digital-3d-carrers" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23283">Visor 3D Carrers</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="https://visors.icgc.cat/menut/" class="nav-link nav-link-https--visorsicgccat-menut- external-link" title="Imatges del satèl·lit Menut " id="navbarDropdownMenuLink" role="button" aria-expanded="false">Imatges del satèl·lit Menut</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/Canvis-en-el-territori/LUll-del-temps" class="nav-link nav-link--ca-eines-i-visors-visors-canvis-en-el-territori-lull-del-temps" title="L&#039;Ull del Temps" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22489">L&#039;Ull del Temps</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/Fototeca" class="nav-link nav-link--ca-eines-i-visors-visors-fototeca" title="Fototeca de Catalunya" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23572">Fototeca de Catalunya</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/Visor-de-descarregues" class="nav-link nav-link--ca-eines-i-visors-visors-visor-de-descarregues" title="Descàrregues" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/19826">Descàrregues</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/Visualitzadors-Geoindex" class="nav-link nav-link--ca-eines-i-visors-visors-visualitzadors-geoindex" title="Geoíndex" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21894">Geoíndex</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/Eines-i-visors/Apps" class="nav-link nav-link--ca-eines-i-visors-apps" title="Apps" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21832">Apps</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Apps/Aplicacio-de-calcul-interactiva-lanalisi-de-dades-hidroquimiques-de-Catalunya-HidroGeoR-Shiny" title="Aplicació de càlcul interactiva per a l&#039;anàlisi de dades hidroquímiques de Catalunya (HidroGeoR-Shiny)" class="nav-link nav-link--ca-eines-i-visors-apps-aplicacio-de-calcul-interactiva-lanalisi-de-dades-hidroquimiques-de-catalunya-hidrogeor-shiny" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23928">Aplicació de càlcul interactiva per a l&#039;anàlisi de dades hidroquímiques de Catalunya (HidroGeoR-Shiny)</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Apps/Avaluacio-del-potencial-geotermic-profund-3DHIP-Calculator" class="nav-link nav-link--ca-eines-i-visors-apps-avaluacio-del-potencial-geotermic-profund-3dhip-calculator" title="Avaluació del potencial geotèrmic profund (3DHIP Calculator)" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22560">Avaluació del potencial geotèrmic profund (3DHIP Calculator)</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Apps/Catalunya-Offline" class="nav-link nav-link--ca-eines-i-visors-apps-catalunya-offline" title="Catalunya Offline" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22487">Catalunya Offline</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Apps/PGOM-Pirineus-Geological-Open-Museum" class="nav-link nav-link--ca-eines-i-visors-apps-pgom-pirineus-geological-open-museum" title="Pirineus Geological Open Museum PGOM)" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22558">Pirineus Geological Open Museum PGOM)</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Apps/Wordle-toponimic" title="Wordle toponímic" class="nav-link nav-link--ca-eines-i-visors-apps-wordle-toponimic" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20202">Wordle toponímic</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/Eines-i-visors/Recursos-desenvolupadors" class="nav-link nav-link--ca-eines-i-visors-recursos-desenvolupadors" title="Recursos per a desenvolupadors" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21679">Recursos per a desenvolupadors</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Recursos-desenvolupadors/API-Territorial" class="nav-link nav-link--ca-eines-i-visors-recursos-desenvolupadors-api-territorial" title="API Territorial de l’ICGC" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23555">API Territorial de l’ICGC</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Recursos-desenvolupadors/Biblioteca-MapICGC-GL-JS" class="nav-link nav-link--ca-eines-i-visors-recursos-desenvolupadors-biblioteca-mapicgc-gl-js" title="Biblioteca MapICGC GL JS" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23554">Biblioteca MapICGC GL JS</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Eines/Geocodificador-ICGC" class="nav-link nav-link--ca-eines-i-visors-eines-geocodificador-icgc" title="Geocodificador ICGC" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23423">Geocodificador ICGC</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Eines/Geocodificador-ICGC-ArcGIS" class="nav-link nav-link--ca-eines-i-visors-eines-geocodificador-icgc-arcgis" title="Geocodificador ICGC per a ArcGIS" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23518">Geocodificador ICGC per a ArcGIS</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Recursos-desenvolupadors/Serveis-API" class="nav-link nav-link--ca-eines-i-visors-recursos-desenvolupadors-serveis-api" title="Serveis API" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23409">Serveis API</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item flex-rows-break">
+                          <a href="/ca/Eines-i-visors" class="nav-link nav-link--ca-eines-i-visors" title="Ves a Eines i visors" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21930">Ves a Eines i visors</a>
+                      </li>
+      </ul>
+    
+              </li>
+                                                              <li class="nav-item menu-item--expanded dropdown">
+                          <a href="/ca/Ambits-tematics" class="nav-link nav-link--ca-ambits-tematics dropdown-toggle" title="Àmbits temàtics" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-drupal-link-system-path="node/21925">Àmbits temàtics</a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-2">
+                          <a href="/ca/Ambits-tematics/Riscos-i-emergencies" class="nav-link nav-link--ca-ambits-tematics-riscos-i-emergencies" title="Riscos i emergències" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21901">Riscos i emergències</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Riscos-i-emergencies/Terratremols/Comunicats-sismics" class="nav-link nav-link--ca-ambits-tematics-riscos-i-emergencies-terratremols-comunicats-sismics" id="navbarDropdownMenuLink" role="button" aria-expanded="false" title="Comunicats sísmics" data-drupal-link-system-path="node/18909">Comunicats sísmics</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Riscos-i-emergencies/Terratremols/Sismogrames-en-directe" class="nav-link nav-link--ca-ambits-tematics-riscos-i-emergencies-terratremols-sismogrames-en-directe" title="Sismogrames en directe" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/19333">Sismogrames en directe</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Riscos-i-emergencies/Terratremols" class="nav-link nav-link--ca-ambits-tematics-riscos-i-emergencies-terratremols" title="Terratrèmols" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21908">Terratrèmols</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Riscos-i-emergencies/Allaus/Butlleti-de-Perill-dAllaus-BPA" class="nav-link nav-link--ca-ambits-tematics-riscos-i-emergencies-allaus-butlleti-de-perill-dallaus-bpa" title="Butlletí de Perill d&#039;Allaus" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22404">Butlletí de Perill d&#039;Allaus</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Riscos-i-emergencies/Allaus" class="nav-link nav-link--ca-ambits-tematics-riscos-i-emergencies-allaus" title="Allaus" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21907">Allaus</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Riscos-i-emergencies/Riscos-geologics" class="nav-link nav-link--ca-ambits-tematics-riscos-i-emergencies-riscos-geologics" title="Riscos geològics" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21670">Riscos geològics</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-2">
+                          <a href="/ca/Ambits-tematics/Observacio-de-la-Terra" class="nav-link nav-link--ca-ambits-tematics-observacio-de-la-terra" title="Observació de la Terra" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21896">Observació de la Terra</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Observacio-de-la-Terra/Estrategia-Satellitaria-NewSpace-Menut" title="Estratègia Satel·litària NewSpace-Menut" class="nav-link nav-link--ca-ambits-tematics-observacio-de-la-terra-estrategia-satellitaria-newspace-menut" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23667">Estratègia Satel·litària NewSpace-Menut</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Observacio-de-la-Terra/COPERNICUS-i-SENTINEL-2-Geoserveis-sobre-el-territori" class="nav-link nav-link--ca-ambits-tematics-observacio-de-la-terra-copernicus-i-sentinel-2-geoserveis-sobre-el-territori" title="Imatges de satèl·lits" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20196">Imatges de satèl·lits</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Observacio-de-la-Terra/Sensor-LIDAR-Aplicabilitat-en-alta-precisio" class="nav-link nav-link--ca-ambits-tematics-observacio-de-la-terra-sensor-lidar-aplicabilitat-en-alta-precisio" title="Sensor LIDAR: Aplicabilitat en alta precisió" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20203">Sensor LIDAR: Aplicabilitat en alta precisió</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Observacio-de-la-Terra/Servei-de-mesures-del-moviment-del-terreny" class="nav-link nav-link--ca-ambits-tematics-observacio-de-la-terra-servei-de-mesures-del-moviment-del-terreny" title="Servei de mesures del moviment del terreny" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20198">Servei de mesures del moviment del terreny</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-2">
+                          <a href="/ca/Ambits-tematics/Ambit-litoral" class="nav-link nav-link--ca-ambits-tematics-ambit-litoral" title="Litoral" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23709">Litoral</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Ambit-litoral/Estrategia-litoral-Servei-dInformacio-de-la-Dinamica-Litoral" title="Estratègia litoral: Servei d’Informació de la Dinàmica Litoral" class="nav-link nav-link--ca-ambits-tematics-ambit-litoral-estrategia-litoral-servei-dinformacio-de-la-dinamica-litoral" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23710">Estratègia litoral: Servei d’Informació de la Dinàmica Litoral</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Ambit-litoral/Dades-i-serveis" title="Dades i serveis" class="nav-link nav-link--ca-ambits-tematics-ambit-litoral-dades-i-serveis" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23711">Dades i serveis</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Ambit-litoral/Aplicacions-i-visors" title="Aplicacions i visors" class="nav-link nav-link--ca-ambits-tematics-ambit-litoral-aplicacions-i-visors" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23712">Aplicacions i visors</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Ambit-litoral/Documentacio-i-coneixement" title="Documentació i coneixement" class="nav-link nav-link--ca-ambits-tematics-ambit-litoral-documentacio-i-coneixement" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23995">Documentació i coneixement</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Ambit-litoral/Noticies-i-actualitat" title="Notícies i actualitat" class="nav-link nav-link--ca-ambits-tematics-ambit-litoral-noticies-i-actualitat" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23991">Notícies i actualitat</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-2">
+                          <a href="/ca/Ambits-tematics/Territori-sostenible" class="nav-link nav-link--ca-ambits-tematics-territori-sostenible" title="Territori sostenible" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23949">Territori sostenible</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Territori-sostenible/Subsol/Enginyeria-geologica" title="Enginyeria geològica" class="nav-link nav-link--ca-ambits-tematics-territori-sostenible-subsol-enginyeria-geologica" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21835">Enginyeria geològica</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="https://catnet-ip.icgc.cat/spgic/ca/index.html" class="nav-link nav-link-https--catnet-ipicgccat-spgic-ca-indexhtml external-link" title="Geodèsia / Posicionament Integrat de Catalunya " id="navbarDropdownMenuLink" role="button" aria-expanded="false">Geodèsia / Posicionament Integrat de Catalunya</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Territori-sostenible/Posicionament" title="Posicionament" class="nav-link nav-link--ca-ambits-tematics-territori-sostenible-posicionament" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21902">Posicionament</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Territori-sostenible/Sols" class="nav-link nav-link--ca-ambits-tematics-territori-sostenible-sols" title="Sòls" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21700">Sòls</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Observacio-de-la-Terra/Sostenibilitat-urbana" class="nav-link nav-link--ca-ambits-tematics-observacio-de-la-terra-sostenibilitat-urbana" title="Sostenibilitat urbana" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20194">Sostenibilitat urbana</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Territori-sostenible/Subsol" class="nav-link nav-link--ca-ambits-tematics-territori-sostenible-subsol" title="Subsol" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23509">Subsol</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Territori-sostenible/Suport-tecnic-la-legalitat" class="nav-link nav-link--ca-ambits-tematics-territori-sostenible-suport-tecnic-la-legalitat" title="Suport tècnic a la legalitat" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21672">Suport tècnic a la legalitat</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-2">
+                          <a href="/ca/Ambits-tematics/Divulgacio" class="nav-link nav-link--ca-ambits-tematics-divulgacio" title="Divulgació" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23724">Divulgació</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="https://cartotecadigital.icgc.cat/" class="nav-link nav-link-https--cartotecadigitalicgccat- external-link" title="Cartoteca digital " id="navbarDropdownMenuLink" role="button" aria-expanded="false">Cartoteca digital</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Divulgacio/Publicacions/Llibres-i-fons-documentals/Fons-documentals" title="Fons documentals" class="nav-link nav-link--ca-divulgacio-publicacions-llibres-i-fons-documentals-fons-documentals" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21749">Fons documentals</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Divulgacio/Publicacions/Llibres-en-PDF" class="nav-link nav-link--ca-ambits-tematics-divulgacio-publicacions-llibres-en-pdf" title="Llibres en PDF" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21682">Llibres en PDF</a>
+                      </li>
+                      <li class="nav-item menu-item--expanded dropdown">
+                          <a href="/ca/Ambits-tematics/Divulgacio/Publicacions" class="nav-link nav-link--ca-ambits-tematics-divulgacio-publicacions" title="Publicacions" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21912">Publicacions</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Divulgacio/Publicacions/Publicacions-cartografiques" class="nav-link nav-link--ca-ambits-tematics-divulgacio-publicacions-publicacions-cartografiques" title="Publicacions cartogràfiques" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23256">Publicacions cartogràfiques</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Divulgacio/Publicacions/Publicacions-tecniques" class="nav-link nav-link--ca-ambits-tematics-divulgacio-publicacions-publicacions-tecniques" title="Publicacions tècniques" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21856">Publicacions tècniques</a>
+                      </li>
+      </ul>
+    
+              </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-2">
+                          <a href="/ca/Ambits-tematics/Recursos-didactics" class="nav-link nav-link--ca-ambits-tematics-recursos-didactics" title="Recursos didàctics" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21854">Recursos didàctics</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Eines/Una-mirada-fotografica-la-geodiversitat-de-Catalunya" title="Una mirada fotogràfica a la geodiversitat de Catalunya" class="nav-link nav-link--ca-eines-i-visors-eines-una-mirada-fotografica-la-geodiversitat-de-catalunya" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23674">Una mirada fotogràfica a la geodiversitat de Catalunya</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Eines/Aprofitaments-geologics-en-construccions-antropiques-Comarques-gironines" title="Aprofitaments geològics en construccions antròpiques. Comarques gironines" class="nav-link nav-link--ca-eines-i-visors-eines-aprofitaments-geologics-en-construccions-antropiques-comarques-gironines" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23895">Aprofitaments geològics en construccions antròpiques. Comarques gironines</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/Didactics-i-ludics/Pintamaps-Mon" title="Pintamaps Món" class="nav-link nav-link--ca-eines-i-visors-visors-didactics-i-ludics-pintamaps-mon" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23806">Pintamaps Món</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Recursos-didactics/Jocs-Catalunya-des-de-lespai" title="Jocs Catalunya des de l&#039;espai" class="nav-link nav-link--ca-ambits-tematics-recursos-didactics-jocs-catalunya-des-de-lespai" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23795">Jocs Catalunya des de l&#039;espai</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/Didactics-i-ludics/El-Mon-en-catala" title="El Món en català" class="nav-link nav-link--ca-eines-i-visors-visors-didactics-i-ludics-el-mon-en-catala" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23799">El Món en català</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item flex-rows-break">
+                          <a href="/ca/Ambits-tematics" class="nav-link nav-link--ca-ambits-tematics" title="Ves a Àmbits temàtics" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21925">Ves a Àmbits temàtics</a>
+                      </li>
+      </ul>
+    
+              </li>
+                                                              <li class="nav-item menu-item--expanded dropdown">
+                          <a href="/ca/Innovacio" class="nav-link nav-link--ca-innovacio dropdown-toggle" title="Innovació" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-drupal-link-system-path="node/21934">Innovació</a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-4">
+                          <a href="/ca/Innovacio/Projectes" class="nav-link nav-link--ca-innovacio-projectes" title="Projectes" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23779">Projectes</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Innovacio/Projectes/Projectes-mida" class="nav-link nav-link--ca-innovacio-projectes-projectes-mida" title="A mida" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21704">A mida</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Innovacio/Projectes/Reculls-anuals-de-projectes" title="Reculls anuals de projectes" class="nav-link nav-link--ca-innovacio-projectes-reculls-anuals-de-projectes" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/19400">Reculls anuals de projectes</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Innovacio/Projectes/Projectes-internacionals-temes" class="nav-link nav-link--ca-innovacio-projectes-projectes-internacionals-temes" title="Internacionals per temes" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21855">Internacionals per temes</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-4">
+                          <a href="/ca/Innovacio/Projectes-RDi" class="nav-link nav-link--ca-innovacio-projectes-rdi" title="Projectes R+D+i" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21722">Projectes R+D+i</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Observacio-de-la-Terra/Estrategia-Satellitaria-NewSpace-Menut/NEWSPACE-Geoinformacio-i-nova-economia-de-lespai" class="nav-link nav-link--ca-ambits-tematics-observacio-de-la-terra-estrategia-satellitaria-newspace-menut-newspace-geoinformacio-i-nova-economia-de-lespai" title="NEWSPACE: Geoinformació i nova economia de l’espai" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20197">NEWSPACE: Geoinformació i nova economia de l’espai</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Innovacio/Projectes-RDi/Actius/GSEU" class="nav-link nav-link--ca-innovacio-projectes-rdi-actius-gseu" title="Un Servei Geològic per a Europa. GSEU" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23330">Un Servei Geològic per a Europa. GSEU</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Innovacio/Projectes-RDi/Collaboracions-en-projectes-de-recerca" class="nav-link nav-link--ca-innovacio-projectes-rdi-collaboracions-en-projectes-de-recerca" title="Col·laboracions en recerca" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23335">Col·laboracions en recerca</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item flex-rows-break">
+                          <a href="/ca/Innovacio" class="nav-link nav-link--ca-innovacio" title="Ves a Innovació" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21934">Ves a Innovació</a>
+                      </li>
+      </ul>
+    
+              </li>
+                                                              <li class="nav-item menu-item--expanded dropdown">
+                          <a href="/ca/LICGC" class="nav-link nav-link--ca-licgc dropdown-toggle" title="L&#039;ICGC" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-drupal-link-system-path="node/22245">L&#039;ICGC</a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/LICGC/Agenda" class="nav-link nav-link--ca-licgc-agenda" title="Agenda" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21982">Agenda</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/propers-esdeveniments" class="nav-link nav-link--ca-propers-esdeveniments" title="Propers esdeveniments" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="propers-esdeveniments">Propers esdeveniments</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/actualitat" class="nav-link nav-link--ca-actualitat" title="Més actualitat" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="actualitat">Més actualitat</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="https://espaigea.cat/" class="nav-link nav-link-https--espaigeacat- external-link" id="navbarDropdownMenuLink" role="button" aria-expanded="false" title="Espaigea ">Espaigea</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/LICGC/Sobre-lICGC" class="nav-link nav-link--ca-licgc-sobre-licgc" title="Sobre l&#039;ICGC" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21676">Sobre l&#039;ICGC</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/LICGC/Sobre-lICGC/Presentacio" class="nav-link nav-link--ca-licgc-sobre-licgc-presentacio" title="Presentació" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22381">Presentació</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Sobre-lICGC/Politiques" class="nav-link nav-link--ca-licgc-sobre-licgc-politiques" title="Polítiques" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21824">Polítiques</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Sobre-lICGC/Experiencia" class="nav-link nav-link--ca-licgc-sobre-licgc-experiencia" title="Experiència" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21677">Experiència</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Sobre-lICGC/Exposicions" title="Exposicions" class="nav-link nav-link--ca-licgc-sobre-licgc-exposicions" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23288">Exposicions</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Sobre-lICGC/Memories-i-butlletins" class="nav-link nav-link--ca-licgc-sobre-licgc-memories-i-butlletins" title="Memòries i butlletins" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21660">Memòries i butlletins</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Sobre-lICGC/Videos" class="nav-link nav-link--ca-licgc-sobre-licgc-videos" title="Vídeos" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/19168">Vídeos</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/LICGC/Informacio-publica" class="nav-link nav-link--ca-licgc-informacio-publica" title="Informació pública" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23617">Informació pública</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/LICGC/Informacio-publica/Transparencia" class="nav-link nav-link--ca-licgc-informacio-publica-transparencia" title="Transparència" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23614">Transparència</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Informacio-publica/Transparencia/Publicitat-activa/6-Servidors-publics/69-Convocatories-dacces-i-promocio-interna" title="Ofertes de treball" class="nav-link nav-link--ca-licgc-informacio-publica-transparencia-publicitat-activa-6-servidors-publics-69-convocatories-dacces-i-promocio-interna" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23842">Ofertes de treball</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Informacio-publica/Perfil-del-contractant" class="nav-link nav-link--ca-licgc-informacio-publica-perfil-del-contractant" id="navbarDropdownMenuLink" role="button" aria-expanded="false" title="Perfil del contractant" data-drupal-link-system-path="node/19310">Perfil del contractant</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Informacio-publica/Sistema-Intern-dAlertes" class="nav-link nav-link--ca-licgc-informacio-publica-sistema-intern-dalertes" title="Sistema Intern d&#039;Alertes" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23486">Sistema Intern d&#039;Alertes</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/Contacte" class="nav-link nav-link--ca-contacte" title="Contacte" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21827">Contacte</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/LICGC/Contacte/Adreces-i-telefons" class="nav-link nav-link--ca-licgc-contacte-adreces-i-telefons" title="Adreces i telèfons" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21826">Adreces i telèfons</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ajuda" title="Ajuda" class="nav-link nav-link--ca-ajuda" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23422">Ajuda</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Contacte/Bustia-de-contacte" class="nav-link nav-link--ca-licgc-contacte-bustia-de-contacte" title="Bústia de contacte" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22246">Bústia de contacte</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Contacte/Busties-especifiques" class="nav-link nav-link--ca-licgc-contacte-busties-especifiques" title="Bústies específiques" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21825">Bústies específiques</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Contacte/RSS" class="nav-link nav-link--ca-licgc-contacte-rss" title="Connecta" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/19748">Connecta</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item flex-rows-break">
+                          <a href="/ca/LICGC" class="nav-link nav-link--ca-licgc" id="navbarDropdownMenuLink" role="button" aria-expanded="false" title="Ves a L&#039;ICGC" data-drupal-link-system-path="node/22245">Ves a L&#039;ICGC</a>
+                      </li>
+      </ul>
+    
+              </li>
+                                            <li class="nav-item">
+                          <a href="/ca/LICGC/Actualitat" class="nav-link nav-link--ca-licgc-actualitat" title="Actualitat" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21936">Actualitat</a>
+                      </li>
+      </ul>
+    
+    </div>
+  </div>
+</nav>
+
+
+  </nav>
+
+  </section>
+
+    <div>
+      <div class="gencat-logo">
+        <a href="https://web.gencat.cat/" target="_blank">
+          <img  alt="Logotip de la Generalitat"src="/themes/custom/icgc_web/assets/gencat-nuevo-completo-w.svg" alt="uncategorized"/>
+        </a>
+      </div>
+    </div>
+    <div class="menu--header">
+      <ul>
+          <li class="user-menu"><a href="/ca/user/login" class="user-menu-button user-login-button" title="Àrea privada">Àrea privada</a></li><li><a href="/ca/Contacte">Contacte</a></li><li class="language-menu-container"></li>
+
+
+      </ul>
+    </div>
+    <div id="toponims-div"></div>
+  </div>
+</div>
+
+<!-- NOM PORTAL/DEPARTAMENT -->
+<div class="portal-title js-search-bar-off">
+  <div class="container">
+    <h1 class="NG-departament__title">
+      <a href="/" title="Institut Cartogràfic i Geològic de Catalunya">Institut Cartogràfic i Geològic de Catalunya</a>
+    </h1>
+    <div class="js-search-bar-content">
+      <div class="views-element-container block block-views block-views-blockbusqueda-searchapi-block-1" id="block-views-block-busqueda-searchapi-block-1">
+  
+    
+      <div class="content">
+      <div><div class="view view-busqueda-searchapi view-id-busqueda_searchapi view-display-id-block_1 js-view-dom-id-ace238e1eec408a209b1388499b271c7da4b58cd12fd331eaac38ddb79113ad7">
+  
+    
+        <div class="view-filters">
+      
+<form class="views-exposed-form bef-exposed-form" data-bef-auto-submit-full-form="" data-bef-auto-submit="" data-bef-auto-submit-delay="500" data-drupal-selector="views-exposed-form-busqueda-searchapi-block-1" action="/ca/busqueda-searchapi" method="get" id="views-exposed-form-busqueda-searchapi-block-1" accept-charset="UTF-8">
+  <div class="form-row">
+  <p class="filter-label">Filtra per:</p>
+  
+
+
+
+
+
+  <div class="js-form-item js-form-type-search-api-autocomplete form-type-search-api-autocomplete js-form-item-search-api-fulltext form-item-search-api-fulltext mb-3">
+          <label for="edit-search-api-fulltext">Búsqueda por texto completo</label>
+                    <input data-bef-auto-submit-exclude="" placeholder="Pots cercar mapes, informació, esdeveniments..." data-drupal-selector="edit-search-api-fulltext" data-search-api-autocomplete-search="busqueda_searchapi" class="form-autocomplete form-control" data-autocomplete-path="/ca/search_api_autocomplete/busqueda_searchapi?display=block_1&amp;arguments%5B0%5D&amp;filter=search_api_fulltext" type="text" id="edit-search-api-fulltext" name="search_api_fulltext" value="" size="30" maxlength="128" />
+
+                      </div>
+<div data-drupal-selector="edit-actions" class="form-actions js-form-wrapper form-wrapper mb-3" id="edit-actions"><button data-bef-auto-submit-click="" class="js-hide button js-form-submit form-submit btn btn-primary" data-drupal-selector="edit-submit-busqueda-searchapi" type="submit" id="edit-submit-busqueda-searchapi" value="Apply">Apply</button>
+</div>
+
+</div>
+
+</form>
+
+    </div>
+    
+  <div class="view-footer-content view-footer-content-hide">
+          <div class="view-footer">
+        <div id="block-icgc-ide-toponims" class="block block-icgc-ide block-icgc-ide-toponims">
+  
+    
+      <div class="content">
+        <div style="display: none" class="toponim-block">
+    <span>Troba el lloc a</span>
+    <div id="toponims-info">
+    </div>
+  </div>
+
+
+    </div>
+  </div>
+S'han trobat <strong>13765</strong> resultats (<strong>2028</strong> continguts, <strong>4873</strong> documents i <strong>6864</strong> multimedia)<a href="/ca/busqueda-searchapi/webicgc_ddev_site?destination=/ca&amp;_exception_statuscode=404" class="views-display-link views-display-link-page_1">Veure tots els resultats</a>
+      </div>
+    
+      </div>
+
+      
+  </div>
+</div>
+
+    </div>
+  </div>
+
+    </div>
+    <div class="js-search-bar">
+      <span class="js-search-bar-icon js-search-bar-search-icon" role="button" tabindex="0">
+        <img src="/themes/custom/icgc_web/assets/search-button.svg" alt="Cerca">
+      </span>
+      <span class="js-search-bar-icon js-search-bar-close-icon" role="button" tabindex="0">
+        <img src="/themes/custom/icgc_web/assets/search-close-button.svg" alt="Tancar">
+      </span>
+    </div>
+  </div>
+</div>
+<div class="menu-mainmenu">
+  <div class="container">
+      <section class="row region region-top-header-form">
+    <nav role="navigation" aria-labelledby="block-mainmenuide-menu" id="block-mainmenuide" class="block block-menu navigation menu--main-menu-ide">
+            
+  <h2 class="visually-hidden" id="block-mainmenuide-menu">Menú principal ICGC</h2>
+  
+
+        
+
+<nav class="navbar navbar-expand-lg navbar-light">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Mostra o amaga el menú de navegació">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="clearfix nav navbar-nav">
+                                                <li class="nav-item">
+                          <a href="/ca/Inici-ICGC" class="nav-link nav-link--ca-inici-icgc" title="Inici" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/1369">Inici</a>
+                      </li>
+                                                              <li class="nav-item menu-item--expanded dropdown">
+                          <a href="/ca/Geoinformacio-i-mapes" class="nav-link nav-link--ca-geoinformacio-i-mapes dropdown-toggle" title="Geoinformació i mapes" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-drupal-link-system-path="node/21931">Geoinformació i mapes</a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis" title="Geoinformació en línia (Geoserveis)" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21658">Geoinformació en línia (Geoserveis)</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Servei-de-Mapa-Base" title="Servei de Mapa Base" class="nav-link nav-link--ca-geoinformacio-i-mapes-servei-de-mapa-base" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23639">Servei de Mapa Base</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis/WMS-Batimetria" title="WMS Batimetria" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis-wms-batimetria" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23732">WMS Batimetria</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis/WMS-Elevacions" title="WMS Elevacions" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis-wms-elevacions" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21843">WMS Elevacions</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis/WMS-Linia-de-costa" title="WMS Línia de costa" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis-wms-linia-de-costa" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23733">WMS Línia de costa</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis/WMS-Ortoimatges" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis-wms-ortoimatges" title="WMS Ortoimatges" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21841">WMS Ortoimatges</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis/WMS-Ortoimatges/WMS-Ortofoto-Territorial" title="WMS Ortofoto Territorial" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis-wms-ortoimatges-wms-ortofoto-territorial" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/18807">WMS Ortofoto Territorial</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis/WMS-Topografics/WMS-Referencial-Topografic-Territorial" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis-wms-topografics-wms-referencial-topografic-territorial" title="WMS Topogràfic Territorial" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20375">WMS Topogràfic Territorial</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis/WMS-Vegetacio" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis-wms-vegetacio" title="WMS Vegetació" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21844">WMS Vegetació</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Geoinformacio-en-linia-Geoserveis/WMS-Geoindex" class="nav-link nav-link--ca-geoinformacio-i-mapes-geoinformacio-en-linia-geoserveis-wms-geoindex" title="WMS Geoíndex" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21719">WMS Geoíndex</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes" title="Dades i Productes" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21914">Dades i Productes</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Bessons-digitals/Besso-Digital-Urba-de-Catalunya" title="Bessó Digital Urbà de Catalunya" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-bessons-digitals-besso-digital-urba-de-catalunya" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/24015">Bessó Digital Urbà de Catalunya</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Geoinformacio-urbana" title="Geoinformació urbana" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-geoinformacio-urbana" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/24025">Geoinformació urbana</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Geoinformacio-tematica/Cartografia-de-sols/Perfils-de-sols" title="Perfils de sòls" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-geoinformacio-tematica-cartografia-de-sols-perfils-de-sols" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/24024">Perfils de sòls</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Elevacions" title="Elevacions" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-elevacions" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/24018">Elevacions</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Elevacions/Elevacions-territorial/LiDAR-Territorial" title="LiDAR Territorial" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-elevacions-elevacions-territorial-lidar-territorial" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23636">LiDAR Territorial</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Imatge/Ortofoto-Territorial" title="Ortofoto Territorial" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-imatge-ortofoto-territorial" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23568">Ortofoto Territorial</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Geoinformacio-cartografica" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-geoinformacio-cartografica" title="Geoinformació cartogràfica" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21919">Geoinformació cartogràfica</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Geoinformacio-geologica-i-geofisica" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-geoinformacio-geologica-i-geofisica" title="Geoinformació geològica i geofísica" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21918">Geoinformació geològica i geofísica</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Geoinformacio-tematica" title="Geoinformació temàtica" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-geoinformacio-tematica" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21920">Geoinformació temàtica</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Imatge" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-imatge" title="Imatge" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21922">Imatge</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/Geoinformacio-i-mapes/Mapes" class="nav-link nav-link--ca-geoinformacio-i-mapes-mapes" title="Mapes" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21913">Mapes</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Mapes/GeoAI-Cubes-entrenant-lIntelligencia-Artificial-dobservacio-de-la-Terra" title="GeoAI-Cubes: entrenant l’Intel.ligència Artificial d’observació de la Terra" class="nav-link nav-link--ca-geoinformacio-i-mapes-mapes-geoai-cubes-entrenant-lintelligencia-artificial-dobservacio-de-la-terra" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/24008">GeoAI-Cubes: entrenant l’Intel.ligència Artificial d’observació de la Terra</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Mapes/Mapes-de-comarques" title="Mapes de comarques" class="nav-link nav-link--ca-geoinformacio-i-mapes-mapes-mapes-de-comarques" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/18787">Mapes de comarques</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Mapes/Mapes-de-comunicacions" title="Mapes de comunicacions" class="nav-link nav-link--ca-geoinformacio-i-mapes-mapes-mapes-de-comunicacions" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/18786">Mapes de comunicacions</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Mapes/Mapes-municipals" class="nav-link nav-link--ca-geoinformacio-i-mapes-mapes-mapes-municipals" title="Mapes municipals (delimitació)" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20389">Mapes municipals (delimitació)</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Dades-i-productes/Geoinformacio-cartografica/Referencial-Topografic-Territorial" class="nav-link nav-link--ca-geoinformacio-i-mapes-dades-i-productes-geoinformacio-cartografica-referencial-topografic-territorial" title="Referencial Topogràfic Territorial" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22578">Referencial Topogràfic Territorial</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Mapes/Mapa-de-cobertes-del-sol-de-Catalunya" class="nav-link nav-link--ca-geoinformacio-i-mapes-mapes-mapa-de-cobertes-del-sol-de-catalunya" title="Mapa de cobertes" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/19812">Mapa de cobertes</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Mapes/Mapes-antics" title="Mapes antics" class="nav-link nav-link--ca-geoinformacio-i-mapes-mapes-mapes-antics" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21906">Mapes antics</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="https://ebotiga.icgc.cat/" target="_blank" class="nav-link nav-link-https--ebotigaicgccat- external-link" title="Comprar un mapa " id="navbarDropdownMenuLink" role="button" aria-expanded="false">Comprar un mapa</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <span class="nav-link nav-link-" title="ꜜ Destacats" id="navbarDropdownMenuLink" role="button" aria-expanded="false">ꜜ Destacats</span>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/Visor-de-descarregues" class="nav-link nav-link--ca-eines-i-visors-visors-visor-de-descarregues" id="navbarDropdownMenuLink" role="button" aria-expanded="false" title="Visor de descàrregues" data-drupal-link-system-path="node/19826">Visor de descàrregues</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Geoinformacio-i-mapes/Obsolescencia-daplicacions-productes-i-serveis" title="Obsolescència d&#039;aplicacions, productes i serveis" class="nav-link nav-link--ca-geoinformacio-i-mapes-obsolescencia-daplicacions-productes-i-serveis" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23318">Obsolescència d&#039;aplicacions, productes i serveis</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item flex-rows-break">
+                          <a href="/ca/Geoinformacio-i-mapes" class="nav-link nav-link--ca-geoinformacio-i-mapes" title="Ves a Geoinformació i mapes" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21931">Ves a Geoinformació i mapes</a>
+                      </li>
+      </ul>
+    
+              </li>
+                                                              <li class="nav-item menu-item--expanded dropdown">
+                          <a href="/ca/Eines-i-visors" class="nav-link nav-link--ca-eines-i-visors dropdown-toggle" title="Eines i visors" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-drupal-link-system-path="node/21930">Eines i visors</a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/Eines-i-visors/Eines" class="nav-link nav-link--ca-eines-i-visors-eines" title="Eines" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21828">Eines</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/ContextMaps" class="nav-link nav-link--ca-eines-i-visors-visors-contextmaps" title="ContextMaps" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20139">ContextMaps</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Eines/Connector-QGIS-Open-ICGC" class="nav-link nav-link--ca-eines-i-visors-eines-connector-qgis-open-icgc" title="Connector QGIS Open ICGC" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22547">Connector QGIS Open ICGC</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Eines/Instamaps" title="Instamaps" class="nav-link nav-link--ca-eines-i-visors-eines-instamaps" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23690">Instamaps</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="https://eines.icgc.cat/storymaps/html/editor.html" class="nav-link nav-link-https--einesicgccat-storymaps-html-editorhtml external-link" title="StoryMaps " id="navbarDropdownMenuLink" role="button" aria-expanded="false">StoryMaps</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Eines/Transforma-coordenades-i-formats" class="nav-link nav-link--ca-eines-i-visors-eines-transforma-coordenades-i-formats" id="navbarDropdownMenuLink" role="button" aria-expanded="false" title="Transforma coordenada i format" data-drupal-link-system-path="node/19755">Transforma coordenada i format</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/Eines-i-visors/Visors" class="nav-link nav-link--ca-eines-i-visors-visors" id="navbarDropdownMenuLink" role="button" aria-expanded="false" title="Visors" data-drupal-link-system-path="node/21829">Visors</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/VISSIR" title="VISSIR 4" class="nav-link nav-link--ca-eines-i-visors-visors-vissir" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23968">VISSIR 4</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/Catalunya-Digital-3D-Carrers" title="Visor 3D Carrers" class="nav-link nav-link--ca-eines-i-visors-visors-catalunya-digital-3d-carrers" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23283">Visor 3D Carrers</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="https://visors.icgc.cat/menut/" class="nav-link nav-link-https--visorsicgccat-menut- external-link" title="Imatges del satèl·lit Menut " id="navbarDropdownMenuLink" role="button" aria-expanded="false">Imatges del satèl·lit Menut</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/Canvis-en-el-territori/LUll-del-temps" class="nav-link nav-link--ca-eines-i-visors-visors-canvis-en-el-territori-lull-del-temps" title="L&#039;Ull del Temps" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22489">L&#039;Ull del Temps</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/Fototeca" class="nav-link nav-link--ca-eines-i-visors-visors-fototeca" title="Fototeca de Catalunya" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23572">Fototeca de Catalunya</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/Visor-de-descarregues" class="nav-link nav-link--ca-eines-i-visors-visors-visor-de-descarregues" title="Descàrregues" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/19826">Descàrregues</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/Visualitzadors-Geoindex" class="nav-link nav-link--ca-eines-i-visors-visors-visualitzadors-geoindex" title="Geoíndex" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21894">Geoíndex</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/Eines-i-visors/Apps" class="nav-link nav-link--ca-eines-i-visors-apps" title="Apps" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21832">Apps</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Apps/Aplicacio-de-calcul-interactiva-lanalisi-de-dades-hidroquimiques-de-Catalunya-HidroGeoR-Shiny" title="Aplicació de càlcul interactiva per a l&#039;anàlisi de dades hidroquímiques de Catalunya (HidroGeoR-Shiny)" class="nav-link nav-link--ca-eines-i-visors-apps-aplicacio-de-calcul-interactiva-lanalisi-de-dades-hidroquimiques-de-catalunya-hidrogeor-shiny" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23928">Aplicació de càlcul interactiva per a l&#039;anàlisi de dades hidroquímiques de Catalunya (HidroGeoR-Shiny)</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Apps/Avaluacio-del-potencial-geotermic-profund-3DHIP-Calculator" class="nav-link nav-link--ca-eines-i-visors-apps-avaluacio-del-potencial-geotermic-profund-3dhip-calculator" title="Avaluació del potencial geotèrmic profund (3DHIP Calculator)" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22560">Avaluació del potencial geotèrmic profund (3DHIP Calculator)</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Apps/Catalunya-Offline" class="nav-link nav-link--ca-eines-i-visors-apps-catalunya-offline" title="Catalunya Offline" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22487">Catalunya Offline</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Apps/PGOM-Pirineus-Geological-Open-Museum" class="nav-link nav-link--ca-eines-i-visors-apps-pgom-pirineus-geological-open-museum" title="Pirineus Geological Open Museum PGOM)" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22558">Pirineus Geological Open Museum PGOM)</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Apps/Wordle-toponimic" title="Wordle toponímic" class="nav-link nav-link--ca-eines-i-visors-apps-wordle-toponimic" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20202">Wordle toponímic</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/Eines-i-visors/Recursos-desenvolupadors" class="nav-link nav-link--ca-eines-i-visors-recursos-desenvolupadors" title="Recursos per a desenvolupadors" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21679">Recursos per a desenvolupadors</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Recursos-desenvolupadors/API-Territorial" class="nav-link nav-link--ca-eines-i-visors-recursos-desenvolupadors-api-territorial" title="API Territorial de l’ICGC" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23555">API Territorial de l’ICGC</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Recursos-desenvolupadors/Biblioteca-MapICGC-GL-JS" class="nav-link nav-link--ca-eines-i-visors-recursos-desenvolupadors-biblioteca-mapicgc-gl-js" title="Biblioteca MapICGC GL JS" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23554">Biblioteca MapICGC GL JS</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Eines/Geocodificador-ICGC" class="nav-link nav-link--ca-eines-i-visors-eines-geocodificador-icgc" title="Geocodificador ICGC" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23423">Geocodificador ICGC</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Eines/Geocodificador-ICGC-ArcGIS" class="nav-link nav-link--ca-eines-i-visors-eines-geocodificador-icgc-arcgis" title="Geocodificador ICGC per a ArcGIS" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23518">Geocodificador ICGC per a ArcGIS</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Recursos-desenvolupadors/Serveis-API" class="nav-link nav-link--ca-eines-i-visors-recursos-desenvolupadors-serveis-api" title="Serveis API" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23409">Serveis API</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item flex-rows-break">
+                          <a href="/ca/Eines-i-visors" class="nav-link nav-link--ca-eines-i-visors" title="Ves a Eines i visors" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21930">Ves a Eines i visors</a>
+                      </li>
+      </ul>
+    
+              </li>
+                                                              <li class="nav-item menu-item--expanded dropdown">
+                          <a href="/ca/Ambits-tematics" class="nav-link nav-link--ca-ambits-tematics dropdown-toggle" title="Àmbits temàtics" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-drupal-link-system-path="node/21925">Àmbits temàtics</a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-2">
+                          <a href="/ca/Ambits-tematics/Riscos-i-emergencies" class="nav-link nav-link--ca-ambits-tematics-riscos-i-emergencies" title="Riscos i emergències" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21901">Riscos i emergències</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Riscos-i-emergencies/Terratremols/Comunicats-sismics" class="nav-link nav-link--ca-ambits-tematics-riscos-i-emergencies-terratremols-comunicats-sismics" id="navbarDropdownMenuLink" role="button" aria-expanded="false" title="Comunicats sísmics" data-drupal-link-system-path="node/18909">Comunicats sísmics</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Riscos-i-emergencies/Terratremols/Sismogrames-en-directe" class="nav-link nav-link--ca-ambits-tematics-riscos-i-emergencies-terratremols-sismogrames-en-directe" title="Sismogrames en directe" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/19333">Sismogrames en directe</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Riscos-i-emergencies/Terratremols" class="nav-link nav-link--ca-ambits-tematics-riscos-i-emergencies-terratremols" title="Terratrèmols" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21908">Terratrèmols</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Riscos-i-emergencies/Allaus/Butlleti-de-Perill-dAllaus-BPA" class="nav-link nav-link--ca-ambits-tematics-riscos-i-emergencies-allaus-butlleti-de-perill-dallaus-bpa" title="Butlletí de Perill d&#039;Allaus" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22404">Butlletí de Perill d&#039;Allaus</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Riscos-i-emergencies/Allaus" class="nav-link nav-link--ca-ambits-tematics-riscos-i-emergencies-allaus" title="Allaus" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21907">Allaus</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Riscos-i-emergencies/Riscos-geologics" class="nav-link nav-link--ca-ambits-tematics-riscos-i-emergencies-riscos-geologics" title="Riscos geològics" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21670">Riscos geològics</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-2">
+                          <a href="/ca/Ambits-tematics/Observacio-de-la-Terra" class="nav-link nav-link--ca-ambits-tematics-observacio-de-la-terra" title="Observació de la Terra" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21896">Observació de la Terra</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Observacio-de-la-Terra/Estrategia-Satellitaria-NewSpace-Menut" title="Estratègia Satel·litària NewSpace-Menut" class="nav-link nav-link--ca-ambits-tematics-observacio-de-la-terra-estrategia-satellitaria-newspace-menut" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23667">Estratègia Satel·litària NewSpace-Menut</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Observacio-de-la-Terra/COPERNICUS-i-SENTINEL-2-Geoserveis-sobre-el-territori" class="nav-link nav-link--ca-ambits-tematics-observacio-de-la-terra-copernicus-i-sentinel-2-geoserveis-sobre-el-territori" title="Imatges de satèl·lits" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20196">Imatges de satèl·lits</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Observacio-de-la-Terra/Sensor-LIDAR-Aplicabilitat-en-alta-precisio" class="nav-link nav-link--ca-ambits-tematics-observacio-de-la-terra-sensor-lidar-aplicabilitat-en-alta-precisio" title="Sensor LIDAR: Aplicabilitat en alta precisió" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20203">Sensor LIDAR: Aplicabilitat en alta precisió</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Observacio-de-la-Terra/Servei-de-mesures-del-moviment-del-terreny" class="nav-link nav-link--ca-ambits-tematics-observacio-de-la-terra-servei-de-mesures-del-moviment-del-terreny" title="Servei de mesures del moviment del terreny" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20198">Servei de mesures del moviment del terreny</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-2">
+                          <a href="/ca/Ambits-tematics/Ambit-litoral" class="nav-link nav-link--ca-ambits-tematics-ambit-litoral" title="Litoral" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23709">Litoral</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Ambit-litoral/Estrategia-litoral-Servei-dInformacio-de-la-Dinamica-Litoral" title="Estratègia litoral: Servei d’Informació de la Dinàmica Litoral" class="nav-link nav-link--ca-ambits-tematics-ambit-litoral-estrategia-litoral-servei-dinformacio-de-la-dinamica-litoral" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23710">Estratègia litoral: Servei d’Informació de la Dinàmica Litoral</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Ambit-litoral/Dades-i-serveis" title="Dades i serveis" class="nav-link nav-link--ca-ambits-tematics-ambit-litoral-dades-i-serveis" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23711">Dades i serveis</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Ambit-litoral/Aplicacions-i-visors" title="Aplicacions i visors" class="nav-link nav-link--ca-ambits-tematics-ambit-litoral-aplicacions-i-visors" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23712">Aplicacions i visors</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Ambit-litoral/Documentacio-i-coneixement" title="Documentació i coneixement" class="nav-link nav-link--ca-ambits-tematics-ambit-litoral-documentacio-i-coneixement" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23995">Documentació i coneixement</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Ambit-litoral/Noticies-i-actualitat" title="Notícies i actualitat" class="nav-link nav-link--ca-ambits-tematics-ambit-litoral-noticies-i-actualitat" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23991">Notícies i actualitat</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-2">
+                          <a href="/ca/Ambits-tematics/Territori-sostenible" class="nav-link nav-link--ca-ambits-tematics-territori-sostenible" title="Territori sostenible" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23949">Territori sostenible</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Territori-sostenible/Subsol/Enginyeria-geologica" title="Enginyeria geològica" class="nav-link nav-link--ca-ambits-tematics-territori-sostenible-subsol-enginyeria-geologica" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21835">Enginyeria geològica</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="https://catnet-ip.icgc.cat/spgic/ca/index.html" class="nav-link nav-link-https--catnet-ipicgccat-spgic-ca-indexhtml external-link" title="Geodèsia / Posicionament Integrat de Catalunya " id="navbarDropdownMenuLink" role="button" aria-expanded="false">Geodèsia / Posicionament Integrat de Catalunya</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Territori-sostenible/Posicionament" title="Posicionament" class="nav-link nav-link--ca-ambits-tematics-territori-sostenible-posicionament" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21902">Posicionament</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Territori-sostenible/Sols" class="nav-link nav-link--ca-ambits-tematics-territori-sostenible-sols" title="Sòls" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21700">Sòls</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Observacio-de-la-Terra/Sostenibilitat-urbana" class="nav-link nav-link--ca-ambits-tematics-observacio-de-la-terra-sostenibilitat-urbana" title="Sostenibilitat urbana" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20194">Sostenibilitat urbana</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Territori-sostenible/Subsol" class="nav-link nav-link--ca-ambits-tematics-territori-sostenible-subsol" title="Subsol" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23509">Subsol</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Territori-sostenible/Suport-tecnic-la-legalitat" class="nav-link nav-link--ca-ambits-tematics-territori-sostenible-suport-tecnic-la-legalitat" title="Suport tècnic a la legalitat" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21672">Suport tècnic a la legalitat</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-2">
+                          <a href="/ca/Ambits-tematics/Divulgacio" class="nav-link nav-link--ca-ambits-tematics-divulgacio" title="Divulgació" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23724">Divulgació</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="https://cartotecadigital.icgc.cat/" class="nav-link nav-link-https--cartotecadigitalicgccat- external-link" title="Cartoteca digital " id="navbarDropdownMenuLink" role="button" aria-expanded="false">Cartoteca digital</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Divulgacio/Publicacions/Llibres-i-fons-documentals/Fons-documentals" title="Fons documentals" class="nav-link nav-link--ca-divulgacio-publicacions-llibres-i-fons-documentals-fons-documentals" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21749">Fons documentals</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Divulgacio/Publicacions/Llibres-en-PDF" class="nav-link nav-link--ca-ambits-tematics-divulgacio-publicacions-llibres-en-pdf" title="Llibres en PDF" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21682">Llibres en PDF</a>
+                      </li>
+                      <li class="nav-item menu-item--expanded dropdown">
+                          <a href="/ca/Ambits-tematics/Divulgacio/Publicacions" class="nav-link nav-link--ca-ambits-tematics-divulgacio-publicacions" title="Publicacions" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21912">Publicacions</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Divulgacio/Publicacions/Publicacions-cartografiques" class="nav-link nav-link--ca-ambits-tematics-divulgacio-publicacions-publicacions-cartografiques" title="Publicacions cartogràfiques" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23256">Publicacions cartogràfiques</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Divulgacio/Publicacions/Publicacions-tecniques" class="nav-link nav-link--ca-ambits-tematics-divulgacio-publicacions-publicacions-tecniques" title="Publicacions tècniques" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21856">Publicacions tècniques</a>
+                      </li>
+      </ul>
+    
+              </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-2">
+                          <a href="/ca/Ambits-tematics/Recursos-didactics" class="nav-link nav-link--ca-ambits-tematics-recursos-didactics" title="Recursos didàctics" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21854">Recursos didàctics</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Eines/Una-mirada-fotografica-la-geodiversitat-de-Catalunya" title="Una mirada fotogràfica a la geodiversitat de Catalunya" class="nav-link nav-link--ca-eines-i-visors-eines-una-mirada-fotografica-la-geodiversitat-de-catalunya" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23674">Una mirada fotogràfica a la geodiversitat de Catalunya</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Eines/Aprofitaments-geologics-en-construccions-antropiques-Comarques-gironines" title="Aprofitaments geològics en construccions antròpiques. Comarques gironines" class="nav-link nav-link--ca-eines-i-visors-eines-aprofitaments-geologics-en-construccions-antropiques-comarques-gironines" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23895">Aprofitaments geològics en construccions antròpiques. Comarques gironines</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/Didactics-i-ludics/Pintamaps-Mon" title="Pintamaps Món" class="nav-link nav-link--ca-eines-i-visors-visors-didactics-i-ludics-pintamaps-mon" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23806">Pintamaps Món</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Recursos-didactics/Jocs-Catalunya-des-de-lespai" title="Jocs Catalunya des de l&#039;espai" class="nav-link nav-link--ca-ambits-tematics-recursos-didactics-jocs-catalunya-des-de-lespai" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23795">Jocs Catalunya des de l&#039;espai</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Eines-i-visors/Visors/Didactics-i-ludics/El-Mon-en-catala" title="El Món en català" class="nav-link nav-link--ca-eines-i-visors-visors-didactics-i-ludics-el-mon-en-catala" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23799">El Món en català</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item flex-rows-break">
+                          <a href="/ca/Ambits-tematics" class="nav-link nav-link--ca-ambits-tematics" title="Ves a Àmbits temàtics" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21925">Ves a Àmbits temàtics</a>
+                      </li>
+      </ul>
+    
+              </li>
+                                                              <li class="nav-item menu-item--expanded dropdown">
+                          <a href="/ca/Innovacio" class="nav-link nav-link--ca-innovacio dropdown-toggle" title="Innovació" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-drupal-link-system-path="node/21934">Innovació</a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-4">
+                          <a href="/ca/Innovacio/Projectes" class="nav-link nav-link--ca-innovacio-projectes" title="Projectes" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23779">Projectes</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Innovacio/Projectes/Projectes-mida" class="nav-link nav-link--ca-innovacio-projectes-projectes-mida" title="A mida" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21704">A mida</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Innovacio/Projectes/Reculls-anuals-de-projectes" title="Reculls anuals de projectes" class="nav-link nav-link--ca-innovacio-projectes-reculls-anuals-de-projectes" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/19400">Reculls anuals de projectes</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Innovacio/Projectes/Projectes-internacionals-temes" class="nav-link nav-link--ca-innovacio-projectes-projectes-internacionals-temes" title="Internacionals per temes" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21855">Internacionals per temes</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-4">
+                          <a href="/ca/Innovacio/Projectes-RDi" class="nav-link nav-link--ca-innovacio-projectes-rdi" title="Projectes R+D+i" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21722">Projectes R+D+i</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/Ambits-tematics/Observacio-de-la-Terra/Estrategia-Satellitaria-NewSpace-Menut/NEWSPACE-Geoinformacio-i-nova-economia-de-lespai" class="nav-link nav-link--ca-ambits-tematics-observacio-de-la-terra-estrategia-satellitaria-newspace-menut-newspace-geoinformacio-i-nova-economia-de-lespai" title="NEWSPACE: Geoinformació i nova economia de l’espai" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/20197">NEWSPACE: Geoinformació i nova economia de l’espai</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Innovacio/Projectes-RDi/Actius/GSEU" class="nav-link nav-link--ca-innovacio-projectes-rdi-actius-gseu" title="Un Servei Geològic per a Europa. GSEU" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23330">Un Servei Geològic per a Europa. GSEU</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Innovacio/Projectes-RDi/Collaboracions-en-projectes-de-recerca" class="nav-link nav-link--ca-innovacio-projectes-rdi-collaboracions-en-projectes-de-recerca" title="Col·laboracions en recerca" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23335">Col·laboracions en recerca</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item flex-rows-break">
+                          <a href="/ca/Innovacio" class="nav-link nav-link--ca-innovacio" title="Ves a Innovació" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21934">Ves a Innovació</a>
+                      </li>
+      </ul>
+    
+              </li>
+                                                              <li class="nav-item menu-item--expanded dropdown">
+                          <a href="/ca/LICGC" class="nav-link nav-link--ca-licgc dropdown-toggle" title="L&#039;ICGC" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-drupal-link-system-path="node/22245">L&#039;ICGC</a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/LICGC/Agenda" class="nav-link nav-link--ca-licgc-agenda" title="Agenda" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21982">Agenda</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/propers-esdeveniments" class="nav-link nav-link--ca-propers-esdeveniments" title="Propers esdeveniments" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="propers-esdeveniments">Propers esdeveniments</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/actualitat" class="nav-link nav-link--ca-actualitat" title="Més actualitat" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="actualitat">Més actualitat</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="https://espaigea.cat/" class="nav-link nav-link-https--espaigeacat- external-link" id="navbarDropdownMenuLink" role="button" aria-expanded="false" title="Espaigea ">Espaigea</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/LICGC/Sobre-lICGC" class="nav-link nav-link--ca-licgc-sobre-licgc" title="Sobre l&#039;ICGC" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21676">Sobre l&#039;ICGC</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/LICGC/Sobre-lICGC/Presentacio" class="nav-link nav-link--ca-licgc-sobre-licgc-presentacio" title="Presentació" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22381">Presentació</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Sobre-lICGC/Politiques" class="nav-link nav-link--ca-licgc-sobre-licgc-politiques" title="Polítiques" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21824">Polítiques</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Sobre-lICGC/Experiencia" class="nav-link nav-link--ca-licgc-sobre-licgc-experiencia" title="Experiència" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21677">Experiència</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Sobre-lICGC/Exposicions" title="Exposicions" class="nav-link nav-link--ca-licgc-sobre-licgc-exposicions" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23288">Exposicions</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Sobre-lICGC/Memories-i-butlletins" class="nav-link nav-link--ca-licgc-sobre-licgc-memories-i-butlletins" title="Memòries i butlletins" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21660">Memòries i butlletins</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Sobre-lICGC/Videos" class="nav-link nav-link--ca-licgc-sobre-licgc-videos" title="Vídeos" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/19168">Vídeos</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/LICGC/Informacio-publica" class="nav-link nav-link--ca-licgc-informacio-publica" title="Informació pública" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23617">Informació pública</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/LICGC/Informacio-publica/Transparencia" class="nav-link nav-link--ca-licgc-informacio-publica-transparencia" title="Transparència" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23614">Transparència</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Informacio-publica/Transparencia/Publicitat-activa/6-Servidors-publics/69-Convocatories-dacces-i-promocio-interna" title="Ofertes de treball" class="nav-link nav-link--ca-licgc-informacio-publica-transparencia-publicitat-activa-6-servidors-publics-69-convocatories-dacces-i-promocio-interna" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23842">Ofertes de treball</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Informacio-publica/Perfil-del-contractant" class="nav-link nav-link--ca-licgc-informacio-publica-perfil-del-contractant" id="navbarDropdownMenuLink" role="button" aria-expanded="false" title="Perfil del contractant" data-drupal-link-system-path="node/19310">Perfil del contractant</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Informacio-publica/Sistema-Intern-dAlertes" class="nav-link nav-link--ca-licgc-informacio-publica-sistema-intern-dalertes" title="Sistema Intern d&#039;Alertes" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23486">Sistema Intern d&#039;Alertes</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item menu-item--expanded dropdown flex-rows-child col-md-3">
+                          <a href="/ca/Contacte" class="nav-link nav-link--ca-contacte" title="Contacte" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21827">Contacte</a>
+                                        <ul>
+                          <li class="nav-item">
+                          <a href="/ca/LICGC/Contacte/Adreces-i-telefons" class="nav-link nav-link--ca-licgc-contacte-adreces-i-telefons" title="Adreces i telèfons" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21826">Adreces i telèfons</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/Ajuda" title="Ajuda" class="nav-link nav-link--ca-ajuda" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/23422">Ajuda</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Contacte/Bustia-de-contacte" class="nav-link nav-link--ca-licgc-contacte-bustia-de-contacte" title="Bústia de contacte" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/22246">Bústia de contacte</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Contacte/Busties-especifiques" class="nav-link nav-link--ca-licgc-contacte-busties-especifiques" title="Bústies específiques" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21825">Bústies específiques</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/ca/LICGC/Contacte/RSS" class="nav-link nav-link--ca-licgc-contacte-rss" title="Connecta" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/19748">Connecta</a>
+                      </li>
+      </ul>
+    
+              </li>
+                      <li class="nav-item flex-rows-break">
+                          <a href="/ca/LICGC" class="nav-link nav-link--ca-licgc" id="navbarDropdownMenuLink" role="button" aria-expanded="false" title="Ves a L&#039;ICGC" data-drupal-link-system-path="node/22245">Ves a L&#039;ICGC</a>
+                      </li>
+      </ul>
+    
+              </li>
+                                            <li class="nav-item">
+                          <a href="/ca/LICGC/Actualitat" class="nav-link nav-link--ca-licgc-actualitat" title="Actualitat" id="navbarDropdownMenuLink" role="button" aria-expanded="false" data-drupal-link-system-path="node/21936">Actualitat</a>
+                      </li>
+      </ul>
+    
+    </div>
+  </div>
+</nav>
+
+
+  </nav>
+
+  </section>
+
+  </div>
+</div>
+    </header>
+          <div class="highlighted">
+        <aside class="container section clearfix" role="complementary">
+            <div data-drupal-messages-fallback class="hidden"></div>
+
+
+        </aside>
+      </div>
+            <div id="main-wrapper" class="layout-main-wrapper clearfix">
+              
+        <div id="main" class="">
+          <div class="clearfix">
+              <main class="main-content col" id="content" role="main">
+                <section>
+                  <a id="main-content" tabindex="-1"></a>
+                    <div id="block-icgc-web-content" class="block block-system block-system-main-block">
+  
+    
+      <div class="content">
+      <br><br><p align="center">La pàgina sol·licitada no s'ha pogut trobar.<br><br>Pàgina d'inici <a href="https://www.icgc.cat/ca">www.icgc.cat</a>.</p>
+    </div>
+  </div>
+
+
+                </section>
+              </main>
+                                  </div>
+        </div>
+    </div>
+        <footer class="site-footer">
+              <div class="container-fluid">
+                      <div class="site-footer__top clearfix">
+                <section class="row region region-footer-first">
+    <div id="block-cookiesui" class="block block-cookies block-cookies-ui-block">
+  
+    
+      <div class="content">
+      <div id="cookiesjsr"></div>
+
+    </div>
+  </div>
+
+  </section>
+
+              
+              
+              
+            </div>
+                                <div class="site-footer__bottom">
+                <section class="region region-footer-promo">
+    <div id="block-icgc-web-promotionalblock" class="block block-icgc-general block-promotional-block">
+  
+    
+      <div class="content">
+      <div class="container">
+  <div class="row">
+    <div id="promotional-block">
+      <div class="d-flex col-12 col-md-12 justify-content-center">
+                  <h2 class="title">
+            Voleu rebre informació de l'ICGC?
+          </h2>
+              </div>
+              <div class="d-flex col-12 col-md-12 justify-content-center">
+          <p class="description">
+            
+          </p>
+        </div>
+            <div class="d-flex col-12 col-md-12 justify-content-center">
+                  <a href="/ca/Registre/Voleu-rebre-informacio-de-lICGC" title="Subscriviu-vos-hi!" target="_self">Subscriviu-vos-hi!</a>
+              </div>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+
+  </section>
+
+            </div>
+                                <div class="site-footer__bottom">
+                <section class="region region-footer-fifth">
+    <div class="container">
+      
+
+
+<div id="block-icgc-web-xarxes" class="block-content-gencat_design_footer_block_type block block-block-content block-block-contentcedf4aa6-879e-4d26-af4e-38abcd052b4e">
+  
+    
+      <div class="container">
+      <div class="content row">
+        
+  <div class="field field--name-field-titol-descripcio field--type-text-with-summary field--label-above field__item col-xs-12 col-md d-flex align-items-center"><p class="text-align-right">Segueix les xarxes socials de l'Institut Cartogràfic i Geològic de Catalunya</p></div>
+
+
+  <div class="field field--name-body field--type-text-with-summary field--label-hidden field__item col-xs-12 col-md"><table class="ck-table-resized" style="float:left;width:40%;" role="presentation"><colgroup><col style="width:16.67%;"><col style="width:16.67%;"><col style="width:16.67%;"><col style="width:16.67%;"><col style="width:16.67%;"><col style="width:16.65%;"></colgroup><tbody><tr role="list"><td role="listitem"><a href="https://twitter.com/ICGCat"><img src="https://icgc-web-pro.s3.eu-central-1.amazonaws.com/preproduccio/s3fs-public/inline-images/Twitter_C_24_0.png" data-entity-uuid="6cead04d-6e9d-4831-aaeb-55487e83b0a4" data-entity-type="file" alt="X" width="24" height="24" title="X" loading="lazy"></a></td><td role="listitem"><a href="https://www.facebook.com/ICGCat"><img src="https://icgc-web-pro.s3.eu-central-1.amazonaws.com/preproduccio/s3fs-public/inline-images/Facebook_C_24_1.png" data-entity-uuid="a09fd0b8-47f1-4e49-ab37-9a7336611b89" data-entity-type="file" alt="Facebook" width="24" height="24" title="Facebook" loading="lazy"></a></td><td role="listitem"><a href="https://es.linkedin.com/company/institut-cartogr-fic-de-catalunya"><img src="https://icgc-web-pro.s3.eu-central-1.amazonaws.com/preproduccio/s3fs-public/inline-images/LinkedIn_C_24_0.png" data-entity-uuid="4dc42547-a971-4712-a603-bc132729efd0" data-entity-type="file" alt="LinkedIn" width="24" height="24" title="LinkedIn" loading="lazy"></a></td><td role="listitem"><a href="https://www.youtube.com/ICGCat"><img src="https://icgc-web-pro.s3.eu-central-1.amazonaws.com/preproduccio/s3fs-public/inline-images/Youtube_C_24_0.png" data-entity-uuid="d51ae760-97be-47a5-b56f-5fb1f2e478c8" data-entity-type="file" alt="Youtube" width="24" height="24" title="Youtube" loading="lazy"></a></td><td role="listitem"><a href="https://vimeo.com/icgcat"><img src="https://icgc-web-pro.s3.eu-central-1.amazonaws.com/preproduccio/s3fs-public/inline-images/Vimeo_C_24_0.png" data-entity-uuid="f0513955-0244-4b87-a4d7-e62fd28ad84d" data-entity-type="file" alt="Vimeo" width="24" height="24" title="Vimeo" loading="lazy"></a></td><td role="listitem"><a href="https://www.slideshare.net/ICGCat/presentations"><img src="https://icgc-web-pro.s3.eu-central-1.amazonaws.com/preproduccio/s3fs-public/inline-images/Slideshare_C_24_0.png" data-entity-uuid="20e5896f-7102-48ea-97a8-3cd13c30eda9" data-entity-type="file" alt="Slideshare" width="24" height="24" title="Slideshare" loading="lazy"></a></td></tr></tbody></table></div>
+
+
+      </div>
+    </div>
+  </div>
+
+
+
+<div id="block-icgc-web-rss" class="block-content-gencat_design_footer_block_type block block-block-content block-block-contentf2733a0c-5bbc-42f2-99ab-8062980b9bec">
+  
+    
+      <div class="container">
+      <div class="content row">
+        
+  <div class="field field--name-field-titol-descripcio field--type-text-with-summary field--label-above field__item col-xs-12 col-md d-flex align-items-center"><p class="text-align-right">Podeu subscriure-us als fils RSS</p></div>
+
+
+  <div class="field field--name-body field--type-text-with-summary field--label-hidden field__item col-xs-12 col-md"><table class="ck-table-resized" style="float:left;width:100%;" role="presentation"><colgroup><col style="width:8%;"><col style="width:92%;"></colgroup><tbody><tr role="list"><td valign="middle" role="listitem"><img src="https://icgc-web-pro.s3.eu-central-1.amazonaws.com/preproduccio/s3fs-public/inline-images/ico_rss_bn_1.png" data-entity-uuid="57062dec-e47f-4e5a-a2b2-fa42a57ef94d" data-entity-type="file" alt width="30" height="29" title="Podeu subscriure-us als fils RSS" loading="lazy"></td><td role="listitem"><a href="https://www.icgc.cat/ca/actualitat/feed" title="RSS Actualitat"><font color="7a7a7a">Actualitat</font></a> | <a href="https://www.icgc.cat/rss/feed/icgc_infobpa_ca.rss" title="RSS Allaus"><font color="7a7a7a">Allaus</font></a> | <a href="https://geofons.blogspot.com/rss.xml" title="RSS CatNet"><font color="7a7a7a">CatNet</font></a><font color="7a7a7a"> </font>| <a href="https://sismocat.icgc.cat/sisweb2/sisweb_api_rss_external.php?consulta=2init&amp;lang=ca" title="RSS Terratrèmols"><font color="7a7a7a">Terratrèmols</font></a></td></tr></tbody></table></div>
+
+
+      </div>
+    </div>
+  </div>
+
+    </div>
+  </section>
+
+            </div>
+                                <div class="site-footer__bottom">
+                <section class="region region-footer-sixth">
+    <div id="block-icgc-web-gencatdesignsubfooterdynamicblock" class="block block-icgc-general block-gencat-design-subfooter-icgc-block">
+  
+    
+      <div class="content">
+      <div class="container">
+  <div class="row">
+    <div id="subfooter-img"
+         class="d-flex col-12 col-md-4 justify-content-center justify-content-md-start order-2 order-md-1">
+              <a href="/ca" title="Inici">
+          <img class="img-fluid" src="https://icgc-web-pro.s3.eu-central-1.amazonaws.com/produccio/s3fs-public/subfooter-images/logo_generalitat_icgc_blanc_1_2%5B1%5D.png"
+               alt="Institut Cartogràfic i Geològic de Catalunya">
+        </a>
+          </div>
+
+    <div
+      class="footer-menu d-flex col-12 col-md-8 justify-content-center justify-content-md-end order-1 order-md-2">
+      
+                  <ul class="clearfix nav" data-component-id="bootstrap_barrio:menu">
+                    <li class="nav-item">
+                <a href="/ca/Ajuda/Avis-legal" class="nav-link nav-link--ca-ajuda-avis-legal" title="Avís legal" data-drupal-link-system-path="node/19320">Avís legal</a>
+              </li>
+                <li class="nav-item">
+                <a href="/ca/Ajuda/Accessibilitat" class="nav-link nav-link--ca-ajuda-accessibilitat" title="Accessibilitat" data-drupal-link-system-path="node/20078">Accessibilitat</a>
+              </li>
+                <li class="nav-item">
+                <a href="/ca/sitemap" class="nav-link nav-link--ca-sitemap" title="Mapa web" data-drupal-link-system-path="sitemap">Mapa web</a>
+              </li>
+                <li class="nav-item">
+                <a href="/ca/LICGC/Webs-relacionats" class="nav-link nav-link--ca-licgc-webs-relacionats" title="Webs relacionats" data-drupal-link-system-path="node/23696">Webs relacionats</a>
+              </li>
+        </ul>
+  
+
+
+
+    </div>
+
+  </div>
+</div>
+
+    </div>
+  </div>
+
+  </section>
+
+            </div>
+                  </div>
+    </footer>
+  </div>
+</div>
+
+  </div>
+
+    
+    <script src="/core/assets/vendor/jquery/jquery.min.js?v=3.7.1"></script>
+<script src="/core/assets/vendor/once/once.min.js?v=1.0.1"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/version-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/data-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/disable-selection-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/form-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/jquery-patch-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/scroll-parent-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/unique-id-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/focusable-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/ie-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/keycode-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/plugin-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/safe-active-element-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/safe-blur-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/widget-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/labels-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/widgets/autocomplete-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/widgets/menu-min.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/tabbable/index.umd.min.js?v=6.2.0"></script>
+<script src="/core/misc/autocomplete.js?v=10.3.9"></script>
+<script src="/themes/contrib/bootstrap_barrio/js/barrio.js?v=10.3.9"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/themes/custom/icgc_web/js/bootstrap.js?v=10.3.9"></script>
+<script src="/themes/custom/icgc_web/node_modules/jquery.marquee/jquery.marquee.js?v=10.3.9"></script>
+<script src="/themes/custom/icgc_web/node_modules/iframe-resizer/js/iframeResizer.js?v=10.3.9"></script>
+<script src="/themes/custom/icgc_web/js/global.js?v=10.3.9"></script>
+<script src="/themes/custom/icgc_web/js/slick.js?v=10.3.9"></script>
+<script src="/themes/custom/icgc_web/js/js_search_bar_searchapi.js?v=10.3.9"></script>
+<script src="/themes/custom/icgc_web/js/gencat_new_design.js?v=10.3.9"></script>
+<script src="https://cdn.jsdelivr.net/gh/jfeltkamp/cookiesjsr@1/dist/cookiesjsr-preloader.min.js" defer></script>
+<script src="/core/misc/jquery.form.js?v=4.3.0"></script>
+<script src="/core/misc/progress.js?v=10.3.9"></script>
+<script src="/core/assets/vendor/loadjs/loadjs.min.js?v=4.3.0"></script>
+<script src="/core/misc/ajax.js?v=10.3.9"></script>
+<script src="/core/modules/views/js/base.js?v=10.3.9"></script>
+<script src="/core/modules/views/js/ajax_view.js?v=10.3.9"></script>
+<script src="/modules/contrib/better_exposed_filters/js/better_exposed_filters.js?v=6.x"></script>
+<script src="/modules/contrib/better_exposed_filters/js/auto_submit.js?v=6.x"></script>
+<script src="/core/misc/jquery.tabbable.shim.js?v=10.3.9"></script>
+<script src="/core/misc/position.js?v=10.3.9"></script>
+<script src="/modules/contrib/search_api_autocomplete/js/search_api_autocomplete.js?tm9zdl"></script>
+
+  </body>
+</html>

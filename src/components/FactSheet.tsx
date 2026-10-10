@@ -1,15 +1,25 @@
-import { MECHANISM_LABEL, groupForZone, type ZoneCard, type ZoneMap } from "../types";
+import { RELIEF_BAND_LABEL, reliefBand, reliefCopy } from "../lib/relief";
+import {
+  MECHANISM_LABEL,
+  groupForZone,
+  type ReliefReading,
+  type ZoneCard,
+  type ZoneMap,
+} from "../types";
 
 type Props = {
   zone: ZoneCard;
   zones: ZoneMap;
+  relief: ReliefReading | undefined;
+  reliefSourceUrl: string | undefined;
   onClose: () => void;
   onOpen: (id: string) => void;
 };
 
-export function FactSheet({ zone, zones, onClose, onOpen }: Props) {
+export function FactSheet({ zone, zones, relief, reliefSourceUrl, onClose, onOpen }: Props) {
   const mitigation = zone.mechanisms.includes("mitigation") && zone.layerType !== "proof";
   const related = (zone.relatedZoneIds ?? []).filter((id) => zones[id]);
+  const band = relief ? reliefBand(relief) : null;
 
   return (
     <article className="sheet" role="dialog" aria-labelledby="sheet-title">
@@ -22,6 +32,11 @@ export function FactSheet({ zone, zones, onClose, onOpen }: Props) {
       <div className="sheet-body">
         <div className="chips">
           {zone.layerType === "proof" ? <span className="chip chip-observed">Observed</span> : null}
+          {relief && band ? (
+            <span className="chip chip-ground">
+              {relief.meters} m · {RELIEF_BAND_LABEL[band]}
+            </span>
+          ) : null}
           {zone.atlasTerm ? <span className="chip">{zone.atlasTerm}</span> : null}
           {zone.mechanisms.map((mechanism) => (
             <span key={mechanism} className="chip chip-quiet">
@@ -31,6 +46,25 @@ export function FactSheet({ zone, zones, onClose, onOpen }: Props) {
         </div>
         <h2 id="sheet-title">{zone.name}</h2>
         {zone.geometryNote ? <p className="geometry-note">{zone.geometryNote}</p> : null}
+
+        {relief ? (
+          <section>
+            <h3>The ground</h3>
+            <p>{reliefCopy(relief, mitigation)}</p>
+            <p className="geometry-note">
+              {relief.meters} m at the marked place, and the drop to the lowest ground {relief.spanMeters} m
+              away. ICGC terrain model, 2022. Not a flood depth.
+              {reliefSourceUrl ? (
+                <>
+                  {" "}
+                  <a href={reliefSourceUrl} target="_blank" rel="noopener noreferrer">
+                    ICGC territorial elevations
+                  </a>
+                </>
+              ) : null}
+            </p>
+          </section>
+        ) : null}
 
         <section>
           <h3>{mitigation ? "What it changes" : "What could fail"}</h3>

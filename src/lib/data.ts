@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { FeatureCollection } from "geojson";
-import type { ZoneMap } from "../types";
+import type { ReliefFile, ZoneMap } from "../types";
 
 export const GEOJSON_FILES = [
   "sewer-t10-stress",
@@ -23,6 +23,7 @@ export type SourceEntry = {
 type LoadState = {
   zones: ZoneMap | null;
   sources: Record<string, SourceEntry>;
+  relief: ReliefFile | null;
   collections: Partial<Record<GeoFile, FeatureCollection>>;
   failed: string[];
   fatal: string | null;
@@ -38,6 +39,7 @@ export function useFloodData(): LoadState & { ready: boolean } {
   const [state, setState] = useState<LoadState>({
     zones: null,
     sources: {},
+    relief: null,
     collections: {},
     failed: [],
     fatal: null,
@@ -48,8 +50,9 @@ export function useFloodData(): LoadState & { ready: boolean } {
     (async () => {
       try {
         const zones = await loadJson<ZoneMap>("/data/zones.json");
-        const [sourcesResult, ...layers] = await Promise.allSettled([
+        const [sourcesResult, reliefResult, ...layers] = await Promise.allSettled([
           loadJson<Record<string, SourceEntry>>("/data/sources.json"),
+          loadJson<ReliefFile>("/data/relief.json"),
           ...GEOJSON_FILES.map((file) =>
             loadJson<FeatureCollection>(`/data/geojson/${file}.geojson`),
           ),
@@ -57,6 +60,7 @@ export function useFloodData(): LoadState & { ready: boolean } {
         if (cancelled) return;
         const collections: Partial<Record<GeoFile, FeatureCollection>> = {};
         const failed: string[] = [];
+        if (reliefResult.status !== "fulfilled") failed.push("relief");
         GEOJSON_FILES.forEach((file, index) => {
           const result = layers[index];
           if (result.status === "fulfilled") collections[file] = result.value;
@@ -65,6 +69,7 @@ export function useFloodData(): LoadState & { ready: boolean } {
         setState({
           zones,
           sources: sourcesResult.status === "fulfilled" ? sourcesResult.value : {},
+          relief: reliefResult.status === "fulfilled" ? reliefResult.value : null,
           collections,
           failed,
           fatal: null,

@@ -1,0 +1,216 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.163910090059573,
+          41.395274289893514
+        ]
+      },
+      "properties": {
+        "date": "2026-10-03",
+        "rank": 1,
+        "cell_id": "r2c10",
+        "score": {
+          "value": 88.29672077788902,
+          "unit": "m*min",
+          "kind": "simulated"
+        },
+        "nearest_street": {
+          "name": "Synthetic street row 2",
+          "segment_id": "stub-ew-2",
+          "distance_m": 0.0
+        },
+        "local_rainfall": {
+          "label": "IDW estimate from 4 gauges, unvalidated for 3-7 Oct",
+          "day_total": {
+            "value": null,
+            "unit": "mm",
+            "kind": "estimate"
+          },
+          "stations": [],
+          "distances_m": [],
+          "weights": [],
+          "method": null,
+          "reason": "SYNTHETIC run: forcing is not gauge data"
+        },
+        "model_forcing_rain": {
+          "value": 80.0,
+          "unit": "mm",
+          "kind": "assumption"
+        },
+        "peak_depth_m": 0.2142777562964464,
+        "peak_time_local": "2026-10-03T01:24:34+02:00",
+        "peak_time_resolution": "solver step",
+        "minutes_above_0.10m": 412.06666666666666,
+        "minutes_above_0.30m": 0.0,
+        "max_velocity_m_s": 0.055239857091141605,
+        "flood_class": "moderate",
+        "upstream_contributing_area": {
+          "simulated": {
+            "value": 798.8166302091795,
+            "unit": "m2",
+            "kind": "simulated"
+          },
+          "d8_cross_check": {
+            "value": 2400.0,
+            "unit": "m2",
+            "kind": "terrain_diagnostic"
+          }
+        },
+        "main_inflow_direction": "W",
+        "inflow_by_direction": {
+          "N": {
+            "value": 18.424639598816665,
+            "unit": "m3",
+            "kind": "simulated"
+          },
+          "E": {
+            "value": 0.9763681606262249,
+            "unit": "m3",
+            "kind": "simulated"
+          },
+          "S": {
+            "value": 0.00339860699288406,
+            "unit": "m3",
+            "kind": "simulated"
+          },
+          "W": {
+            "value": 36.50092405029338,
+            "unit": "m3",
+            "kind": "simulated"
+          }
+        },
+        "upstream_streets": [
+          "Synthetic street col 10",
+          "Synthetic street row 0",
+          "Synthetic street row 2"
+        ],
+        "inflow_source": "simulated per-face cumulative inflow over the local day (solver M2-A2-06)",
+        "dem_crosscheck": {
+          "label": "DEM cross-check only (D8 steepest descent), not the simulated flow",
+          "kind": "terrain_diagnostic",
+          "main_inflow_direction": "SW",
+          "upstream_streets": [
+            "Synthetic street col 10",
+            "Synthetic street row 2"
+          ],
+          "contributing_area": {
+            "value": 2400.0,
+            "unit": "m2",
+            "kind": "terrain_diagnostic"
+          }
+        },
+        "local_slope": {
+          "value": 0.018027756377319917,
+          "unit": "m/m",
+          "kind": "terrain_diagnostic"
+        },
+        "depression_depth": {
+          "value": 0.20000000000000018,
+          "unit": "m",
+          "kind": "terrain_diagnostic"
+        },
+        "drainage_scenario_spread": {
+          "max_depth_m": {
+            "low": 0.2172416637826992,
+            "mid": 0.2142777562964464,
+            "high": 0.21033724236370202
+          },
+          "range_m": 0.006904421418997192,
+          "unit": "m",
+          "kind": "assumption"
+        },
+        "explanation": {
+          "budget_period": "whole run (per-cell budget is cumulative over the run)",
+          "rain_in": {
+            "value": 16.00000000000295,
+            "unit": "m3",
+            "kind": "simulated"
+          },
+          "roof_in": {
+            "value": 0.0,
+            "unit": "m3",
+            "kind": "simulated"
+          },
+          "runoff_out": {
+            "value": 78.50783195733695,
+            "unit": "m3",
+            "kind": "simulated"
+          },
+          "inflow": {
+            "value": 111.81066083345988,
+            "unit": "m3",
+            "kind": "simulated"
+          },
+          "drainage_out": {
+            "value": 49.302828876170864,
+            "unit": "m3",
+            "kind": "simulated"
+          },
+          "infiltration_out": {
+            "value": 0.0,
+            "unit": "m3",
+            "kind": "simulated"
+          },
+          "boundary_outflow": {
+            "value": 0.0,
+            "unit": "m3",
+            "kind": "simulated"
+          },
+          "tank": {
+            "value": 0.0,
+            "unit": "m3",
+            "kind": "simulated"
+          },
+          "storage_end": {
+            "value": 0.0,
+            "unit": "m3",
+            "kind": "simulated"
+          },
+          "residual_rel": {
+            "value": 3.5201905521448424e-13,
+            "unit": "1",
+            "kind": "simulated"
+          },
+          "stored_depth_peak": {
+            "value": 0.2142777562964464,
+            "unit": "m",
+            "kind": "simulated"
+          },
+          "best_mitigation": {
+            "scenario": "drain_plus_20mm_h",
+            "delta_peak_depth": {
+              "value": -0.2142777562964464,
+              "unit": "m",
+              "kind": "simulated"
+            },
+            "label": "model scenario, not a guarantee"
+          },
+          "best_mitigation_note": null
+        },
+        "uncertainty_status": "UNVALIDATED: synthetic, not calibrated",
+        "data_quality": "SYNTHETIC run; stub street network",
+        "provenance": {
+          "run_id": "synthetic-demo",
+          "source": "solver.grid.run_grid",
+          "selection": "score = peak_depth_m * minutes_above_0.10m (unit m*min, simulated); dedup 100 m"
+        },
+        "unavailable": {}
+      }
+    }
+  ],
+  "properties": {
+    "run_id": "synthetic-demo",
+    "date": "2026-10-03",
+    "crs": "EPSG:4326",
+    "synthetic": true,
+    "score_formula": "score = peak_depth_m * minutes_above_0.10m (unit m*min, simulated)",
+    "dedup_m": 100.0,
+    "limit": 5
+  },
+  "label": "SYNTHETIC example: hotspots from synthetic run 'synthetic-demo' (run_grid), stub street network. NOT Barcelona data."
+}

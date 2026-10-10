@@ -107,6 +107,39 @@ for (const [id, card] of Object.entries(zones)) {
   }
 }
 
+const relief = JSON.parse(readFileSync("data/relief.json", "utf8"));
+let reliefBytes = 0;
+try {
+  reliefBytes = statSync(join("data", relief.image ?? "missing")).size;
+} catch {
+  reliefBytes = 0;
+}
+if (reliefBytes < 1000) fail("relief hillshade missing");
+if (reliefBytes > 3 * 1024 * 1024) fail("relief hillshade exceeds 3 MB");
+const directions = new Set([
+  "north",
+  "northeast",
+  "east",
+  "southeast",
+  "south",
+  "southwest",
+  "west",
+  "northwest",
+]);
+for (const id of seenGlobal) {
+  const place = relief.places?.[id];
+  if (!place) {
+    fail(`no relief reading for ${id}`);
+    continue;
+  }
+  if (!Number.isFinite(place.meters) || place.meters < 0 || place.meters > 600) {
+    fail(`${id} relief height looks wrong`);
+  }
+  if (!Number.isFinite(place.fallMeters)) fail(`${id} relief fall missing`);
+  if (!directions.has(place.toward)) fail(`${id} relief direction ${place.toward}`);
+}
+if (!String(relief.sourceUrl).startsWith("https://")) fail("relief sourceUrl is not https");
+
 const torre = zones["slope-torre-baro"];
 const torreProof = zones["proof-torre-baro-2026-10"];
 if (!torre) fail("missing Torre Baró slope card");

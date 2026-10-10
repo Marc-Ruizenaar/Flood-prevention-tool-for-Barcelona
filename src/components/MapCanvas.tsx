@@ -2,7 +2,8 @@ import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import maplibregl, { type GeoJSONSource, type Map } from "maplibre-gl";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import type { GeoFile } from "../lib/data";
-import type { GroupId } from "../types";
+import { dayByDate } from "../lib/weather";
+import type { GroupId, ReliefFile } from "../types";
 
 export type MapHandle = {
   focus: (id: string) => void;
@@ -11,8 +12,11 @@ export type MapHandle = {
 
 type Props = {
   collections: Partial<Record<GeoFile, FeatureCollection>>;
+  relief: Pick<ReliefFile, "image" | "bounds"> | null;
   visibility: Record<GroupId, boolean>;
   selectedId: string | null;
+  day: string;
+  strength: number;
   focusNonce: number;
   onSelect: (id: string) => void;
 };
@@ -23,14 +27,16 @@ const CITY_BOUNDS: [[number, number], [number, number]] = [
 ];
 
 const LAYER_GROUPS: { group: GroupId; ids: string[] }[] = [
+  { group: "relief", ids: ["relief-shade"] },
   { group: "slopes", ids: ["slope-fill", "slope-line", "slope-label"] },
   { group: "sewers", ids: ["sewer-fill", "sewer-line", "sewer-label", "hotspot-circle", "hotspot-label"] },
-  { group: "streams", ids: ["stream-line", "stream-label", "tank-circle", "tank-label"] },
+  { group: "streams", ids: ["stream-line", "stream-label", "stream-critical", "stream-critical-label", "tank-circle", "tank-label"] },
   { group: "proof", ids: ["proof-halo", "proof-circle", "proof-label"] },
 ];
 
 const HIT_LAYERS = [
   "proof-circle",
+  "stream-critical",
   "tank-circle",
   "hotspot-circle",
   "stream-line",
@@ -39,7 +45,8 @@ const HIT_LAYERS = [
 ];
 
 const HIT_RANK: Record<string, number> = {
-  "proof-circle": 6,
+  "proof-circle": 7,
+  "stream-critical": 6,
   "tank-circle": 5,
   "hotspot-circle": 4,
   "stream-line": 3,
@@ -47,10 +54,30 @@ const HIT_RANK: Record<string, number> = {
   "sewer-fill": 1,
 };
 
+function proofForDay(
+  collection: FeatureCollection | undefined,
+  day: string,
+): FeatureCollection | undefined {
+  if (!collection) return undefined;
+  const ids = new Set(dayByDate(day).reportIds);
+  return {
+    type: "FeatureCollection",
+    features: collection.features.filter((feature) => ids.has(String(feature.properties?.id ?? ""))),
+  };
+}
+
+function zoneIdOf(feature: { properties?: Record<string, unknown> | null }): string | null {
+  const selectId = feature.properties?.selectId;
+  if (typeof selectId === "string") return selectId;
+  const id = feature.properties?.id;
+  if (typeof id === "string" && feature.properties?.tappable !== false) return id;
+  return null;
+}
+
 function pad(): maplibregl.PaddingOptions {
   const wide = window.innerWidth >= 960;
   return {
-    top: 96,
+    top: wide ? 96 : 128,
     bottom: wide ? 56 : 248,
     left: wide ? 332 : 28,
     right: wide ? 48 : 28,
@@ -79,7 +106,7 @@ function boundsOf(geometry: Geometry): [[number, number], [number, number]] | nu
 }
 
 export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
-  { collections, visibility, selectedId, focusNonce, onSelect },
+  { collections, relief, visibility, selectedId, day, strength, focusNonce, onSelect },
   ref,
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -89,6 +116,10 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
   onSelectRef.current = onSelect;
   const visibilityRef = useRef(visibility);
   visibilityRef.current = visibility;
+  const dayRef = useRef(day);
+  dayRef.current = day;
+  const strengthRef = useRef(strength);
+  strengthRef.current = strength;
 
   useImperativeHandle(ref, () => ({
     focus(id: string) {
@@ -138,6 +169,25 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
 
     map.on("load", () => {
       const empty: FeatureCollection = { type: "FeatureCollection", features: [] };
+      if (relief) {
+        const [west, south, east, north] = relief.bounds;
+        map.addSource("relief", {
+          type: "image",
+          url: `/data/${relief.image}`,
+          coordinates: [
+            [west, north],
+            [east, north],
+            [east, south],
+            [west, south],
+          ],
+        });
+        map.addLayer({
+          id: "relief-shade",
+          type: "raster",
+          source: "relief",
+          paint: { "raster-opacity": 0.72, "raster-fade-duration": 0 },
+        });
+      }
       const add = (id: string, data: FeatureCollection | undefined) => {
         map.addSource(id, { type: "geojson", data: data ?? empty });
         for (const feature of data?.features ?? []) {
@@ -153,7 +203,13 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       add("streams", collections["buried-streams"]);
       add("tanks", collections["retention-tanks"]);
       add("hotspots", collections["resccue-hotspots"]);
-      add("proof", collections["proof-oct2026"]);
+      add("proof", proofForDay(collections["proof-oct2026"], dayRef.current));
+      for (const feature of collections["proof-oct2026"]?.features ?? []) {
+        const fid = feature.properties?.id;
+        if (typeof fid === "string" && feature.properties?.tappable !== false) {
+          indexRef.current.set(fid, feature);
+        }
+      }
       map.addSource("highlight", { type: "geojson", data: empty });
 
       map.addLayer({
@@ -188,6 +244,18 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
           "line-color": ["case", ["==", ["get", "highlight"], true], "#0f5f73", "#5eead4"],
           "line-width": ["case", ["==", ["get", "highlight"], true], 4, 1.3],
           "line-opacity": ["case", ["==", ["get", "highlight"], true], 0.95, 0.75],
+        },
+      });
+      map.addLayer({
+        id: "stream-critical",
+        type: "circle",
+        source: "streams",
+        filter: ["==", ["get", "kind"], "critical"],
+        paint: {
+          "circle-radius": 7,
+          "circle-color": "#b42318",
+          "circle-stroke-width": 2,
+          "circle-stroke-color": "#fff7ed",
         },
       });
       map.addLayer({
@@ -259,8 +327,40 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
       map.addLayer(label("slope-label", "slopes", 12));
       map.addLayer(label("sewer-label", "sewers", 12));
       map.addLayer(
-        label("stream-label", "streams", 13, ["==", ["get", "highlight"], true]),
+        label("stream-label", "streams", 13, [
+          "all",
+          ["==", ["get", "highlight"], true],
+          ["!=", ["get", "quietLabel"], true],
+        ]),
       );
+      map.addLayer({
+        id: "stream-critical-label",
+        type: "symbol",
+        source: "streams",
+        minzoom: 9,
+        filter: ["==", ["get", "kind"], "critical"],
+        layout: {
+          "text-field": ["get", "name"],
+          "text-font": ["Noto Sans Regular"],
+          "text-size": 12,
+          "text-line-height": 1.1,
+          "text-max-width": 12,
+          "text-anchor": ["get", "anchor"],
+          "text-offset": [
+            "match",
+            ["get", "anchor"],
+            "right",
+            ["literal", [-0.7, 0]],
+            ["literal", [0.7, 0]],
+          ],
+          "text-allow-overlap": true,
+        },
+        paint: {
+          "text-color": "#9f1239",
+          "text-halo-color": "#fff7ed",
+          "text-halo-width": 1.6,
+        },
+      });
       map.addLayer(label("tank-label", "tanks", 13));
       map.addLayer(label("hotspot-label", "hotspots", 13.4));
       map.addLayer(label("proof-label", "proof", 13));
@@ -292,7 +392,9 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
 
       for (const entry of LAYER_GROUPS) {
         const visible = visibilityRef.current[entry.group] ? "visible" : "none";
-        for (const id of entry.ids) map.setLayoutProperty(id, "visibility", visible);
+        for (const id of entry.ids) {
+          if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", visible);
+        }
       }
 
       map.on("click", (event) => {
@@ -304,24 +406,19 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
           { layers: HIT_LAYERS.filter((id) => map.getLayer(id)) },
         );
         const ranked = hits
-          .filter((feature) => {
-            const id = feature.properties?.id;
-            return typeof id === "string" && feature.properties?.tappable !== false;
-          })
-          .sort((a, b) => (HIT_RANK[b.layer.id] ?? 0) - (HIT_RANK[a.layer.id] ?? 0));
+          .map((feature) => ({ feature, id: zoneIdOf(feature) }))
+          .filter((hit): hit is { feature: (typeof hits)[number]; id: string } => hit.id !== null)
+          .sort((a, b) => (HIT_RANK[b.feature.layer.id] ?? 0) - (HIT_RANK[a.feature.layer.id] ?? 0));
         const top = ranked[0];
         if (!top) return;
-        const id = top.properties?.id;
-        if (typeof id === "string") onSelectRef.current(id);
+        onSelectRef.current(top.id);
       });
 
       map.on("mousemove", (event) => {
         const hits = map.queryRenderedFeatures(event.point, {
           layers: HIT_LAYERS.filter((id) => map.getLayer(id)),
         });
-        const tappable = hits.some(
-          (feature) => typeof feature.properties?.id === "string" && feature.properties?.tappable !== false,
-        );
+        const tappable = hits.some((feature) => zoneIdOf(feature) !== null);
         map.getCanvas().style.cursor = tappable ? "pointer" : "";
       });
     });
@@ -333,6 +430,35 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
     // Map is created once, after data is ready. Visibility is applied on load and updated below.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collections]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const apply = () => {
+      if (!map.getLayer("sewer-fill")) return;
+      const weight = strengthRef.current;
+      map.setPaintProperty("sewer-fill", "fill-opacity", 0.12 + 0.28 * weight);
+      map.setPaintProperty("sewer-line", "line-width", 0.8 + 1.6 * weight);
+      map.setPaintProperty("hotspot-circle", "circle-radius", 5 + 4 * weight);
+      map.setPaintProperty("slope-fill", "fill-opacity", 0.08 + 0.22 * weight);
+      map.setPaintProperty("slope-line", "line-width", 1 + weight);
+    };
+    if (map.getLayer("sewer-fill")) apply();
+    else map.once("idle", apply);
+  }, [strength]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const apply = () => {
+      const source = map.getSource("proof") as GeoJSONSource | undefined;
+      if (!source) return;
+      const proof = proofForDay(collections["proof-oct2026"], day);
+      source.setData(proof ?? { type: "FeatureCollection", features: [] });
+    };
+    if (map.getSource("proof")) apply();
+    else map.once("idle", apply);
+  }, [day, collections]);
 
   useEffect(() => {
     const map = mapRef.current;

@@ -1,0 +1,583 @@
+{
+ "schema_version": "0.1.0",
+ "generated_at": "2026-10-09T21:10:00Z",
+ "period_local": [
+  "2026-10-03",
+  "2026-10-07"
+ ],
+ "timezone": "Europe/Madrid",
+ "datasets": [
+  {
+   "id": "meteocat_xema_api",
+   "name": "Meteocat XEMA API (official)",
+   "category": "rainfall",
+   "provider": "Servei Meteorologic de Catalunya",
+   "status": "MISSING",
+   "access": "https://api.meteo.cat/xema/v1 (requires X-Api-Key)",
+   "probes": [
+    {
+     "url": "https://api.meteo.cat/xema/v1/estacions/metadades",
+     "http_status": 403,
+     "probed_at": "2026-10-09T20:55:00Z",
+     "note": "{\"message\":\"Forbidden\"} without API key"
+    },
+    {
+     "url": "https://api.meteo.cat/xema/v1/variables/mesurades/35/2026/10/03?codiEstacio=X4",
+     "http_status": 403,
+     "probed_at": "2026-10-09T20:55:00Z",
+     "note": "no API key available"
+    }
+   ],
+   "warnings": [
+    "No API key configured; the open-data mirror below is used for availability checks."
+   ]
+  },
+  {
+   "id": "xema_opendata_precip",
+   "name": "XEMA 30-min station data (Transparencia Catalunya Socrata nzvn-apee), variable 35 = precipitation",
+   "category": "rainfall",
+   "provider": "Meteocat via analisi.transparenciacatalunya.cat",
+   "status": "CONDITIONAL",
+   "access": "https://analisi.transparenciacatalunya.cat/resource/nzvn-apee.json",
+   "units": "mm per 30-min record (var 35, codi_base SH) - verified from 4fb2-n3yi",
+   "crs": "EPSG:4326 (station coords)",
+   "temporal_resolution": "30 min",
+   "spatial_resolution": "point gauges",
+   "covers_2026_10_03_to_07": true,
+   "probes": [
+    {
+     "url": "https://analisi.transparenciacatalunya.cat/resource/nzvn-apee.json?$select=codi_estacio,count(*),sum(valor_lectura)...",
+     "http_status": 200,
+     "probed_at": "2026-10-09T21:00:00Z",
+     "note": "2026-10-03..07: X4 Raval 240/240 records, 265.0 mm; X8 Zona Universitaria 240/240, 228.3 mm; D5 Observatori Fabra 236/240, 203.6 mm; WU Badalona 240/240, 228.9 mm"
+    },
+    {
+     "url": "first probe",
+     "http_status": 429,
+     "probed_at": "2026-10-09T20:55:00Z",
+     "note": "rate limited without app token; retry succeeded"
+    }
+   ],
+   "warnings": [
+    "Event-period data NOT validated by Meteocat (codi_estat blank)",
+    "D5 missing 4 half-hours 2026-10-03T21:30-23:00Z",
+    "Evidence from the mirror metadata, not the Meteocat API",
+    "Point gauges only"
+   ],
+   "timestamp_tz": "UTC, label = interval start (verified from nzvn-apee column metadata)",
+   "qc": "codi_estat: blank=not validated, T=in validation, V=valid; invalid not published. 3-7 Oct 2026 records are blank (unvalidated).",
+   "evidence": "manifests/g1_xema_evidence.md; manifests/raw/g1/provenance.json",
+   "licence": "Meteocat intellectual property (http://www.meteo.cat/wpweb/avis-legal/), per nzvn-apee dataset metadata",
+   "adapter": "src/bcnflood/data/xema_opendata.py"
+  },
+  {
+   "id": "meteocat_radar",
+   "name": "Meteocat radar QPE",
+   "category": "radar",
+   "provider": "Meteocat",
+   "status": "MISSING",
+   "access": "not publicly located; likely requires agreement/API key",
+   "warnings": [
+    "No accessible radar precipitation product verified"
+   ]
+  },
+  {
+   "id": "icgc_dem",
+   "name": "ICGC MET 2 m / LiDAR DEM",
+   "category": "dem",
+   "provider": "Institut Cartografic i Geologic de Catalunya",
+   "status": "REJECTED",
+   "access": "ICGC download services (URL not yet verified)",
+   "crs": "EPSG:25831 expected",
+   "vertical_datum": "EGM08-REDNAP expected (unverified)",
+   "probes": [
+    {
+     "url": "https://geoserveis.icgc.cat/servei/catalunya/mde/wcs?SERVICE=WCS&REQUEST=GetCapabilities",
+     "http_status": 404,
+     "probed_at": "2026-10-09T20:56:00Z"
+    },
+    {
+     "url": "https://geoserveis.icgc.cat/servei/catalunya/elevacions/wcs?SERVICE=WCS&REQUEST=GetCapabilities",
+     "http_status": 404,
+     "probed_at": "2026-10-09T20:58:00Z"
+    },
+    {
+     "url": "https://www.icgc.cat/ca/Descarregues/Elevacions/Model-d-elevacions-del-terreny-de-Catalunya",
+     "http_status": 404,
+     "probed_at": "2026-10-09T20:56:00Z"
+    },
+    {
+     "url": "https://datacloud.icgc.cat/datacloud/met2_ETRS89/",
+     "http_status": null,
+     "probed_at": "2026-10-09T21:00:00Z",
+     "note": "connection timeout"
+    },
+    {
+     "url": "https://geoserveis.icgc.cat/icgc_mdt2m/wcs/service?SERVICE=WCS&REQUEST=GetCapabilities",
+     "http_status": 404,
+     "probed_at": "2026-10-09T21:05:00Z"
+    },
+    {
+     "url": "https://datacloud.icgc.cat/datacloud/met2_ETRS89/",
+     "http_status": null,
+     "probed_at": "2026-10-09T21:07:00Z",
+     "note": "timeout again"
+    }
+   ],
+   "warnings": [
+    "No public raw-value endpoint reachable: icgc_mdt2m is WMS only (rendered images), and that WMS is scheduled to shut down on 2026-10-31. REJECTED for M2; IGN fallback used. The MET2 download app is interactive, so Marc would need to provide the files for an upgrade."
+   ]
+  },
+  {
+   "id": "ign_mdt",
+   "name": "IGN/CNIG MDT05 via IDEE WCS INSPIRE (coverage Elevacion4258_5), clipped to Barcelona",
+   "category": "dem",
+   "provider": "IGN Spain",
+   "status": "CONDITIONAL",
+   "access": "https://servicios.idee.es/wcs-inspire/mdt",
+   "probes": [
+    {
+     "url": "https://servicios.idee.es/wcs-inspire/mdt?SERVICE=WCS&REQUEST=GetCapabilities",
+     "http_status": 200,
+     "probed_at": "2026-10-09T20:58:00Z",
+     "note": "capabilities returned (12 kB); coverage resolution for Barcelona not yet checked"
+    }
+   ],
+   "file": "manifests/raw/g2/bcn_mdt05_25831.tif",
+   "sha256": "0daa368ca3fd0aec525bf5166e5aadcd96dbef685634df92851489b7660f086c",
+   "crs": "EPSG:25831 (output). Source: WCS coverage Elevacion4258_5 is named for ETRS89 (EPSG:4258), but both the DescribeCoverage envelope and the delivered GeoTIFF declare EPSG:4326. The two differ by less than 1 m, which is negligible at 5 m.",
+   "spatial_resolution": "5 m (source about 0.000045 deg)",
+   "vertical_datum": "Orthometric heights, REDNAP (Alicante tide gauge), per IGN MDT05 product specification; not stated in the WCS response itself",
+   "nodata": -9999.0,
+   "shape_rows_cols": [
+    3352,
+    2939
+   ],
+   "bounds_25831": [
+    420820.0,
+    4574275.0,
+    435515.0,
+    4591035.0
+   ],
+   "coverage": "101.26 km2 valid inside municipality polygon (101.26 km2); no gaps",
+   "elevation_m": {
+    "min": -7.0,
+    "max": 517.4898681640625,
+    "p01": 2.0,
+    "p99": 420.7618713378906
+   },
+   "licence": "CC BY 4.0, (c) Instituto Geografico Nacional",
+   "provenance": "manifests/raw/g2/dem_build_report.json (tile URLs, fetch times, sha256); builder src/bcnflood/data/dem.py; boundary manifests/raw/g2/bcn_boundary_osm_nominatim.json",
+   "warnings": [
+    "The WCS serves int16 values, so elevations are quantised to 1 m. This is a serious limitation for street-scale ponding.",
+    "Clip boundary is OSM relation 347950 (ODbL), not the official ICGC/IGN boundary",
+    "Raw tiles (29 MB) are not committed; they can be rebuilt from the URLs, and sha256 sums are recorded",
+    "Max 517.49 m (raw source int16 max 518) at x=426387.5 y=4586002.5 (2.11908E 41.42221N). Verified: this point lies inside the OSM footprint of the Temple Expiatori del Sagrat Cor (way 486759610) on the Tibidabo summit. Nominal summit is 512 m, so the +5.5 m is consistent with the temple platform or structure in the DTM or a source artefact. It is not a reprojection error, because the raw tile reads 518 too. The cause beyond that is not verified.",
+    "124 cells below 0 m (min -7.0 m; the raw source tile contains -7, so these values are not created by the processing). All of them lie in the Zona Franca / port area, bbox x 425437-428707, y 4575837-4577772. The minimum is next to Passeig de la Zona Franca. Cause (dock basins, excavations or source artefact) is NOT verified. Flag these cells for review before any simulation."
+   ],
+   "attribution": "DEM: (c) Instituto Geografico Nacional (MDT05). Clip boundary: (c) OpenStreetMap contributors, ODbL 1.0"
+  },
+  {
+   "id": "catastro_buildings",
+   "name": "Catastro INSPIRE Buildings WFS",
+   "category": "buildings",
+   "provider": "Direccion General del Catastro",
+   "status": "MISSING",
+   "access": "https://ovc.catastro.meh.es/INSPIRE/wfsBU.aspx",
+   "probes": [
+    {
+     "url": "https://ovc.catastro.meh.es/INSPIRE/wfsBU.aspx?service=WFS&request=GetCapabilities",
+     "http_status": 400,
+     "probed_at": "2026-10-09T20:56:00Z"
+    },
+    {
+     "url": "https://ovc.catastro.meh.es/INSPIRE/wfsBU.aspx?service=WFS&version=2.0.0&request=GetCapabilities",
+     "http_status": null,
+     "probed_at": "2026-10-09T20:58:00Z",
+     "note": "timeout"
+    },
+    {
+     "url": "https://ovc.catastro.meh.es/INSPIRE/wfsBU.aspx?service=WFS&version=2.0.0&request=GetCapabilities",
+     "http_status": null,
+     "probed_at": "2026-10-09T21:18:17Z",
+     "note": "timeout"
+    },
+    {
+     "url": "...wfsBU.aspx?...request=GetFeature&STOREDQUERIE_ID=GetBuildingByBBOX&bbox=430000,4581000,430500,4581500",
+     "http_status": 400,
+     "probed_at": "2026-10-09T21:18:17Z"
+    }
+   ],
+   "warnings": [
+    "Unreachable from the box; the OSM fallback is in use (osm_buildings_roads)"
+   ]
+  },
+  {
+   "id": "corine_clc2018",
+   "name": "CORINE Land Cover 2018",
+   "category": "land_cover",
+   "provider": "EEA / Copernicus",
+   "status": "CONDITIONAL",
+   "access": "https://image.discomap.eea.europa.eu/arcgis/rest/services/Corine/CLC2018_WM/MapServer",
+   "spatial_resolution": "100 m / 25 ha MMU",
+   "probes": [
+    {
+     "url": "...CLC2018_WM/MapServer?f=json",
+     "http_status": 200,
+     "probed_at": "2026-10-09T20:56:00Z"
+    }
+   ],
+   "warnings": [
+    "Too coarse for urban street-scale imperviousness; context only"
+   ]
+  },
+  {
+   "id": "siose",
+   "name": "SIOSE land occupation (IDEE WMS INSPIRE)",
+   "category": "land_cover",
+   "provider": "IGN Spain",
+   "status": "PENDING",
+   "access": "https://servicios.idee.es/wms-inspire/ocupacion-suelo",
+   "probes": [
+    {
+     "url": "...ocupacion-suelo?SERVICE=WMS&REQUEST=GetCapabilities",
+     "http_status": 200,
+     "probed_at": "2026-10-09T20:56:00Z",
+     "note": "WMS = rendered images only; vector download still needed"
+    }
+   ]
+  },
+  {
+   "id": "soilgrids",
+   "name": "ISRIC SoilGrids v2 (texture)",
+   "category": "soil",
+   "provider": "ISRIC",
+   "status": "CONDITIONAL",
+   "access": "https://rest.isric.org/soilgrids/v2.0/properties/query",
+   "spatial_resolution": "250 m",
+   "probes": [
+    {
+     "url": "...query?lon=2.17&lat=41.39&property=sand&depth=0-5cm",
+     "http_status": 200,
+     "probed_at": "2026-10-09T20:56:00Z"
+    }
+   ],
+   "warnings": [
+    "250 m global model; urban sealed soils poorly represented; Green-Ampt params need pedotransfer (estimate)"
+   ]
+  },
+  {
+   "id": "bcn_opendata_sewer",
+   "name": "Barcelona Open Data (sewer network / clavegueram, roads, gauges)",
+   "category": "drainage",
+   "provider": "Ajuntament de Barcelona",
+   "status": "PENDING",
+   "access": "https://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search",
+   "probes": [
+    {
+     "url": "...package_search?q=clavegueram",
+     "http_status": null,
+     "probed_at": "2026-10-09T21:00:00Z",
+     "note": "CKAN API timed out from box twice; homepage returned 302"
+    }
+   ],
+   "warnings": [
+    "Sewer capacities (BCASA) likely not public; drainage capacity is MISSING until proven otherwise"
+   ]
+  },
+  {
+   "id": "drainage_capacity",
+   "name": "Stormwater drainage capacities (inlets, pipes, tanks)",
+   "category": "drainage",
+   "provider": "BCASA (Barcelona Cicle de l'Aigua)",
+   "status": "MISSING",
+   "access": "no public source verified",
+   "warnings": [
+    "Any drainage sink will be an explicit ASSUMPTION scenario"
+   ]
+  },
+  {
+   "id": "aemet_opendata",
+   "name": "AEMET OpenData daily climatology",
+   "category": "rainfall",
+   "provider": "AEMET",
+   "status": "MISSING",
+   "access": "requires api_key",
+   "probes": [
+    {
+     "url": "https://opendata.aemet.es/opendata/api/valores/climatologicos/diarios/...",
+     "http_status": 200,
+     "probed_at": "2026-10-09T20:56:00Z",
+     "note": "HTTP 200 but empty body without key"
+    }
+   ]
+  },
+  {
+   "id": "osm_buildings_roads",
+   "name": "OpenStreetMap buildings + highway ways (Overpass), Barcelona municipality (relation 347950)",
+   "category": "buildings",
+   "provider": "OpenStreetMap contributors via overpass-api.de",
+   "status": "CONDITIONAL",
+   "label": "FALLBACK (Catastro unavailable)",
+   "licence": "ODbL 1.0, (c) OpenStreetMap contributors, https://www.openstreetmap.org/copyright",
+   "attribution": "(c) OpenStreetMap contributors",
+   "osm_base_timestamp": "2026-10-09T21:18:00Z",
+   "query": "[out:json];area(3600347950)->.a;way[building](area.a);relation[building](area.a);out geom tags; | way[highway](area.a);out geom",
+   "raw": [
+    "manifests/raw/g3/osm_buildings_raw.json.gz",
+    "manifests/raw/g3/osm_highways_raw.json.gz",
+    "manifests/raw/g3/osm_building_relations_raw.json.gz"
+   ],
+   "raw_sha256_uncompressed": {
+    "manifests/raw/g3/osm_buildings_raw.json": "aff195967ae50ea7f7d9fa4242098650b2a3bdc35ef2c90552e2e13d71d166a0",
+    "manifests/raw/g3/osm_highways_raw.json": "3daad23aa07a8fec9d758b7bf6069c2f10b68d7d2a3d10d37b9649549485498b",
+    "manifests/raw/g3/osm_building_relations_raw.json": "98421e8d23a0fe78020d5b8c125915bd90f0fb9ff09767bc467acebe733465e7"
+   },
+   "outputs": [
+    {
+     "file": "manifests/derived/osm/bcn_buildings_osm_4326.geojson.gz",
+     "crs": "EPSG:4326",
+     "n_features": 70338,
+     "bytes": 6136023,
+     "sha256": "c7546d8d85b308fc5bd27421864817d0d3fc6b4dcd4ece2ef78f3c9291841bba"
+    },
+    {
+     "file": "manifests/derived/osm/bcn_buildings_osm_25831.geojson.gz",
+     "crs": "EPSG:25831",
+     "n_features": 70338,
+     "bytes": 13530792,
+     "sha256": "92a43f5e44be46eaa97fe52d6cf7420c00e2612426a8c5581d55d97821ca56d8"
+    },
+    {
+     "file": "manifests/derived/osm/bcn_streets_osm_4326.geojson.gz",
+     "crs": "EPSG:4326",
+     "n_features": 84323,
+     "bytes": 3813171,
+     "sha256": "0f840eaac05728555d33d23aefd9780a1d7852ab48096604f1b8ea1805e2b3d1"
+    },
+    {
+     "file": "manifests/derived/osm/bcn_streets_osm_25831.geojson.gz",
+     "crs": "EPSG:25831",
+     "n_features": 84323,
+     "bytes": 7665617,
+     "sha256": "f4350b061f39d7ef8ce39414e54dfc1b690a304e7aeab56b5fd88227b9c93229"
+    }
+   ],
+   "validation": {
+    "buildings_polygons": 70338,
+    "buildings_area_km2": 26.58,
+    "building_elements_dropped": 22,
+    "street_linestrings": 84323,
+    "streets_length_km": 5168.6
+   },
+   "provenance": "src/bcnflood/data/osm.py; manifests/derived/osm/osm_build_report.json",
+   "warnings": [
+    "Volunteered data, not cadastral. Completeness has not been checked against Catastro.",
+    "The area() filter keeps features that intersect the boundary, so some features extend past the municipal edge",
+    "Streets include all highway=* values (footways, service, steps); filter by class before use",
+    "Fixed (M2 re-run): the first build dropped all 10307 building multipolygon relations, because 'out geom tags' returns no relation members. They were re-fetched with 'out body geom'. 22 elements are still dropped (unclosed or invalid).",
+    "Building area 26.6 km2 may include overlapping polygons (site-level multipolygons over individual buildings); overlaps were not removed."
+   ],
+   "access": "https://overpass-api.de/api/interpreter (POST, Overpass QL, User-Agent required); derived files in manifests/derived/osm/",
+   "crs": "EPSG:25831 and EPSG:4326 (both provided)"
+  },
+  {
+   "id": "osm_landcover",
+   "name": "OpenStreetMap landuse/natural/leisure polygons, Barcelona municipality",
+   "category": "land_cover",
+   "provider": "OpenStreetMap contributors via overpass-api.de",
+   "status": "CONDITIONAL",
+   "label": "FALLBACK / ESTIMATE source (SIOSE vector not yet obtained)",
+   "access": "https://overpass-api.de/api/interpreter (POST Overpass QL, area(3600347950)); ways via 'out geom tags', relations via 'out body geom'",
+   "crs": "EPSG:4326 (raw)",
+   "licence": "ODbL 1.0, (c) OpenStreetMap contributors",
+   "attribution": "(c) OpenStreetMap contributors",
+   "raw": "manifests/raw/g3/landcover/*.json.gz (SHA256SUMS in manifests/raw/g3)",
+   "probes": [
+    {
+     "url": "https://overpass-api.de/api/interpreter (natural, unfiltered)",
+     "http_status": 504,
+     "probed_at": "2026-10-09T21:33:00Z",
+     "note": "timeout; re-run with a value filter, 200"
+    },
+    {
+     "url": "https://overpass.private.coffee/api/interpreter",
+     "http_status": 200,
+     "probed_at": "2026-10-09T21:37:00Z",
+     "note": "mirror data stale (osm_base 2026-05-31); response discarded"
+    }
+   ],
+   "warnings": [
+    "Volunteered data; completeness and attribute accuracy not checked",
+    "natural=* limited to wood|scrub|water|beach|grassland|heath|sand|bare_rock|wetland|scree (the unfiltered query times out)"
+   ]
+  },
+  {
+   "id": "bcn_surface_params_5m",
+   "name": "Land-cover class, Manning n and Green-Ampt rasters on the G2 DEM grid",
+   "category": "land_cover",
+   "provider": "Derived by Agent 1 (src/bcnflood/data/landcover.py) from OSM + config tables",
+   "status": "CONDITIONAL",
+   "kind": "estimate",
+   "access": "local files manifests/derived/landcover/*.tif (built by python -m bcnflood.data.landcover)",
+   "crs": "EPSG:25831",
+   "spatial_resolution": "5 m, same grid/extent as manifests/raw/g2/bcn_mdt05_25831.tif",
+   "units": "manning_n s m^-1/3; ga_ks_cm_h cm/h; ga_psi_cm cm; porosities dimensionless; class uint8 (0 = outside)",
+   "licence": "Derived from ODbL OSM data (ODbL share-alike applies to the derived database)",
+   "files": {
+    "class": {
+     "file": "manifests/derived/landcover/bcn_class_25831_5m.tif",
+     "unit": "class code",
+     "sha256": "693a6ea788e205b361bf9dbc10be04ffb5c9533f78512b82f75fd42fa2b73183"
+    },
+    "manning_n": {
+     "file": "manifests/derived/landcover/bcn_manning_n_25831_5m.tif",
+     "unit": "s m^-1/3",
+     "sha256": "4dab1c9219da8862034cc3e6f1547be7ead8151109693bd333a08078a35b5e9c"
+    },
+    "ga_ks_cm_h": {
+     "file": "manifests/derived/landcover/bcn_ga_ks_cm_h_25831_5m.tif",
+     "unit": "cm/h",
+     "sha256": "cd047be4266e528cdd31f37be3f7d573b916ffa2402923f6f0c80f1a9c1de478"
+    },
+    "ga_psi_cm": {
+     "file": "manifests/derived/landcover/bcn_ga_psi_cm_25831_5m.tif",
+     "unit": "cm",
+     "sha256": "a9b9d6d850feeb757edccae162918479b9c51072cef38e2afa21a85663cd7dab"
+    },
+    "ga_porosity": {
+     "file": "manifests/derived/landcover/bcn_ga_porosity_25831_5m.tif",
+     "unit": "-",
+     "sha256": "f7dd3bd849406156a71cfc070d4b31b5c16e157f4033228122773857916743ea"
+    },
+    "ga_eff_porosity": {
+     "file": "manifests/derived/landcover/bcn_ga_eff_porosity_25831_5m.tif",
+     "unit": "-",
+     "sha256": "ab56c0c2321835dff9d086a41c3cf494cb03f27882941caa8b07d50c164db8c7"
+    }
+   },
+   "lookup": "config/landcover_param_lookup.json",
+   "validation": {
+    "inside_cells": 4050544,
+    "unassigned_inside": 0,
+    "params_nodata_inside": {
+     "manning_n": 0,
+     "ga_ks": 0
+    },
+    "class_stats": {
+     "urban_sealed": {
+      "code": 1,
+      "cells": 1004531,
+      "km2": 25.113,
+      "pct": 24.8
+     },
+     "water": {
+      "code": 2,
+      "cells": 7036,
+      "km2": 0.176,
+      "pct": 0.17
+     },
+     "beach_sand": {
+      "code": 3,
+      "cells": 13441,
+      "km2": 0.336,
+      "pct": 0.33
+     },
+     "grass_park": {
+      "code": 4,
+      "cells": 353816,
+      "km2": 8.845,
+      "pct": 8.74
+     },
+     "pitch_sealed": {
+      "code": 5,
+      "cells": 48247,
+      "km2": 1.206,
+      "pct": 1.19
+     },
+     "scrub_heath": {
+      "code": 6,
+      "cells": 98686,
+      "km2": 2.467,
+      "pct": 2.44
+     },
+     "forest": {
+      "code": 7,
+      "cells": 551873,
+      "km2": 13.797,
+      "pct": 13.62
+     },
+     "bare_fallow": {
+      "code": 8,
+      "cells": 16566,
+      "km2": 0.414,
+      "pct": 0.41
+     },
+     "cultivated": {
+      "code": 9,
+      "cells": 5931,
+      "km2": 0.148,
+      "pct": 0.15
+     },
+     "road_paved": {
+      "code": 10,
+      "cells": 862659,
+      "km2": 21.566,
+      "pct": 21.3
+     },
+     "path_unpaved": {
+      "code": 11,
+      "cells": 33013,
+      "km2": 0.825,
+      "pct": 0.82
+     },
+     "building": {
+      "code": 12,
+      "cells": 1054745,
+      "km2": 26.369,
+      "pct": 26.04
+     }
+    }
+   },
+   "warnings": [
+    "ESTIMATE: literature values with assumptions A1-A7 (see the lookup file). Not calibrated.",
+    "Single soil texture (clay_loam) for every pervious cell. SoilGrids is null at urban points.",
+    "24.8% of the area defaults to urban_sealed (no OSM tag); 'sealed' means Ks=0 by assumption",
+    "Road widths are assumed per highway class",
+    "Ks of 0.10 cm/h for clay loam is a mean; the Rawls ranges are wide"
+   ]
+  },
+  {
+   "id": "xema_stations_g1",
+   "name": "XEMA station metadata for G1 stations X4, X8, D5, WU",
+   "category": "rainfall",
+   "provider": "Meteocat via analisi.transparenciacatalunya.cat (dataset yqwd-vj5e)",
+   "status": "CONDITIONAL",
+   "access": "https://analisi.transparenciacatalunya.cat/resource/yqwd-vj5e.json?$limit=5000 (raw copy manifests/raw/g1/stations_yqwd-vj5e.json; extract manifests/xema_stations_g1.json)",
+   "crs": "EPSG:4326 lon/lat (source); EPSG:25831 x/y computed with pyproj",
+   "licence": "Meteocat intellectual property - http://www.meteo.cat/wpweb/avis-legal/",
+   "warnings": [
+    "Elevation datum not stated in source",
+    "Status is from the metadata dataset at fetch time (all 4 Operativa)",
+    "Coordinates are station metadata, not surveyed by us"
+   ]
+  },
+  {
+   "id": "rain_idw_method",
+   "name": "IDW rainfall interpolation helper (src/bcnflood/data/rain_idw.py)",
+   "category": "rainfall",
+   "provider": "Derived method by Agent 1",
+   "status": "CONDITIONAL",
+   "kind": "estimate",
+   "access": "python: bcnflood.data.rain_idw.idw_point(x, y, stations, values, power=2.0, k=4, coincident_tol_m=1.0)",
+   "crs": "EPSG:25831 (Euclidean distance, m)",
+   "units": "same as input values (e.g. mm per 30 min)",
+   "method": "w_i = d_i^-p / sum d_j^-p over the k nearest stations with valid values (default p=2, k=4). Missing values are excluded and the weights renormalised. All missing -> value None (never 0). A station within 1 m returns its own value (mean if several).",
+   "warnings": [
+    "ESTIMATE: only 4 gauges; ignores orography (D5 at 410 m) and storm structure",
+    "Results stay within the range of the stations used; it cannot represent local maxima",
+    "Input values for 3-7 Oct are unvalidated (G1)"
+   ]
+  }
+ ]
+}

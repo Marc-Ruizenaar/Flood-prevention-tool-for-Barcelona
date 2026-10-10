@@ -1,0 +1,4 @@
+[{"codi_estacio":"D5","count":"236","sum_valor_lectura":"203.6","min_data_lectura":"2026-10-03T00:00:00.000","max_data_lectura":"2026-10-07T23:30:00.000"}
+,{"codi_estacio":"WU","count":"240","sum_valor_lectura":"228.9","min_data_lectura":"2026-10-03T00:00:00.000","max_data_lectura":"2026-10-07T23:30:00.000"}
+,{"codi_estacio":"X4","count":"240","sum_valor_lectura":"265.0","min_data_lectura":"2026-10-03T00:00:00.000","max_data_lectura":"2026-10-07T23:30:00.000"}
+,{"codi_estacio":"X8","count":"240","sum_valor_lectura":"228.3","min_data_lectura":"2026-10-03T00:00:00.000","max_data_lectura":"2026-10-07T23:30:00.000"}]

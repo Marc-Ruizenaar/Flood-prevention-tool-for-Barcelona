@@ -1,0 +1,20 @@
+{
+  "id": "drainage_capacity_scenarios",
+  "version": 1,
+  "kind": "assumption",
+  "status": "ASSUMPTION",
+  "unit": "mm/h",
+  "applies_as": "uniform per-cell sink rate cap (Domain.drainage_capacity), converted to m/s; removed water booked as ledger.drainage",
+  "rationale": "No primary drainage data: manifests/datasets.json lists drainage_capacity as MISSING (BCASA sewer capacities not publicly verified). Per docs/milestone2_plan.md M2-A1-05 and gate G4, any drainage sink must be an explicit ASSUMPTION scenario with a capacity sweep. Values follow the plan's example sweep (0/10/20/30 mm/h equivalent). They are NOT derived from any Barcelona network design standard and carry no external citation; they bracket the sensitivity of results to drainage only.",
+  "sources": [
+    {"ref": "docs/milestone2_plan.md, M2-A1-05 and gate G4", "use": "sweep values and labelling requirement"},
+    {"ref": "manifests/datasets.json, entry drainage_capacity (status MISSING)", "use": "absence of primary data"}
+  ],
+  "requires_signoff": "Marc (gate G4) before any Barcelona run uses these",
+  "scenarios": [
+    {"name": "none", "capacity_mm_h": 0.0, "kind": "assumption", "note": "no drainage; upper bound on surface water"},
+    {"name": "low", "capacity_mm_h": 10.0, "kind": "assumption"},
+    {"name": "mid", "capacity_mm_h": 20.0, "kind": "assumption"},
+    {"name": "high", "capacity_mm_h": 30.0, "kind": "assumption"}
+  ]
+}

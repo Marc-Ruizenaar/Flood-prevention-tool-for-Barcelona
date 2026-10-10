@@ -1,0 +1,344 @@
+{
+  "sourceUrl": "https://www.icgc.cat/en/Geoinformation-and-Maps/Online-services-Geoservices/WMS-and-WCS-Elevations/WMS-Territorial-elevations",
+  "model": "AMB lidar terrain model, 2022",
+  "spanMeters": 250,
+  "bounds": [
+    1.9,
+    41.2,
+    2.4,
+    41.62
+  ],
+  "image": "relief-hillshade.png",
+  "places": {
+    "hotspot-clot-navas": {
+      "meters": 26,
+      "fallMeters": 8,
+      "spanMeters": 250,
+      "toward": "east",
+      "at": [
+        2.1866,
+        41.4155
+      ]
+    },
+    "hotspot-diagonal-bruc": {
+      "meters": 32,
+      "fallMeters": 5,
+      "spanMeters": 250,
+      "toward": "southeast",
+      "at": [
+        2.1705,
+        41.4003
+      ]
+    },
+    "hotspot-llucmajor": {
+      "meters": 67,
+      "fallMeters": 9,
+      "spanMeters": 250,
+      "toward": "east",
+      "at": [
+        2.17465,
+        41.43818
+      ]
+    },
+    "hotspot-macia": {
+      "meters": 51,
+      "fallMeters": 5,
+      "spanMeters": 250,
+      "toward": "southeast",
+      "at": [
+        2.1445,
+        41.39274
+      ]
+    },
+    "hotspot-parallel": {
+      "meters": 12,
+      "fallMeters": 4,
+      "spanMeters": 250,
+      "toward": "northeast",
+      "at": [
+        2.16508,
+        41.3759
+      ]
+    },
+    "hotspot-parcerisa": {
+      "meters": 11,
+      "fallMeters": 6,
+      "spanMeters": 250,
+      "toward": "south",
+      "at": [
+        2.13586,
+        41.36726
+      ]
+    },
+    "hotspot-rambla-prim": {
+      "meters": 17,
+      "fallMeters": 4,
+      "spanMeters": 250,
+      "toward": "east",
+      "at": [
+        2.19816,
+        41.42756
+      ]
+    },
+    "hotspot-riera-blanca": {
+      "meters": 38,
+      "fallMeters": 8,
+      "spanMeters": 250,
+      "toward": "southeast",
+      "at": [
+        2.12175,
+        41.37585
+      ]
+    },
+    "hotspot-sant-pau": {
+      "meters": 6,
+      "fallMeters": 0,
+      "spanMeters": 250,
+      "toward": "southeast",
+      "at": [
+        2.1727,
+        41.37981
+      ]
+    },
+    "hotspot-seat": {
+      "meters": 4,
+      "fallMeters": 4,
+      "spanMeters": 250,
+      "toward": "west",
+      "at": [
+        2.138,
+        41.345
+      ]
+    },
+    "hotspot-tajo-cartella": {
+      "meters": 77,
+      "fallMeters": 12,
+      "spanMeters": 250,
+      "toward": "southeast",
+      "at": [
+        2.1635,
+        41.4312
+      ]
+    },
+    "hotspot-tapioles": {
+      "meters": 24,
+      "fallMeters": 12,
+      "spanMeters": 250,
+      "toward": "north",
+      "at": [
+        2.16371,
+        41.37208
+      ]
+    },
+    "hotspot-urgell-roma": {
+      "meters": 17,
+      "fallMeters": 2,
+      "spanMeters": 250,
+      "toward": "southeast",
+      "at": [
+        2.1585,
+        41.3812
+      ]
+    },
+    "hotspot-via-augusta": {
+      "meters": 58,
+      "fallMeters": 7,
+      "spanMeters": 250,
+      "toward": "southeast",
+      "at": [
+        2.15302,
+        41.39916
+      ]
+    },
+    "proof-gracia-2026-10": {
+      "meters": 66,
+      "fallMeters": 6,
+      "spanMeters": 250,
+      "toward": "southeast",
+      "at": [
+        2.1514,
+        41.4018
+      ]
+    },
+    "proof-les-corts-2026-10": {
+      "meters": 45,
+      "fallMeters": 7,
+      "spanMeters": 250,
+      "toward": "southeast",
+      "at": [
+        2.136,
+        41.385
+      ]
+    },
+    "proof-sant-andreu-2026-10": {
+      "meters": 23,
+      "fallMeters": 3,
+      "spanMeters": 250,
+      "toward": "northeast",
+      "at": [
+        2.19103,
+        41.436
+      ]
+    },
+    "proof-sant-genis-2026-10": {
+      "meters": 262,
+      "fallMeters": 45,
+      "spanMeters": 250,
+      "toward": "east",
+      "at": [
+        2.13021,
+        41.42775
+      ]
+    },
+    "proof-torre-baro-2026-10": {
+      "meters": 45,
+      "fallMeters": 15,
+      "spanMeters": 250,
+      "toward": "northeast",
+      "at": [
+        2.18092,
+        41.46001
+      ]
+    },
+    "sewer-badal": {
+      "meters": 30,
+      "fallMeters": 5,
+      "spanMeters": 250,
+      "toward": "southeast",
+      "at": [
+        2.12766,
+        41.37556
+      ]
+    },
+    "sewer-diagonal": {
+      "meters": 47,
+      "fallMeters": 7,
+      "spanMeters": 250,
+      "toward": "southeast",
+      "at": [
+        2.15856,
+        41.39671
+      ]
+    },
+    "sewer-parallel-raval": {
+      "meters": 15,
+      "fallMeters": 2,
+      "spanMeters": 250,
+      "toward": "east",
+      "at": [
+        2.15969,
+        41.37699
+      ]
+    },
+    "sewer-poblenou": {
+      "meters": 3,
+      "fallMeters": 0,
+      "spanMeters": 250,
+      "toward": "southeast",
+      "at": [
+        2.20252,
+        41.39844
+      ]
+    },
+    "sewer-sant-andreu": {
+      "meters": 27,
+      "fallMeters": 3,
+      "spanMeters": 250,
+      "toward": "northeast",
+      "at": [
+        2.18947,
+        41.43293
+      ]
+    },
+    "slope-sant-genis": {
+      "meters": 252,
+      "fallMeters": 41,
+      "spanMeters": 250,
+      "toward": "northeast",
+      "at": [
+        2.13182,
+        41.42486
+      ]
+    },
+    "slope-torre-baro": {
+      "meters": 191,
+      "fallMeters": 73,
+      "spanMeters": 250,
+      "toward": "east",
+      "at": [
+        2.17244,
+        41.45355
+      ]
+    },
+    "stream-cartella": {
+      "meters": 77,
+      "fallMeters": 12,
+      "spanMeters": 250,
+      "toward": "southeast",
+      "at": [
+        2.1635,
+        41.4312
+      ]
+    },
+    "stream-rambla-prim": {
+      "meters": 15,
+      "fallMeters": 3,
+      "spanMeters": 250,
+      "toward": "northeast",
+      "at": [
+        2.2,
+        41.42585
+      ]
+    },
+    "stream-riera-blanca": {
+      "meters": 38,
+      "fallMeters": 6,
+      "spanMeters": 250,
+      "toward": "southeast",
+      "at": [
+        2.12173,
+        41.3763
+      ]
+    },
+    "stream-tapioles": {
+      "meters": 25,
+      "fallMeters": 12,
+      "spanMeters": 250,
+      "toward": "north",
+      "at": [
+        2.16369,
+        41.372
+      ]
+    },
+    "stream-torre-baro": {
+      "meters": 193,
+      "fallMeters": 86,
+      "spanMeters": 250,
+      "toward": "east",
+      "at": [
+        2.17319,
+        41.45392
+      ]
+    },
+    "tank-rambla-prim": {
+      "meters": 15,
+      "fallMeters": 3,
+      "spanMeters": 250,
+      "toward": "northeast",
+      "at": [
+        2.2008,
+        41.4254
+      ]
+    },
+    "tank-zona-universitaria": {
+      "meters": 76,
+      "fallMeters": 10,
+      "spanMeters": 250,
+      "toward": "southeast",
+      "at": [
+        2.11169,
+        41.38424
+      ]
+    }
+  }
+}

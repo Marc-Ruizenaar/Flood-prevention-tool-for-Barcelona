@@ -1,0 +1,31 @@
+{
+  "id": "mitigation_levers_m2",
+  "version": 1,
+  "kind": "assumption",
+  "label": "assumption, illustrative, Orchestrator-set; not engineering design",
+  "set_by": "Orchestrator (Agent 4), 2026-10-10",
+  "drainage_scenario": "mid",
+  "results_status": "model scenarios on CONDITIONAL subdomains; not guarantees",
+  "seed": 20261010,
+  "configs": [
+    {"name": "baseline", "levers": [],
+     "label": "assumption, illustrative, Orchestrator-set; not engineering design",
+     "rationale": "mid drainage scenario without levers; reference for deltas"},
+    {"name": "drain", "levers": [{"kind": "drain", "extra_mm_h": 10.0, "cells": "all_open"}],
+     "label": "assumption, illustrative, Orchestrator-set; not engineering design",
+     "rationale": "+10 mm/h sink capacity over the mid scenario on every open cell; tests sensitivity to inlet/sewer upgrades. No design source."},
+    {"name": "suds", "levers": [{"kind": "suds", "fraction": 0.25, "cells": "sealed_non_building",
+                                 "k_sat_cm_h": 2.5, "psi_dtheta": "median_pervious"}],
+     "label": "assumption, illustrative, Orchestrator-set; not engineering design",
+     "rationale": "25% of sealed non-building cells (seeded random) become permeable paving with Ks 2.5 cm/h; psi and dtheta from the median pervious (clay loam, Agent 1 ESTIMATE) cell. No product/design source."},
+    {"name": "tank", "levers": [{"kind": "tank", "cells": "hotspot", "volume_m3": 20000.0,
+                                 "inflow_m3_s": 2.0, "drain_down_m3_s": 0.2,
+                                 "drain_down_after_rain_only": true}],
+     "label": "assumption, illustrative, Orchestrator-set; not engineering design",
+     "rationale": "single 20,000 m3 detention tank at the hotspot cell, inflow capped at 2 m3/s (never more than the water present), drained to the sewer at 0.2 m3/s only while the current rain interval is dry. No design source."},
+    {"name": "green_roof", "levers": [{"kind": "green_roof", "fraction": 0.30, "cells": "building",
+                                       "storage_mm": 20.0, "release": "none (evaporation only, not modelled during event)"}],
+     "label": "assumption, illustrative, Orchestrator-set; not engineering design",
+     "rationale": "30% of building cells (seeded random) intercept up to 20 mm of rain each; no release during the event. No product/design source."}
+  ]
+}

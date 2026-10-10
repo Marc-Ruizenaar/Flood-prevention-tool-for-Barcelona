@@ -15,7 +15,7 @@
     "label": "Buried streams and rieres",
     "primary": "https://maps.icgc.cat/vector02/rest/services/icgc_geotecnicbcn25m/MapServer/1",
     "secondary": "https://coneixement-eu.bcn.cat/widget/atles-resiliencia/index_resccue_inun_urbana.html",
-    "note": "Hairlines are ICGC RIER_LN. Named avenues are simplified traces of streets the RESCCUE list calls out."
+    "note": "Hairlines are ICGC RIER_LN. Named avenues are simplified traces. Red dots sit where a RESCCUE critical point lies on one of those streams. Not taken from the October reports."
   },
   "retention-tanks": {
     "label": "Stormwater tanks",
@@ -35,9 +35,20 @@
     "secondary": "https://beteve.cat/societat/810-abonats-sense-llum-pluja-filtracions-aigua-xarxa-electrica/",
     "note": "Observed only. Not mixed into the atlas layers."
   },
+  "relief": {
+    "label": "Terrain height, ICGC",
+    "primary": "https://www.icgc.cat/en/Geoinformation-and-Maps/Online-services-Geoservices/WMS-and-WCS-Elevations/WMS-Territorial-elevations",
+    "note": "Hillshade and the height on each card are the 2022 AMB lidar terrain model, read at the marked place. The fall is the drop to the lowest ground 250 m away. Not a flood depth."
+  },
   "rainfall-observed": {
     "label": "Rainfall, observed mention only",
     "primary": "https://ajuntament.barcelona.cat/gracia/es/noticias/activada-la-emergencia-por-riesgo-de-inundaciones-41745",
     "note": "Quoted in About as an observation from 3 October 2026. Not a layer and not a forecast."
+  },
+  "weather-days": {
+    "label": "Daily rainfall, Meteocat XEMA",
+    "primary": "https://analisi.transparenciacatalunya.cat/Medi-Ambient/Dades-meteorol-giques-di-ries-de-la-XEMA/7bvh-jvq2",
+    "secondary": "https://beteve.cat/medi-ambient/temps-barcelona-divendres-9-octubre-refrescada-tardor/",
+    "note": "Daily accumulated rainfall at Barcelona – el Raval, Observatori Fabra and Zona Universitària. The map uses the highest of the three. The file publishes with about two days of delay."
   }
 }

@@ -1,0 +1,56 @@
+{
+  "gates": {
+    "G1": {
+      "status": "PASSED",
+      "name": "rainfall",
+      "evidence": "CONDITIONAL: Marc APPROVED provisional XEMA (Transparencia copy, D5 gap IDW-filled, disclosed) 2026-10-10 08:42 CEST via BCN Flood MAIN; ~52/288 validated"
+    },
+    "G2": {
+      "status": "PASSED",
+      "name": "terrain",
+      "evidence": "CONDITIONAL: IGN MDT05 CC BY 4.0, 1 m vertical rounding (Agent 3)"
+    },
+    "G3": {
+      "status": "PASSED",
+      "name": "surface parameters",
+      "evidence": "CONDITIONAL: OSM fallback (ODbL), Catastro/SIOSE missing, ESTIMATE params (Agent 3)"
+    },
+    "G4": {
+      "status": "PASSED",
+      "name": "drainage",
+      "evidence": "CONDITIONAL: Marc APPROVED assumption drainage 10/20/30 mm/h 2026-10-10 08:42 CEST via BCN Flood MAIN"
+    },
+    "G5": {
+      "status": "PASSED",
+      "name": "time local-day to UTC",
+      "evidence": "Agent 3 e26e98d: timewindows + INCOMPLETE flag verified"
+    },
+    "G6": {
+      "status": "PASSED",
+      "name": "numerics",
+      "evidence": "Agent 3 31fa4e3: order ~0.85 accepted, 30 m CONDITIONAL PASS caveats in run metadata; D6 fixed c59af83; suite 152 pass @e96d9ad"
+    },
+    "G7": {
+      "status": "PASSED",
+      "name": "API contract",
+      "evidence": "Agent 3 627ae3e: H1-H3 verified, mitigation driver PASS; suite 176 pass/0 fail"
+    },
+    "G8": {
+      "status": "PASSED",
+      "name": "sign-off (Marc)",
+      "evidence": "Marc authorised the first Barcelona run 2026-10-10 08:42 CEST via BCN Flood MAIN; all results CONDITIONAL"
+    }
+  },
+  "signoffs": [
+    {
+      "by": "Marc Ruizenaar",
+      "via": "BCN Flood MAIN",
+      "at": "2026-10-10T08:42:00+02:00",
+      "items": [
+        "G1 provisional XEMA",
+        "G4 drainage 10/20/30 mm/h assumption",
+        "G8 first run"
+      ]
+    }
+  ]
+}

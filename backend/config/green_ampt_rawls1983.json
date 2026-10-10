@@ -1,0 +1,21 @@
+{
+ "kind": "estimate",
+ "label": "ESTIMATE: literature texture-class values. No Barcelona-specific measurement.",
+ "source": "Rawls, W.J., Brakensiek, D.L., Miller, N. (1983). Green-Ampt infiltration parameters from soils data. J. Hydraulic Engineering 109(1):62-70. Reproduced in Chow, Maidment & Mays (1988), Applied Hydrology, Table 4.3.1.",
+ "units": {"porosity": "-", "effective_porosity": "-", "wetting_front_suction_head": "cm", "saturated_hydraulic_conductivity": "cm/h"},
+ "notes": ["These are mean values only. The source gives wide ranges (about ±1 sd) that should be used for sensitivity runs.",
+           "Sealed urban surfaces are not soil classes. Mapping a texture to a cell requires SoilGrids texture (250 m) and imperviousness. That mapping is an ASSUMPTION pending G3."],
+ "classes": {
+  "sand":            {"porosity": 0.437, "effective_porosity": 0.417, "wetting_front_suction_head": 4.95,  "saturated_hydraulic_conductivity": 11.78},
+  "loamy_sand":      {"porosity": 0.437, "effective_porosity": 0.401, "wetting_front_suction_head": 6.13,  "saturated_hydraulic_conductivity": 2.99},
+  "sandy_loam":      {"porosity": 0.453, "effective_porosity": 0.412, "wetting_front_suction_head": 11.01, "saturated_hydraulic_conductivity": 1.09},
+  "loam":            {"porosity": 0.463, "effective_porosity": 0.434, "wetting_front_suction_head": 8.89,  "saturated_hydraulic_conductivity": 0.34},
+  "silt_loam":       {"porosity": 0.501, "effective_porosity": 0.486, "wetting_front_suction_head": 16.68, "saturated_hydraulic_conductivity": 0.65},
+  "sandy_clay_loam": {"porosity": 0.398, "effective_porosity": 0.330, "wetting_front_suction_head": 21.85, "saturated_hydraulic_conductivity": 0.15},
+  "clay_loam":       {"porosity": 0.464, "effective_porosity": 0.309, "wetting_front_suction_head": 20.88, "saturated_hydraulic_conductivity": 0.10},
+  "silty_clay_loam": {"porosity": 0.471, "effective_porosity": 0.432, "wetting_front_suction_head": 27.30, "saturated_hydraulic_conductivity": 0.10},
+  "sandy_clay":      {"porosity": 0.430, "effective_porosity": 0.321, "wetting_front_suction_head": 23.90, "saturated_hydraulic_conductivity": 0.06},
+  "silty_clay":      {"porosity": 0.479, "effective_porosity": 0.423, "wetting_front_suction_head": 29.22, "saturated_hydraulic_conductivity": 0.05},
+  "clay":            {"porosity": 0.475, "effective_porosity": 0.385, "wetting_front_suction_head": 31.63, "saturated_hydraulic_conductivity": 0.03}
+ }
+}

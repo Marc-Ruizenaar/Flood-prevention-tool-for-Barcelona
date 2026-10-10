@@ -1,0 +1,75 @@
+{
+ "kind": "measurement (station metadata)",
+ "source": "https://analisi.transparenciacatalunya.cat/resource/yqwd-vj5e.json?$limit=5000",
+ "source_file": "manifests/raw/g1/stations_yqwd-vj5e.json",
+ "source_sha256": "5a8294b9e61120ecab22ea3648afafd75746b6cd46ab73665918cbee86ef9462",
+ "fetched_at_utc": "2026-10-09T21:22:13+00:00",
+ "licence": "Meteocat intellectual property - http://www.meteo.cat/wpweb/avis-legal/",
+ "notes": [
+  "lon/lat, altitud, nom_estat_ema copied verbatim from yqwd-vj5e (WGS84 per Socrata geocoded_column)",
+  "x/y EPSG:25831 computed with pyproj from lon/lat (EPSG:4326 -> 25831); not a source value",
+  "Elevation datum not stated in the source"
+ ],
+ "stations": [
+  {
+   "id": "D5",
+   "name": "Barcelona - Observatori Fabra",
+   "lon": 2.12379,
+   "lat": 41.41864,
+   "x_25831": 426777.27,
+   "y_25831": 4585602.18,
+   "elevation_m": 410.0,
+   "status": "Operativa",
+   "status_code": "2",
+   "municipality": "Barcelona",
+   "site": "Observatori Fabra",
+   "data_inici": "1995-11-03T00:00:00.000",
+   "data_fi": null
+  },
+  {
+   "id": "WU",
+   "name": "Badalona - Museu",
+   "lon": 2.24757,
+   "lat": 41.45215,
+   "x_25831": 437153.68,
+   "y_25831": 4589225.17,
+   "elevation_m": 42.0,
+   "status": "Operativa",
+   "status_code": "2",
+   "municipality": "Badalona",
+   "site": "Museu",
+   "data_inici": "2005-09-21T00:00:00.000",
+   "data_fi": null
+  },
+  {
+   "id": "X4",
+   "name": "Barcelona - el Raval",
+   "lon": 2.16774,
+   "lat": 41.38386,
+   "x_25831": 430413.0,
+   "y_25831": 4581704.72,
+   "elevation_m": 33.0,
+   "status": "Operativa",
+   "status_code": "2",
+   "municipality": "Barcelona",
+   "site": "Facultat de Geografia i Història. c. Montalegre nº6, 6a",
+   "data_inici": "2006-10-11T00:00:00.000",
+   "data_fi": null
+  },
+  {
+   "id": "X8",
+   "name": "Barcelona - Zona Universitària",
+   "lon": 2.10537,
+   "lat": 41.37922,
+   "x_25831": 425192.75,
+   "y_25831": 4581241.55,
+   "elevation_m": 82.0,
+   "status": "Operativa",
+   "status_code": "2",
+   "municipality": "Barcelona",
+   "site": "Pistes UB",
+   "data_inici": "2008-04-17T00:00:00.000",
+   "data_fi": null
+  }
+ ]
+}

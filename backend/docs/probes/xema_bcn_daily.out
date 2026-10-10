@@ -1,0 +1,15 @@
+[{"codi_estacio":"D5","d":"2026-10-03T00:00:00.000","count":"44","sum_valor_lectura":"104.3"}
+,{"codi_estacio":"D5","d":"2026-10-04T00:00:00.000","count":"48","sum_valor_lectura":"8.9"}
+,{"codi_estacio":"D5","d":"2026-10-05T00:00:00.000","count":"48","sum_valor_lectura":"74.8"}
+,{"codi_estacio":"D5","d":"2026-10-06T00:00:00.000","count":"48","sum_valor_lectura":"15.4"}
+,{"codi_estacio":"D5","d":"2026-10-07T00:00:00.000","count":"48","sum_valor_lectura":"0.2"}
+,{"codi_estacio":"X4","d":"2026-10-03T00:00:00.000","count":"48","sum_valor_lectura":"190.8"}
+,{"codi_estacio":"X4","d":"2026-10-04T00:00:00.000","count":"48","sum_valor_lectura":"2.0"}
+,{"codi_estacio":"X4","d":"2026-10-05T00:00:00.000","count":"48","sum_valor_lectura":"43.8"}
+,{"codi_estacio":"X4","d":"2026-10-06T00:00:00.000","count":"48","sum_valor_lectura":"28.3"}
+,{"codi_estacio":"X4","d":"2026-10-07T00:00:00.000","count":"48","sum_valor_lectura":"0.1"}
+,{"codi_estacio":"X8","d":"2026-10-03T00:00:00.000","count":"48","sum_valor_lectura":"170.3"}
+,{"codi_estacio":"X8","d":"2026-10-04T00:00:00.000","count":"48","sum_valor_lectura":"3.6"}
+,{"codi_estacio":"X8","d":"2026-10-05T00:00:00.000","count":"48","sum_valor_lectura":"28.1"}
+,{"codi_estacio":"X8","d":"2026-10-06T00:00:00.000","count":"48","sum_valor_lectura":"26.0"}
+,{"codi_estacio":"X8","d":"2026-10-07T00:00:00.000","count":"48","sum_valor_lectura":"0.3"}]

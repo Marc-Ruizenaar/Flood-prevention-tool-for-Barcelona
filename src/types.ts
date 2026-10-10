@@ -26,7 +26,24 @@ export type ZoneCard = {
 
 export type ZoneMap = Record<string, ZoneCard>;
 
-export type GroupId = "sewers" | "streams" | "slopes" | "proof";
+export type GroupId = "relief" | "sewers" | "streams" | "slopes" | "proof";
+
+export type ReliefReading = {
+  meters: number;
+  fallMeters: number;
+  spanMeters: number;
+  toward: string;
+  at: [number, number];
+};
+
+export type ReliefFile = {
+  sourceUrl: string;
+  model: string;
+  spanMeters: number;
+  bounds: [number, number, number, number];
+  image: string;
+  places: Record<string, ReliefReading>;
+};
 
 export type LayerGroup = {
   id: GroupId;
@@ -36,6 +53,12 @@ export type LayerGroup = {
 };
 
 export const GROUPS: LayerGroup[] = [
+  {
+    id: "relief",
+    label: "Height of the ground",
+    legend: "Collserola down to the sea. The fall is on each card. Not a flood depth.",
+    swatches: [{ color: "#8d877c", shape: "square" }],
+  },
   {
     id: "sewers",
     label: "Next rain — sewers",
@@ -48,9 +71,10 @@ export const GROUPS: LayerGroup[] = [
   {
     id: "streams",
     label: "Buried streams",
-    legend: "Riera traces, named avenues, and tanks. Green is in service; amber is approved, not yet protection.",
+    legend: "Red dots are critical points on a stream, not October. Green tanks are in service; amber is approved.",
     swatches: [
       { color: "#0f5f73", shape: "line" },
+      { color: "#b42318", shape: "dot" },
       { color: "#0f766e", shape: "dot" },
     ],
   },
@@ -69,6 +93,7 @@ export const GROUPS: LayerGroup[] = [
 ];
 
 export const DEFAULT_VISIBILITY: Record<GroupId, boolean> = {
+  relief: true,
   sewers: true,
   streams: false,
   slopes: false,

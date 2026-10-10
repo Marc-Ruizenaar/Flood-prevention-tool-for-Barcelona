@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WMS_Capabilities xmlns:srv="http://schemas.opengis.net/iso/19139/20060504/srv/srv.xsd" xmlns:gmd="http://schemas.opengis.net/iso/19139/20060504/gmd/gmd.xsd" xmlns:gco="http://schemas.opengis.net/iso/19139/20060504/gco/gco.xsd" xmlns:inspire_vs="http://inspire.ec.europa.eu/schemas/inspire_vs/1.0" xmlns:gml="http://schemas.opengis.net/gml" xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0" version="1.3.0" updateSequence="2619" xmlns="http://www.opengis.net/wms" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wms http://inspire.ec.europa.eu/schemas/inspire_vs/1.0/inspire_vs.xsd">
+	<Service>
+		<Name>WMS</Name>
+		<Title>Ocupación de suelo de España</Title>
+		<Abstract>Información de Ocupación de Suelo de España (SIOSE 2014 y SIOSE de Alta Resolución 2017) y CORINE Land Cover 2018. La denominación de las capas es conforme con las especificaciones de la Directiva Inspire 2007/2/EC, así como el estilo Inspire por defecto. Servicio de visualización WMS 1.3.0 conforme al perfil Inspire de ISO 19128:2005.</Abstract>
+		<KeywordList>
+			<Keyword>Infraestructura de Datos Espaciales de España</Keyword>
+			<Keyword>IDEE</Keyword>
+			<Keyword>Sistema Cartográfico Nacional</Keyword>
+			<Keyword>SCNE</Keyword>
+			<Keyword>España</Keyword>
+			<Keyword vocabulary="ISO 19119 geographic services taxonomy, version 2.3">infoManagementService</Keyword>
+			<Keyword vocabulary="ISO 19119 geographic services taxonomy, version 2.3">infoMapAccessService</Keyword>
+			<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Cubierta terrestre</Keyword>
+			<Keyword vocabulary="GEMET - INSPIRE themes, version 1.0">Usos del suelo</Keyword>
+		</KeywordList>
+		<OnlineResource xlink:type="simple" xlink:href="https://www.ign.es"/>
+		<ContactInformation>
+			<ContactPersonPrimary>
+				<ContactPerson/>
+				<ContactOrganization>Infraestructura de Datos Espaciales de España</ContactOrganization>
+			</ContactPersonPrimary>
+			<ContactPosition>Punto de contacto</ContactPosition>
+			<ContactAddress>
+				<AddressType>Postal</AddressType>
+				<Address>C/ General Ibáñez de Ibero, 3</Address>
+				<City>Madrid</City>
+				<StateOrProvince>Madrid</StateOrProvince>
+				<PostCode>28003</PostCode>
+				<Country>España</Country>
+			</ContactAddress>
+			<ContactVoiceTelephone>+34 91 597 96 46</ContactVoiceTelephone>
+			<ContactFacsimileTelephone>+34 91 597 97 64</ContactFacsimileTelephone>
+			<ContactElectronicMailAddress>ign@transportes.gob.es</ContactElectronicMailAddress>
+		</ContactInformation>
+		<Fees>No se aplican condiciones</Fees>
+		<AccessConstraints>CC BY 4.0 scne.es</AccessConstraints>
+	</Service>
+	<Capability>
+		<Request>
+			<GetCapabilities>
+				<Format>text/xml</Format>
+				<DCPType>
+					<HTTP>
+						<Get>
+							<OnlineResource xlink:type="simple" xlink:href="https://servicios.idee.es/wms-inspire/ocupacion-suelo?SERVICE=WMS&amp;"/>
+						</Get>
+						<Post>
+							<OnlineResource xlink:type="simple" xlink:href="https://servicios.idee.es/wms-inspire/ocupacion-suelo?SERVICE=WMS&amp;"/>
+						</Post>
+					</HTTP>
+				</DCPType>
+			</GetCapabilities>
+			<GetMap>
+				<Format>image/png</Format>
+				<Format>application/atom+xml</Format>
+				<Format>application/json;type=geojson</Format>
+				<Format>application/json;type=topojson</Format>
+				<Format>application/json;type=utfgrid</Format>
+				<Format>application/pdf</Format>
+				<Format>application/rss+xml</Format>
+				<Format>application/vnd.google-earth.kml+xml</Format>
+				<Format>application/vnd.google-earth.kml+xml;mode=networklink</Format>
+				<Format>application/vnd.google-earth.kmz</Format>
+				<Format>application/vnd.mapbox-vector-tile</Format>
+				<Format>image/geotiff</Format>
+				<Format>image/geotiff8</Format>
+				<Format>image/gif</Format>
+				<Format>image/jpeg</Format>
+				<Format>image/png; mode=8bit</Format>
+				<Format>image/svg+xml</Format>
+				<Format>image/tiff</Format>
+				<Format>image/tiff8</Format>
+				<Format>image/vnd.jpeg-png</Format>
+				<Format>image/vnd.jpeg-png8</Format>
+				<Format>text/html; subtype=openlayers</Format>
+				<Format>text/html; subtype=openlayers2</Format>
+				<Format>text/html; subtype=openlayers3</Format>
+				<DCPType>
+					<HTTP>
+						<Get>
+							<OnlineResource xlink:type="simple" xlink:href="https://servicios.idee.es/wms-inspire/ocupacion-suelo?SERVICE=WMS&amp;"/>
+						</Get>
+					</HTTP>
+				</DCPType>
+			</GetMap>
+			<GetFeatureInfo>
+				<Format>text/plain</Format>
+				<Format>application/vnd.ogc.gml</Format>
+				<Format>text/xml</Format>
+				<Format>application/vnd.ogc.gml/3.1.1</Format>
+				<Format>text/xml; subtype=gml/3.1.1</Format>
+				<Format>text/html</Format>
+				<Format>application/json</Format>
+				<DCPType>
+					<HTTP>
+						<Get>
+							<OnlineResource xlink:type="simple" xlink:href="https://servicios.idee.es/wms-inspire/ocupacion-suelo?SERVICE=WMS&amp;"/>
+						</Get>
+					</HTTP>
+				</DCPType>
+			</GetFeatureInfo>
+		</Request>
+		<Exception>
+			<Format>XML</Format>
+		</Exception>
+		<inspire_vs:ExtendedCapabilities>
+			<inspire_common:MetadataUrl xsi:type="inspire_common:resourceLocatorType">
+				<inspire_common:URL>https://www.idee.es/csw-inspire-idee/srv/spa/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetRecordById&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;ElementSetName=full&amp;ID=spaignwms_OcupacionSuelo</inspire_common:URL>
+				<inspire_common:MediaType>application/vnd.ogc.csw.GetRecordByIdResponse_xml</inspire_common:MediaType>
+			</inspire_common:MetadataUrl>
+			<inspire_common:SupportedLanguages xsi:type="inspire_common:supportedLanguagesType">
+				<inspire_common:DefaultLanguage>
+					<inspire_common:Language>spa</inspire_common:Language>
+				</inspire_common:DefaultLanguage>
+				<inspire_common:SupportedLanguage>
+					<inspire_common:Language>eng</inspire_common:Language>
+				</inspire_common:SupportedLanguage>
+			</inspire_common:SupportedLanguages>
+			<inspire_common:ResponseLanguage>
+				<inspire_common:Language>spa</inspire_common:Language>
+			</inspire_common:ResponseLanguage>
+		</inspire_vs:ExtendedCapabilities>
+		<Layer>
+			<Title>Ocupación de suelo de España</Title>
+			<Abstract>Información de Ocupación de Suelo de España (SIOSE 2014 y SIOSE de Alta Resolución 2017) y CORINE Land Cover 2018. La denominación de las capas es conforme con las especificaciones de la Directiva Inspire 2007/2/EC, así como el estilo Inspire por defecto. Servicio de visualización WMS 1.3.0 conforme al perfil Inspire de ISO 19128:2005.</Abstract>
+			<!--Limited list of EPSG projections:-->
+			<CRS>EPSG:4258</CRS>
+			<CRS>EPSG:4326</CRS>
+			<CRS>EPSG:3857</CRS>
+			<CRS>EPSG:3035</CRS>
+			<CRS>EPSG:25828</CRS>
+			<CRS>EPSG:25829</CRS>
+			<CRS>EPSG:25830</CRS>
+			<CRS>EPSG:25831</CRS>
+			<CRS>EPSG:32628</CRS>
+			<CRS>EPSG:32629</CRS>
+			<CRS>EPSG:32630</CRS>
+			<CRS>EPSG:32631</CRS>
+			<CRS>EPSG:4080</CRS>
+			<CRS>EPSG:4081</CRS>
+			<CRS>EPSG:4082</CRS>
+			<CRS>EPSG:4083</CRS>
+			<CRS>CRS:84</CRS>
+			<EX_GeographicBoundingBox>
+				<westBoundLongitude>-19.0</westBoundLongitude>
+				<eastBoundLongitude>5.0</eastBoundLongitude>
+				<southBoundLatitude>27.0</southBoundLatitude>
+				<northBoundLatitude>44.0</northBoundLatitude>
+			</EX_GeographicBoundingBox>
+			<BoundingBox CRS="CRS:84" minx="-19.0" miny="27.0" maxx="5.0" maxy="44.0"/>
+			<BoundingBox CRS="EPSG:4258" minx="27.0" miny="-19.0" maxx="44.0" maxy="5.0"/>
+			<BoundingBox CRS="EPSG:4326" minx="27.0" miny="-19.0" maxx="44.0" maxy="5.0"/>
+			<BoundingBox CRS="EPSG:3857" minx="-2115070.325072198" miny="3123471.749104576" maxx="556597.4539663679" maxy="5465442.183322753"/>
+			<BoundingBox CRS="EPSG:3035" minx="471468.5017937361" miny="1445891.6963879904" maxx="2768821.4534321986" maxy="3919390.1873301356"/>
+			<BoundingBox CRS="EPSG:25828" minx="102948.3712066114" miny="2986435.2424698113" maxx="2508202.7078731647" maxy="5070480.910834041"/>
+			<BoundingBox CRS="EPSG:25829" minx="-495135.75545797264" miny="2988008.1382796224" maxx="1897204.2192799984" maxy="4968139.496861154"/>
+			<BoundingBox CRS="EPSG:25830" minx="-1099673.713805158" miny="2986435.2424698113" maxx="1295248.9457888722" maxy="4998012.35979611"/>
+			<BoundingBox CRS="EPSG:25831" minx="-1714549.1480732663" miny="2988008.1382796224" maxx="698454.2342175536" maxy="5113259.329733409"/>
+			<BoundingBox CRS="EPSG:32628" minx="102948.37120796047" miny="2986435.2425578996" maxx="2508202.7078655367" maxy="5070480.910951035"/>
+			<BoundingBox CRS="EPSG:32629" minx="-495135.75545450323" miny="2988008.1383677055" maxx="1897204.2192749865" maxy="4968139.496979078"/>
+			<BoundingBox CRS="EPSG:32630" minx="-1099673.7137993197" miny="2986435.2425578996" maxx="1295248.9457861297" maxy="4998012.359913771"/>
+			<BoundingBox CRS="EPSG:32631" minx="-1714549.148064664" miny="2988008.1383677055" maxx="698454.2342168819" maxy="5113259.329849991"/>
+			<BoundingBox CRS="EPSG:4080" minx="27.0" miny="-19.0" maxx="44.0" maxy="5.0"/>
+			<BoundingBox CRS="EPSG:4081" minx="27.0" miny="-19.0" maxx="44.0" maxy="5.0"/>
+			<BoundingBox CRS="EPSG:4082" minx="660349.4105800533" miny="2988008.1382796224" maxx="3132117.470118926" maxy="5212437.859985052"/>
+			<BoundingBox CRS="EPSG:4083" minx="102948.3712066114" miny="2986435.2424698113" maxx="2508202.7078731647" maxy="5070480.910834041"/>
+			<Layer queryable="1" opaque="1">
+				<Name>LC.LandCoverSurfaces</Name>
+				<Title>Superficies de Cubierta terrestre</Title>
+				<Abstract>Representación de datos espaciales correspondientes al tema "Cubierta terrestre" del Anexo II de la Directiva Inspire y Anexo I de LISIGE. Datos procedentes de CORINE Land Cover 2018, SIOSE de Alta Resolución 2017 y SIOSE 2014. Para escalas menores de 1:50.000 se distinguen las clases correspondientes al nivel 3 de CORINE Land Cover; entre las escalas 1:50.000 y 1:10.000, la clasificación corresponde a la nomenclatura establecida por el CODIIGE para SIOSE; y para escalas mayores de 1:10.000, la clasificación corresponde a la nomenclatura establecida por el CODIIGE para SIOSE de Alta Resolución. La capa es consultable a partir de la escala 1:350.000.</Abstract>
+				<KeywordList>
+					<Keyword>Cubierta terrestre</Keyword>
+					<Keyword>CORINE 2018</Keyword>
+					<Keyword>SIOSE 2014</Keyword>
+					<Keyword>SIOSE AR 2017</Keyword>
+				</KeywordList>
+				<CRS>EPSG:4258</CRS>
+				<CRS>CRS:84</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>-19.0</westBoundLongitude>
+					<eastBoundLongitude>5.0</eastBoundLongitude>
+					<southBoundLatitude>27.0</southBoundLatitude>
+					<northBoundLatitude>44.0</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="CRS:84" minx="-19.0" miny="27.0" maxx="5.0" maxy="44.0"/>
+				<BoundingBox CRS="EPSG:4258" minx="27.0" miny="-19.0" maxx="44.0" maxy="5.0"/>
+				<BoundingBox CRS="EPSG:4326" minx="27.0" miny="-19.0" maxx="44.0" maxy="5.0"/>
+				<BoundingBox CRS="EPSG:3857" minx="-2115070.325072198" miny="3123471.749104576" maxx="556597.4539663679" maxy="5465442.183322753"/>
+				<BoundingBox CRS="EPSG:3035" minx="471468.5017937361" miny="1445891.6963879904" maxx="2768821.4534321986" maxy="3919390.1873301356"/>
+				<BoundingBox CRS="EPSG:25828" minx="102948.3712066114" miny="2986435.2424698113" maxx="2508202.7078731647" maxy="5070480.910834041"/>
+				<BoundingBox CRS="EPSG:25829" minx="-495135.75545797264" miny="2988008.1382796224" maxx="1897204.2192799984" maxy="4968139.496861154"/>
+				<BoundingBox CRS="EPSG:25830" minx="-1099673.713805158" miny="2986435.2424698113" maxx="1295248.9457888722" maxy="4998012.35979611"/>
+				<BoundingBox CRS="EPSG:25831" minx="-1714549.1480732663" miny="2988008.1382796224" maxx="698454.2342175536" maxy="5113259.329733409"/>
+				<BoundingBox CRS="EPSG:32628" minx="102948.37120796047" miny="2986435.2425578996" maxx="2508202.7078655367" maxy="5070480.910951035"/>
+				<BoundingBox CRS="EPSG:32629" minx="-495135.75545450323" miny="2988008.1383677055" maxx="1897204.2192749865" maxy="4968139.496979078"/>
+				<BoundingBox CRS="EPSG:32630" minx="-1099673.7137993197" miny="2986435.2425578996" maxx="1295248.9457861297" maxy="4998012.359913771"/>
+				<BoundingBox CRS="EPSG:32631" minx="-1714549.148064664" miny="2988008.1383677055" maxx="698454.2342168819" maxy="5113259.329849991"/>
+				<BoundingBox CRS="EPSG:4080" minx="27.0" miny="-19.0" maxx="44.0" maxy="5.0"/>
+				<BoundingBox CRS="EPSG:4081" minx="27.0" miny="-19.0" maxx="44.0" maxy="5.0"/>
+				<BoundingBox CRS="EPSG:4082" minx="660349.4105800533" miny="2988008.1382796224" maxx="3132117.470118926" maxy="5212437.859985052"/>
+				<BoundingBox CRS="EPSG:4083" minx="102948.3712066114" miny="2986435.2424698113" maxx="2508202.7078731647" maxy="5070480.910834041"/>
+				<Attribution>
+					<Title>Sistema Cartográfico Nacional</Title>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.scne.es"/>
+				</Attribution>
+				<AuthorityURL name="SCNE">
+					<OnlineResource xlink:type="simple" xlink:href="https://www.scne.es"/>
+				</AuthorityURL>
+				<Identifier authority="SCNE">LC.LandCoverSurfaces</Identifier>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/plain</Format>
+					<OnlineResource xlink:type="simple" xlink:href="https://www.idee.es/csw-inspire-idee/srv/spa/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetRecordById&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;ElementSetName=full&amp;ID=spaignCLC2018"/>
+				</MetadataURL>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/plain</Format>
+					<OnlineResource xlink:type="simple" xlink:href="https://www.idee.es/csw-inspire-idee/srv/spa/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetRecordById&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;ElementSetName=full&amp;ID=spaignsiose2014"/>
+				</MetadataURL>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/plain</Format>
+					<OnlineResource xlink:type="simple" xlink:href="https://www.idee.es/csw-inspire-idee/srv/spa/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetRecordById&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;ElementSetName=full&amp;ID=spaignsioseAR2017"/>
+				</MetadataURL>
+				<Style>
+					<Name>LC.LandCoverSurfaces.Default</Name>
+					<Title>Estilo por defecto de superficies de cubierta terrestre</Title>
+					<Abstract>Para escalas menores de 1:50.000 se distinguen las clases correspondientes al nivel 3 de CORINE Land Cover; entre las escalas 1:50.000 y 1:10.000, la clasificación corresponde a la nomenclatura establecida por el CODIIGE para SIOSE; y para escalas mayores de 1:10.000, la clasificación corresponde a la nomenclatura establecida por el CODIIGE para SIOSE de Alta Resolución.</Abstract>
+					<LegendURL width="992" height="503">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://servicios.idee.es/wms-inspire/ocupacion-suelo/leyendas/cubierta-terrestre.png"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+			<Layer queryable="1" opaque="1">
+				<Name>LU.ExistingLandUse</Name>
+				<Title>Usos de suelo existentes</Title>
+				<Abstract>Representación de datos espaciales correspondientes al tema "Usos del suelo" del Anexo III de la Directiva Inspire y Anexo II de LISIGE. Datos procedentes de CORINE Land Cover 2018, SIOSE de Alta Resolución 2017 y SIOSE 2014. Para escalas menores de 1:50.000 se distinguen las clases de CORINE Land Cover; entre las escalas 1:50.000 y 1:10.000, SIOSE; y para escalas mayores de 1:10.000, SIOSE de Alta Resolución. Se utiliza la nomenclatura de clases de Usos del Suelo HILUCS, distinguiendo las siguientes clases: 1_1 Agricultura, 1_2 Forestal, 1_3 Minas y canteras, 1_4 Pesca y acuicultura, 1_5 Otra producción primaria, 2 Sector secundario, 3_1 Servicios comerciales, 3_2 Servicios profesionales y de información financiera, 3_3 Servicios comunitarios, 3_4 Servicios recreativos y culturales, 3_5 Otros servicios, 4_1 Redes de transporte, 4_2 Servicios logísticos y de almacenamiento, 4_3 Utilidades, 5 Uso residencial, 6_1 Áreas de transición, 6_2 Áreas abandonadas, 6_3_1 Zonas terrestres sin uso económico, 6_3_2 Zonas de agua sin uso económico, 6_6 Uso desconocido. La capa es consultable a partir de la escala 1:350.000.</Abstract>
+				<KeywordList>
+					<Keyword>Usos del suelo</Keyword>
+					<Keyword>CORINE 2018</Keyword>
+					<Keyword>SIOSE 2014</Keyword>
+					<Keyword>SIOSE AR 2017</Keyword>
+					<Keyword>HILUCS</Keyword>
+				</KeywordList>
+				<CRS>EPSG:4258</CRS>
+				<CRS>CRS:84</CRS>
+				<EX_GeographicBoundingBox>
+					<westBoundLongitude>-19.0</westBoundLongitude>
+					<eastBoundLongitude>5.0</eastBoundLongitude>
+					<southBoundLatitude>27.0</southBoundLatitude>
+					<northBoundLatitude>44.0</northBoundLatitude>
+				</EX_GeographicBoundingBox>
+				<BoundingBox CRS="CRS:84" minx="-19.0" miny="27.0" maxx="5.0" maxy="44.0"/>
+				<BoundingBox CRS="EPSG:4258" minx="27.0" miny="-19.0" maxx="44.0" maxy="5.0"/>
+				<BoundingBox CRS="EPSG:4326" minx="27.0" miny="-19.0" maxx="44.0" maxy="5.0"/>
+				<BoundingBox CRS="EPSG:3857" minx="-2115070.325072198" miny="3123471.749104576" maxx="556597.4539663679" maxy="5465442.183322753"/>
+				<BoundingBox CRS="EPSG:3035" minx="471468.5017937361" miny="1445891.6963879904" maxx="2768821.4534321986" maxy="3919390.1873301356"/>
+				<BoundingBox CRS="EPSG:25828" minx="102948.3712066114" miny="2986435.2424698113" maxx="2508202.7078731647" maxy="5070480.910834041"/>
+				<BoundingBox CRS="EPSG:25829" minx="-495135.75545797264" miny="2988008.1382796224" maxx="1897204.2192799984" maxy="4968139.496861154"/>
+				<BoundingBox CRS="EPSG:25830" minx="-1099673.713805158" miny="2986435.2424698113" maxx="1295248.9457888722" maxy="4998012.35979611"/>
+				<BoundingBox CRS="EPSG:25831" minx="-1714549.1480732663" miny="2988008.1382796224" maxx="698454.2342175536" maxy="5113259.329733409"/>
+				<BoundingBox CRS="EPSG:32628" minx="102948.37120796047" miny="2986435.2425578996" maxx="2508202.7078655367" maxy="5070480.910951035"/>
+				<BoundingBox CRS="EPSG:32629" minx="-495135.75545450323" miny="2988008.1383677055" maxx="1897204.2192749865" maxy="4968139.496979078"/>
+				<BoundingBox CRS="EPSG:32630" minx="-1099673.7137993197" miny="2986435.2425578996" maxx="1295248.9457861297" maxy="4998012.359913771"/>
+				<BoundingBox CRS="EPSG:32631" minx="-1714549.148064664" miny="2988008.1383677055" maxx="698454.2342168819" maxy="5113259.329849991"/>
+				<BoundingBox CRS="EPSG:4080" minx="27.0" miny="-19.0" maxx="44.0" maxy="5.0"/>
+				<BoundingBox CRS="EPSG:4081" minx="27.0" miny="-19.0" maxx="44.0" maxy="5.0"/>
+				<BoundingBox CRS="EPSG:4082" minx="660349.4105800533" miny="2988008.1382796224" maxx="3132117.470118926" maxy="5212437.859985052"/>
+				<BoundingBox CRS="EPSG:4083" minx="102948.3712066114" miny="2986435.2424698113" maxx="2508202.7078731647" maxy="5070480.910834041"/>
+				<Attribution>
+					<Title>Sistema Cartográfico Nacional</Title>
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.scne.es"/>
+				</Attribution>
+				<AuthorityURL name="SCNE">
+					<OnlineResource xlink:type="simple" xlink:href="https://www.scne.es"/>
+				</AuthorityURL>
+				<Identifier authority="SCNE">LU.ExistingLandUse</Identifier>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/plain</Format>
+					<OnlineResource xlink:type="simple" xlink:href="https://www.idee.es/csw-inspire-idee/srv/spa/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetRecordById&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;ElementSetName=full&amp;ID=spaignCLC2018"/>
+				</MetadataURL>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/plain</Format>
+					<OnlineResource xlink:type="simple" xlink:href="https://www.idee.es/csw-inspire-idee/srv/spa/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetRecordById&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;ElementSetName=full&amp;ID=spaignsiose2014"/>
+				</MetadataURL>
+				<MetadataURL type="ISO19115:2003">
+					<Format>text/plain</Format>
+					<OnlineResource xlink:type="simple" xlink:href="https://www.idee.es/csw-inspire-idee/srv/spa/csw?SERVICE=CSW&amp;VERSION=2.0.2&amp;REQUEST=GetRecordById&amp;outputSchema=http://www.isotc211.org/2005/gmd&amp;ElementSetName=full&amp;ID=spaignsioseAR2017"/>
+				</MetadataURL>
+				<Style>
+					<Name>LU.ExistingLandUse.Default</Name>
+					<Title>Estilo por defecto de usos de suelo existentes</Title>
+					<Abstract>El color del relleno depende del valor de la clase de Uso del Suelo de HILUCS (1_1 Agricultura #E6E66E, 1_2 Forestal #6EE66E, 1_3 Minas y canteras #A64D00, 1_4 Pesca y acuicultura #8CE6FF, 1_5 Otra producción primaria #B4B490, 2 Sector secundario #646464, 3_1 Servicios comerciales #9696C8, 3_2 Servicios profesionales y de información financiera #00C864, 3_3 Servicios comunitarios #96B496, 3_4 Servicios recreativos y culturales #B49696, 3_5 Otros servicios #FF64FF, 4_1 Redes de transporte #E678F0, 4_2 Servicios logísticos y de almacenamiento #969696, 4_3 Utilidades #B450F0, 5 Uso residencial #F07864, 6_1 Áreas de transición #F0D2D2, 6_2 Áreas abandonadas #F0F0D2, 6_3_1 Zonas terrestres sin uso económico #D2FAD2, 6_3_2 Zonas de agua sin uso económico #D2F0FA, 6_6 Uso desconocido #E6E6E6).</Abstract>
+					<LegendURL width="368" height="400">
+						<Format>image/png</Format>
+						<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://servicios.idee.es/wms-inspire/ocupacion-suelo/leyendas/lu.existinglanduse.default.png"/>
+					</LegendURL>
+				</Style>
+			</Layer>
+		</Layer>
+	</Capability>
+</WMS_Capabilities>

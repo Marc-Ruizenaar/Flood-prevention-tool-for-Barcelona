@@ -1,0 +1,34 @@
+{
+ "kind": "estimate",
+ "label": "ESTIMATE / ASSUMPTION: OSM-derived land-cover classes mapped to literature parameters. Not calibrated and not validated for Barcelona.",
+ "parameter_sources": {"manning_n": "config/manning_overland.json (TR-55 Table 3-1)", "green_ampt": "config/green_ampt_rawls1983.json (Rawls et al. 1983)"},
+ "assumptions": [
+  "A1: Pervious-soil texture is clay_loam everywhere. SoilGrids v2 (0-5 cm) at 2.105E 41.420N (Collserola) gives clay 28.9%, sand 31.2%, silt 39.8%, which is USDA clay loam. SoilGrids returns null at the 3 urban points tested, so the Collserola texture is extrapolated to urban parks. Raw files are in manifests/raw/g3/landcover/soilgrids_*.json.",
+  "A2: 'sealed' classes get Ks=0 and no Green-Ampt soil. This structural assumption (no infiltration through roofs, roads, pavements or water) is not a value from the Rawls table; psi and porosity are NoData there.",
+  "A3: TR-55 'smooth surfaces' n=0.011 is used for every sealed surface and for water. Water is not in TR-55; this is an ASSUMPTION.",
+  "A4: OSM lines are buffered by an assumed half-width per highway class (road_half_width_m). This is not measured.",
+  "A5: Cells inside the boundary with no OSM land-cover tag default to urban_sealed (dense city fabric: courtyards, plazas, pavements, port).",
+  "A6: leisure=park/garden is treated as grass, although many Barcelona parks are partly paved. Pitches/playgrounds are treated as sealed (artificial turf and paving are common).",
+  "A7: tunnel=yes and covered=yes ways are skipped. Layer order (later overwrites earlier) is given by 'order'."
+ ],
+ "road_half_width_m": {"motorway": 12, "motorway_link": 5, "trunk": 12, "trunk_link": 5, "primary": 10, "primary_link": 5,
+   "secondary": 8, "secondary_link": 4, "tertiary": 6, "tertiary_link": 4, "residential": 5, "living_street": 4,
+   "unclassified": 4, "pedestrian": 4, "service": 3, "footway": 1.5, "cycleway": 1.5, "steps": 1.5, "path": 1, "track": 1.5,
+   "bridleway": 1, "default": 2},
+ "unpaved_highway": ["path", "track", "bridleway"],
+ "unpaved_surface_values": ["unpaved", "dirt", "earth", "ground", "gravel", "fine_gravel", "compacted", "grass", "sand", "mud"],
+ "classes": [
+  {"code": 1, "name": "urban_sealed", "order": 0, "manning_surface": "smooth_surfaces_concrete_asphalt_gravel_bare_soil", "soil": null, "osm": "default (no tag)"},
+  {"code": 2, "name": "water", "order": 1, "manning_surface": "smooth_surfaces_concrete_asphalt_gravel_bare_soil", "soil": null, "osm": ["natural=water", "natural=wetland", "leisure=swimming_pool", "landuse=basin", "landuse=reservoir"]},
+  {"code": 3, "name": "beach_sand", "order": 2, "manning_surface": "smooth_surfaces_concrete_asphalt_gravel_bare_soil", "soil": "sand", "osm": ["natural=beach", "natural=sand"]},
+  {"code": 4, "name": "grass_park", "order": 3, "manning_surface": "grass_short_grass_prairie", "soil": "clay_loam", "osm": ["landuse=grass", "landuse=meadow", "landuse=village_green", "landuse=recreation_ground", "landuse=greenfield", "landuse=flowerbed", "landuse=allotments", "landuse=cemetery", "leisure=park", "leisure=garden", "leisure=dog_park", "leisure=golf_course", "leisure=common", "natural=grassland"]},
+  {"code": 5, "name": "pitch_sealed", "order": 4, "manning_surface": "smooth_surfaces_concrete_asphalt_gravel_bare_soil", "soil": null, "osm": ["leisure=pitch", "leisure=track", "leisure=playground", "leisure=stadium"]},
+  {"code": 6, "name": "scrub_heath", "order": 3, "manning_surface": "range_natural", "soil": "clay_loam", "osm": ["natural=scrub", "natural=heath"]},
+  {"code": 7, "name": "forest", "order": 3, "manning_surface": "woods_light_underbrush", "soil": "clay_loam", "osm": ["landuse=forest", "natural=wood"]},
+  {"code": 8, "name": "bare_fallow", "order": 3, "manning_surface": "fallow_no_residue", "soil": "clay_loam", "osm": ["landuse=brownfield", "natural=bare_rock"]},
+  {"code": 9, "name": "cultivated", "order": 3, "manning_surface": "cultivated_residue_cover_le_20pct", "soil": "clay_loam", "osm": ["landuse=farmland", "landuse=orchard", "landuse=plant_nursery", "landuse=vineyard"]},
+  {"code": 10, "name": "road_paved", "order": 5, "manning_surface": "smooth_surfaces_concrete_asphalt_gravel_bare_soil", "soil": null, "osm": "highway=* (paved), buffered"},
+  {"code": 11, "name": "path_unpaved", "order": 5, "manning_surface": "smooth_surfaces_concrete_asphalt_gravel_bare_soil", "soil": "clay_loam", "osm": "highway in unpaved_highway or surface in unpaved_surface_values, buffered"},
+  {"code": 12, "name": "building", "order": 6, "manning_surface": "smooth_surfaces_concrete_asphalt_gravel_bare_soil", "soil": null, "osm": "building=* polygons (manifests/derived/osm)"}
+ ]
+}

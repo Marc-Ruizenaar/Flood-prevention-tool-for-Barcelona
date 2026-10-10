@@ -3,16 +3,88 @@ import { AboutPanel } from "./components/AboutPanel";
 import { FactSheet } from "./components/FactSheet";
 import { LayerDock } from "./components/LayerDock";
 import { MapCanvas, type MapHandle } from "./components/MapCanvas";
+import { WeatherPanel } from "./components/WeatherPanel";
 import { useFloodData } from "./lib/data";
+import { readFlooding } from "./lib/flooding";
+import {
+  atlasLocked,
+  fetchGauges,
+  layersForRain,
+  peakOf,
+  rainCaption,
+  RAIN_SNAPSHOT,
+  rainStrength,
+  type Gauge,
+} from "./lib/rain";
+import { dayByDate, daysForWeek, DEFAULT_DAY, formatDay, PROOF_DAY, weekDates } from "./lib/weather";
 import { DEFAULT_VISIBILITY, groupForZone, type GroupId } from "./types";
 
 export function App() {
   const data = useFloodData();
-  const [visibility, setVisibility] = useState(DEFAULT_VISIBILITY);
+  const [gauges, setGauges] = useState<Record<string, Gauge>>(RAIN_SNAPSHOT);
+  const [rainLive, setRainLive] = useState<boolean | null>(null);
+  const [visibility, setVisibility] = useState(() =>
+    layersForRain(peakOf(RAIN_SNAPSHOT[DEFAULT_DAY.this])?.mm ?? null, false, DEFAULT_VISIBILITY),
+  );
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [focusNonce, setFocusNonce] = useState(0);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [weatherOpen, setWeatherOpen] = useState(false);
+  const [past, setPast] = useState(false);
+  const [day, setDay] = useState<string>(DEFAULT_DAY.this);
   const mapRef = useRef<MapHandle>(null);
+  const dayRef = useRef(day);
+  dayRef.current = day;
+  const packRef = useRef({ zones: data.zones, relief: data.relief });
+  packRef.current = { zones: data.zones, relief: data.relief };
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchGauges()
+      .then((next) => {
+        if (cancelled) return;
+        const merged = { ...RAIN_SNAPSHOT, ...next };
+        setGauges(merged);
+        setRainLive(true);
+        const currentDay = dayRef.current;
+        const { zones, relief } = packRef.current;
+        setVisibility((current) => {
+          if (!zones || !relief) {
+            return layersForRain(
+              peakOf(merged[currentDay])?.mm ?? null,
+              dayByDate(currentDay).reportIds.length > 0,
+              current,
+            );
+          }
+          const reading = readFlooding({
+            day: currentDay,
+            gauges: merged,
+            zones,
+            relief,
+          });
+          const next = {
+            ...current,
+            sewers: false,
+            streams: false,
+            slopes: false,
+            proof: dayByDate(currentDay).reportIds.length > 0,
+          };
+          for (const place of reading.places) next[place.group] = true;
+          return next;
+        });
+      })
+      .catch(() => {
+        if (!cancelled) setRainLive(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!data.zones || !data.relief) return;
+    setVisibility((current) => visibilityFor(day, gauges, current));
+  }, [data.zones, data.relief, gauges, day]);
 
   useEffect(() => {
     if (!data.ready || !data.zones) return;
@@ -28,6 +100,7 @@ export function App() {
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       setAboutOpen(false);
+      setWeatherOpen(false);
       setSelectedId(null);
     };
     window.addEventListener("keydown", onKey);
@@ -43,36 +116,123 @@ export function App() {
 
   function openZone(id: string, fly: boolean) {
     if (!data.zones?.[id]) return;
-    setVisibility((current) => ({ ...current, [groupForZone(data.zones![id])]: true }));
+    const proofDay = PROOF_DAY[id];
+    const alreadyOnThisDay = dayByDate(day).reportIds.includes(id);
+    if (proofDay && !alreadyOnThisDay) {
+      setDay(proofDay);
+      if (!weekDates(past).includes(proofDay)) setPast(true);
+      setVisibility((current) => ({
+        ...visibilityFor(proofDay, gauges, current),
+        [groupForZone(data.zones![id])]: true,
+      }));
+    } else if (proofDay || !atlasLocked(peakOf(gauges[day])?.mm ?? null)) {
+      setVisibility((current) => ({ ...current, [groupForZone(data.zones![id])]: true }));
+    }
     setSelectedId(id);
     remember(id);
     if (fly) setFocusNonce((nonce) => nonce + 1);
   }
 
+  function visibilityFor(date: string, source: Record<string, Gauge>, current: Record<GroupId, boolean>) {
+    const reports = dayByDate(date).reportIds.length > 0;
+    if (!data.zones || !data.relief) {
+      return layersForRain(peakOf(source[date])?.mm ?? null, reports, current);
+    }
+    const reading = readFlooding({ day: date, gauges: source, zones: data.zones, relief: data.relief });
+    const next = { ...current, sewers: false, streams: false, slopes: false, proof: reports };
+    for (const place of reading.places) next[place.group] = true;
+    return next;
+  }
+
+  function applyDay(date: string) {
+    setDay(date);
+    setVisibility((current) => visibilityFor(date, gauges, current));
+  }
+
+  function selectDay(date: string) {
+    applyDay(date);
+    if (!selectedId || !data.zones?.[selectedId]) return;
+    const proofDay = PROOF_DAY[selectedId];
+    const listed = dayByDate(date).reportIds.includes(selectedId);
+    const dry = atlasLocked(peakOf(gauges[date])?.mm ?? null);
+    const problem = groupForZone(data.zones[selectedId]) !== "relief";
+    if ((proofDay && proofDay !== date && !listed) || (dry && problem && !proofDay)) {
+      setSelectedId(null);
+      remember(null);
+    }
+  }
+
   function blindSpot() {
-    setVisibility({ sewers: false, streams: false, slopes: true, proof: true });
+    if (atlasLocked(peakOf(gauges[day])?.mm ?? null)) return;
+    setVisibility({ relief: true, sewers: false, streams: false, slopes: true, proof: true });
     setSelectedId("slope-torre-baro");
     remember("slope-torre-baro");
     setFocusNonce((nonce) => nonce + 1);
   }
 
+  function showPast() {
+    if (past) return;
+    setPast(true);
+    applyDay(DEFAULT_DAY.past);
+    setSelectedId(null);
+    remember(null);
+    mapRef.current?.reset();
+  }
+
+  function showThisWeek() {
+    if (!past) return;
+    setPast(false);
+    applyDay(DEFAULT_DAY.this);
+    setSelectedId(null);
+    remember(null);
+    mapRef.current?.reset();
+  }
+
   const zone = selectedId && data.zones ? data.zones[selectedId] : undefined;
 
   return (
-    <div className={`app${zone ? " sheet-open" : ""}`}>
+    <div className={`app${zone ? " sheet-open" : ""}${past ? " is-past" : ""}`}>
       <header className="topbar">
-        <div className="brand">
+        <div className={`brand${past ? " is-past" : ""}`}>
           <span className="mark" aria-hidden="true" />
           <div>
-            <p className="kicker">Barcelona</p>
-            <h1>Next rain</h1>
+            <p className="kicker">{past ? "3–7 October" : "5–11 October"}</p>
+            <h1>{formatDay(day)}</h1>
+            <p className="rain-now">{rainCaption(gauges[day], rainLive)}</p>
           </div>
+        </div>
+        <div className="topbar-break" aria-hidden="true" />
+        <div className="when" role="group" aria-label="Which week">
+          <button type="button" aria-pressed={!past} onClick={showThisWeek}>
+            This week
+          </button>
+          <button type="button" aria-pressed={past} onClick={showPast}>
+            Past
+          </button>
         </div>
         <div className="top-actions">
           <button type="button" className="pill" onClick={() => mapRef.current?.reset()}>
             City
           </button>
-          <button type="button" className="pill" onClick={() => setAboutOpen(true)}>
+          <button
+            type="button"
+            className="pill"
+            aria-pressed={weatherOpen}
+            onClick={() => {
+              setAboutOpen(false);
+              setWeatherOpen(true);
+            }}
+          >
+            Weather
+          </button>
+          <button
+            type="button"
+            className="pill"
+            onClick={() => {
+              setWeatherOpen(false);
+              setAboutOpen(true);
+            }}
+          >
             About
           </button>
         </div>
@@ -94,8 +254,11 @@ export function App() {
         <MapCanvas
           ref={mapRef}
           collections={data.collections}
+          relief={data.relief ? { image: data.relief.image, bounds: data.relief.bounds } : null}
           visibility={visibility}
           selectedId={selectedId}
+          day={day}
+          strength={rainStrength(peakOf(gauges[day])?.mm ?? null)}
           focusNonce={focusNonce}
           onSelect={(id) => openZone(id, false)}
         />
@@ -106,7 +269,20 @@ export function App() {
       <LayerDock
         visibility={visibility}
         failed={data.failed}
-        onToggle={(id: GroupId) => setVisibility((current) => ({ ...current, [id]: !current[id] }))}
+        dayLabel={formatDay(day)}
+        mm={peakOf(gauges[day])?.mm ?? null}
+        hasReports={dayByDate(day).reportIds.length > 0}
+        proofLegend={dayByDate(day).proofLegend}
+        reading={
+          data.zones && data.relief
+            ? readFlooding({ day, gauges, zones: data.zones, relief: data.relief })
+            : null
+        }
+        onOpenPlace={(id) => openZone(id, true)}
+        onToggle={(id: GroupId) => {
+          if (id !== "relief" && id !== "proof" && atlasLocked(peakOf(gauges[day])?.mm ?? null)) return;
+          setVisibility((current) => ({ ...current, [id]: !current[id] }));
+        }}
         onBlindSpot={blindSpot}
       />
 
@@ -115,11 +291,31 @@ export function App() {
           key={zone.id}
           zone={zone}
           zones={data.zones}
+          relief={data.relief?.places[zone.id]}
+          reliefSourceUrl={data.relief?.sourceUrl}
           onClose={() => {
             setSelectedId(null);
             remember(null);
           }}
           onOpen={(id) => openZone(id, true)}
+        />
+      ) : null}
+
+      {weatherOpen && data.zones ? (
+        <WeatherPanel
+          past={past}
+          day={day}
+          days={daysForWeek(past)}
+          gauges={gauges}
+          rainLive={rainLive}
+          zones={data.zones}
+          relief={data.relief}
+          onSelectDay={selectDay}
+          onOpenReport={(id) => {
+            setWeatherOpen(false);
+            openZone(id, true);
+          }}
+          onClose={() => setWeatherOpen(false)}
         />
       ) : null}
 

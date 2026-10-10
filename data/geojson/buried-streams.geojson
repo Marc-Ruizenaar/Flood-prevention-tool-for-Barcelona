@@ -4404,6 +4404,7 @@
         "layer": "buried-streams",
         "tappable": true,
         "highlight": true,
+        "quietLabel": true,
         "priority": 1,
         "kind": "avenue-trace"
       }
@@ -4437,6 +4438,7 @@
         "layer": "buried-streams",
         "tappable": true,
         "highlight": true,
+        "quietLabel": true,
         "priority": 1,
         "kind": "avenue-trace"
       }
@@ -4466,6 +4468,7 @@
         "layer": "buried-streams",
         "tappable": true,
         "highlight": true,
+        "quietLabel": true,
         "priority": 1,
         "kind": "avenue-trace"
       }
@@ -4515,6 +4518,7 @@
         "layer": "buried-streams",
         "tappable": true,
         "highlight": true,
+        "quietLabel": true,
         "priority": 1,
         "kind": "avenue-trace"
       }
@@ -4698,6 +4702,54 @@
         "highlight": true,
         "priority": 1,
         "kind": "icgc-riera"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [2.19951, 41.42582] },
+      "properties": {
+        "name": "Critical point\nRambla de Prim",
+        "layer": "buried-streams",
+        "tappable": false,
+        "kind": "critical",
+        "anchor": "left",
+        "selectId": "stream-rambla-prim"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [2.1635, 41.4312] },
+      "properties": {
+        "name": "Critical point\nTajo – Cartellà",
+        "layer": "buried-streams",
+        "tappable": false,
+        "kind": "critical",
+        "anchor": "right",
+        "selectId": "stream-cartella"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [2.1217, 41.37585] },
+      "properties": {
+        "name": "Critical point\nRiera Blanca",
+        "layer": "buried-streams",
+        "tappable": false,
+        "kind": "critical",
+        "anchor": "right",
+        "selectId": "stream-riera-blanca"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [2.16371, 41.37208] },
+      "properties": {
+        "name": "Critical point\nTapioles",
+        "layer": "buried-streams",
+        "tappable": false,
+        "kind": "critical",
+        "anchor": "left",
+        "selectId": "stream-tapioles"
       }
     }
   ]
