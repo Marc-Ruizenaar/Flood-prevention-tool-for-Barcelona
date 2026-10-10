@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import maplibregl, { type GeoJSONSource, type Map } from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
+
+maplibregl.setMaxParallelImageRequests(16);
 import type { Feature } from "geojson";
 import { useFloodData } from "./lib/data";
 import { FLOOD_CLASSES, FLOOD_COLORS, FLOOD_LABELS, floodColorExpression, streetWidth } from "./lib/modelStyle";
@@ -87,6 +90,8 @@ export function CitizenApp() {
     };
     map.on("load", readView);
     map.on("moveend", readView);
+    // ponytail: no start screen on the resident view, just a fade so the map does not pop in on a phone.
+    map.once("load", () => containerRef.current?.classList.add("is-ready"));
     map.on("load", () => {
       const empty = { type: "FeatureCollection" as const, features: [] };
       map.addSource("streets", { type: "geojson", data: empty });
