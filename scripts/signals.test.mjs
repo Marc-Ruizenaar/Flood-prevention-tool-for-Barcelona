@@ -6,7 +6,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { cadence, compose, isHealth, isRelevant, keywordMechanism, makeResolver, normUrl, parseRss, signalId } from "./signals-lib.mjs";
+import { allowEntry, cadence, compose, isHealth, isRelevant, keywordMechanism, makeResolver, normUrl, parseRss, signalId } from "./signals-lib.mjs";
 
 const gaz = JSON.parse(readFileSync("signals/gazetteer.json", "utf8"));
 const code = (name) => Object.entries(gaz.barris).find(([, b]) => b.name === name)[0];
@@ -232,4 +232,24 @@ test("publish window: SIGNALS_NOW decides what a build keeps; README says so", (
   assert.equal(build("2026-10-08T12:00:00Z"), 1, "demo time inside the window");
   assert.equal(build("2026-10-12T12:00:00Z"), 0, "a rebuild more than 7 days later drops the row");
   assert.match(readFileSync("signals/README.md", "utf8"), /SIGNALS_NOW[^\n]*demo/);
+});
+
+test("social hosts are blocked even if someone allowlists them", () => {
+  assert.equal(allowEntry("https://x.com/someone/status/1", { hosts: { "x.com": { kind: "press", label: "X" } } }), null);
+  assert.equal(allowEntry("https://www.instagram.com/p/1", { hosts: { "instagram.com": { kind: "press", label: "IG" } } }), null);
+});
+
+test("minPublishConfidence keeps approved low-confidence rows off the map; cards name the level", () => {
+  const dir = sandbox([row({ confidence: "low", via: "apify-test" })]);
+  const build = (min) => {
+    const cfg = JSON.parse(readFileSync(join(dir, "signals/config.json"), "utf8"));
+    writeFileSync(join(dir, "signals/config.json"), JSON.stringify({ ...cfg, minPublishConfidence: min }));
+    assert.equal(run(dir, "scripts/signals-build.mjs").status, 0);
+    return JSON.parse(readFileSync(join(dir, "data/signals-cards.json"), "utf8"));
+  };
+  assert.deepEqual(build("medium"), {}, "below the threshold: not drawn");
+  const cards = Object.values(build("low"));
+  assert.equal(cards.length, 1);
+  assert.match(cards[0].sourceLabel, /low confidence$/);
+  assert.equal(run(dir, "scripts/qa.mjs").status, 0, "qa accepts the card");
 });

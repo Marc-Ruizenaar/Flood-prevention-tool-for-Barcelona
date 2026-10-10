@@ -17,7 +17,7 @@
 // Otherwise nothing is sent and a keyword hint goes to the reviewer.
 import { readFileSync, renameSync, writeFileSync } from "node:fs";
 import {
-  PUBLISH_MECH, allowEntry, cadence, compose, isHealth, isRelevant, keywordMechanism, makeResolver, norm, normUrl, parseRss, rainFromRows, sha, signalId, stripHtml,
+  CONFIDENCE, PUBLISH_MECH, allowEntry, cadence, compose, isHealth, isRelevant, keywordMechanism, lowerConfidence, makeResolver, norm, normUrl, parseRss, rainFromRows, sha, signalId, stripHtml,
 } from "./signals-lib.mjs";
 
 const read = (p) => JSON.parse(readFileSync(p, "utf8"));
@@ -94,6 +94,8 @@ const ADAPTERS = {
       .filter((it) => new Date(it.published_at) > since);
   },
 };
+// Feed caps: the most confidence an item can carry when it reached us through this feed. Built-in feeds read the source itself.
+const FEED_CAP = {};
 
 async function rainNow() {
   const since = iso(now - 4 * 3600e3).slice(0, 16), until = iso(now).slice(0, 16);
@@ -219,6 +221,7 @@ async function ingest() {
         rows.push({
           signal_id: id, platform: item.platform, source_kind: entry.kind, source_url: item.url, source_label: entry.label,
           published_at: iso(item.published_at), fetched_at: iso(now),
+          confidence: lowerConfidence(entry.confidence ?? "medium", FEED_CAP[name] ?? "high"), via: name,
           summary: `${entry.label} published an item ${rel ? "matching" : "with no"} flood terms${where ? ` that names ${where}` : ""}.`,
           relevant: rel,
           place: { level: barri ? "barri" : place.level, barri, district: barri ? gaz.barris[barri].district : place.districts[0] ?? null,
@@ -266,14 +269,15 @@ async function list() {
   const rank = Object.fromEntries(compose({ priors, rain3h, signals6h: s6, staleH: stale, weights: config.weights, knobs: config.knobs }).map((p) => [p.c_barri, p.score]));
   const flagged = Object.entries(counts.sources ?? {}).filter(([, s]) => s.fails >= 3).map(([n]) => n);
   console.log(`${rows.length} pending${flagged.length ? `; FLAG 3+ failures: ${flagged.join(", ")}` : ""}`);
-  rows.sort((a, b) => (a.relevant === false) - (b.relevant === false) || (rank[b.place.barri] ?? -1) - (rank[a.place.barri] ?? -1) || b.published_at.localeCompare(a.published_at));
+  const conf = (r) => CONFIDENCE.indexOf(r.confidence ?? "medium");
+  rows.sort((a, b) => (a.relevant === false) - (b.relevant === false) || conf(b) - conf(a) || (rank[b.place.barri] ?? -1) - (rank[a.place.barri] ?? -1) || b.published_at.localeCompare(a.published_at));
   const firstMiss = rows.findIndex((r) => r.relevant === false);
   for (const [i, r] of rows.entries()) {
     if (i === firstMiss) console.log(`--- ${rows.length - i} row(s) with no flood term: skim the links, most are off-topic ---`);
     const where = r.place.barri ? gaz.barris[r.place.barri].name : r.place.candidates?.length ? `one of ${r.place.candidates.map((c) => `${c} ${gaz.barris[c].name}`).join("; ")}`
       : r.place.level === "none" ? "no named place (pass --barri to approve)" : `${r.place.level} ${r.place.district ? gaz.districts[r.place.district] ?? "" : ""}`.trim();
     const hint = `${r.cls?.mechanism ?? "?"}${r.cls?.p_mechanism != null ? ` (${r.cls.model} ${r.cls.p_mechanism})` : ` (${r.cls?.model} hint)`}`;
-    console.log(`${r.signal_id}  p=${rank[r.place.barri] ?? "-"}  ${hint} reported in ${where}, ${r.source_label}, ${r.published_at}\n    ${r.source_url}`);
+    console.log(`${r.signal_id}  p=${rank[r.place.barri] ?? "-"}  ${hint} reported in ${where}, ${r.source_label} (${r.confidence ?? "?"} confidence${r.via ? ` via ${r.via}` : ""}), ${r.published_at}\n    ${r.source_url}`);
   }
 }
 
@@ -329,6 +333,7 @@ function add(url) {
   const row = {
     signal_id: id, platform: "manual", source_kind: entry.kind, source_url: url, source_label: entry.label,
     published_at: iso(date), fetched_at: iso(now),
+    confidence: entry.confidence ?? "medium", via: "manual", // the reviewer opened the source itself
     summary: opt("summary") ?? `${entry.label} reported ${mech.replace(/_/g, " ")} in ${gaz.barris[code].name}.`,
     place: { level: "barri", barri: code, district: gaz.barris[code].district, candidates: [code], zone_ids: gaz.barris[code].zone_ids, hotspot_fid: null, gaz: sha(gazText).slice(0, 8) },
     cls: null,

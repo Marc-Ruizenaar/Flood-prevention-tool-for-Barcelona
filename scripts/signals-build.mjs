@@ -24,6 +24,7 @@ try {
     zones: read("data/zones.json"),
     now,
     windowDays: config.windowDays,
+    minConfidence: config.minPublishConfidence ?? "low",
     meta: { schema: "signals-v1", generated_at: new Date(now).toISOString().slice(0, 16) + "Z", window_days: config.windowDays, gazetteer: sha(gazText).slice(0, 8), pipeline: "scripts/signals-build.mjs" },
   });
   writeFileSync("data/geojson/signals.geojson", JSON.stringify(geojson) + "\n");

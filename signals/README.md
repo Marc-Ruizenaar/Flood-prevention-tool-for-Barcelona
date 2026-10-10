@@ -27,9 +27,11 @@ Every allowlisted item is written, including ones the keyword regex misses (`"re
 | `allowlist.json` | hosts that may become a row or a card source; sets `source_kind` | yes |
 | `gazetteer.json` | 73 barris (Open Data BCN, CC BY 4.0), Atlas aliases, districts, repo zone ids; rebuild with `scripts/signals-gazetteer.mjs` | yes |
 | `barri_priors.json` | per-barri exposure, population, nearest XEMA station, from the backtest | yes |
-| `config.json` | priority weights, window, expiry, User-Agent, `sendTextToJev` | yes |
+| `config.json` | priority weights, window, expiry, User-Agent, `sendTextToJev`, `minPublishConfidence` | yes |
 
 `inbox.jsonl` is retired and left empty: nothing reads or writes it. Generated and gitignored: `data/geojson/signals.geojson`, `data/signals-cards.json`.
+
+Sources and confidence: every row carries `confidence` (`low`, `medium` or `high`) and `via` (the feed that delivered it). The host sets the level in `allowlist.json` (high for the body responsible, medium for press). A feed in `feeds.json` can only lower it with `maxConfidence`, never raise it. `--list` shows the level and sorts higher first; cards name it next to each source. `minPublishConfidence` in `config.json` (default `low`) keeps approved rows below it off the map.
 
 Publish window: the build keeps approved rows published in the 7 days before "now", and "now" is `SIGNALS_NOW` if set, else the clock at build time. For the demo, set `SIGNALS_NOW` to the demo time (for example `SIGNALS_NOW=2026-10-10T16:00Z npm run build`) so the map shows what it showed in rehearsal. Any later rebuild without it drops rows older than 7 days, so the dots disappear on their own.
 

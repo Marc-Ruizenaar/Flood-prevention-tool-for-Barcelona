@@ -51,11 +51,19 @@ export function normUrl(url) {
 export const sha = (s) => createHash("sha256").update(s).digest("hex");
 export const signalId = (platform, postIdOrUrl) => sha(postIdOrUrl.startsWith("https://") ? postIdOrUrl : `${platform}:${postIdOrUrl}`).slice(0, 16);
 
-// Allowlist: exact host or a subdomain of it. source_kind comes only from here.
+// Individuals post on these. They never become rows, even if someone adds them to the allowlist or an Apify feed returns them.
+export const NEVER_HOSTS = ["x.com", "twitter.com", "instagram.com", "facebook.com", "tiktok.com", "reddit.com", "t.me", "youtube.com", "bsky.app", "threads.net", "linkedin.com"];
+
+// Confidence in a row's source, lowest first. A host sets it (allowlist.json); a feed can only lower it (feeds.json maxConfidence).
+export const CONFIDENCE = ["low", "medium", "high"];
+export const lowerConfidence = (...levels) => CONFIDENCE[Math.min(...levels.map((c) => Math.max(0, CONFIDENCE.indexOf(c))))];
+
+// Allowlist: exact host or a subdomain of it. source_kind and confidence come only from here.
 export function allowEntry(url, allowlist) {
   let host;
   try { host = new URL(url).hostname; } catch { return null; }
   if (!String(url).startsWith("https://")) return null;
+  if (NEVER_HOSTS.some((h) => host === h || host.endsWith(`.${h}`))) return null;
   const key = Object.keys(allowlist.hosts).find((h) => host === h || host.endsWith(`.${h}`));
   return key ? { host: key, ...allowlist.hosts[key] } : null;
 }
@@ -176,6 +184,7 @@ export function validateRow(row, { allowlist, gaz }) {
   if (!entry) bad(`source_url not https or host not on signals/allowlist.json: ${row.source_url}`);
   if (row.source_kind !== entry.kind) bad(`source_kind ${row.source_kind} does not match the allowlist (${entry.kind})`);
   if (!row.source_label) bad("source_label missing");
+  if ("confidence" in row && !CONFIDENCE.includes(row.confidence)) bad(`confidence must be one of ${CONFIDENCE.join(", ")}`);
   if (Number.isNaN(Date.parse(row.published_at))) bad("published_at invalid");
   for (const k of ["text", "title", "handle", "author", "display_name", "media", "excerpt"]) if (k in row) bad(`field ${k} must never be stored`);
   if (row.review.status !== "approved") return null;
@@ -198,7 +207,7 @@ const shortRange = (keys) => (keys.length === 1 ? fmt(keys[0], "short")
   : keys[0].slice(0, 7) === keys.at(-1).slice(0, 7) ? `${+keys[0].slice(8)}–${fmt(keys.at(-1), "short")}` : `${fmt(keys[0], "short")} – ${fmt(keys.at(-1), "short")}`);
 
 // Approved, allowlisted rows inside the window -> one feature and one card per barri. Card text is template-only.
-export function buildPublished({ rows, gaz, allowlist, zones, now, windowDays, meta }) {
+export function buildPublished({ rows, gaz, allowlist, zones, now, windowDays, meta, minConfidence = "low" }) {
   const proofByUrl = new Map();
   for (const card of Object.values(zones)) {
     if (card.layerType !== "proof") continue;
@@ -212,6 +221,9 @@ export function buildPublished({ rows, gaz, allowlist, zones, now, windowDays, m
     if (ids.has(row.signal_id)) throw new Error(`inbox row ${row.signal_id}: duplicate signal_id, keep one line`);
     ids.add(row.signal_id);
     if (!mech || Date.parse(row.published_at) < since || Date.parse(row.published_at) > now) continue;
+    // Rows from before confidence existed take their host's level.
+    const confidence = row.confidence ?? allowEntry(row.source_url, allowlist).confidence ?? "medium";
+    if (CONFIDENCE.indexOf(confidence) < CONFIDENCE.indexOf(minConfidence)) continue;
     const url = normUrl(row.source_url);
     if (urls.has(url)) continue; // same page under two ids (e.g. with a query string): one report
     urls.add(url);
@@ -222,7 +234,7 @@ export function buildPublished({ rows, gaz, allowlist, zones, now, windowDays, m
       continue;
     }
     if (!byBarri.has(b)) byBarri.set(b, []);
-    byBarri.get(b).push({ ...row, mech });
+    byBarri.get(b).push({ ...row, mech, confidence });
   }
   const features = [], cards = {};
   for (const [code, list] of [...byBarri].sort(([a], [b]) => a.localeCompare(b))) {
@@ -233,7 +245,7 @@ export function buildPublished({ rows, gaz, allowlist, zones, now, windowDays, m
     for (const r of list) counts[r.mech] = (counts[r.mech] ?? 0) + 1;
     const mechs = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b));
     const orgs = [...new Set(list.map((r) => r.source_label))];
-    const label = (r) => `${r.source_label}, ${fmt(dayKey(r.published_at), "short")}`;
+    const label = (r) => `${r.source_label}, ${fmt(dayKey(r.published_at), "short")}, ${r.confidence} confidence`;
     const id = `sig-${code}`;
     const name = `${g.name}: reviewed reports, ${shortRange(days)}`;
     const related = [...new Set([...g.zone_ids, ...(proofLinks.get(code) ?? [])])].filter((z) => zones[z]);
