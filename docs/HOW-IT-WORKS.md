@@ -33,8 +33,8 @@ technical questions. Every number comes from `data/ml/metrics.json` (generated b
 | App | [src/App.tsx](../src/App.tsx) | Opens the intro on arrival, the Scan button, Enter map |
 | App | [src/components/MapCanvas.tsx](../src/components/MapCanvas.tsx) | Only change: `project()`, turns a map coordinate into a screen point so alerts sit on the right street |
 | App | [src/lib/artefacts.ts](../src/lib/artefacts.ts), [HotspotCard.tsx](../src/components/HotspotCard.tsx) | Marks "edge ponding" results as an upper bound, not a real depth |
-| Tests | [ml/tests/test_pipeline.py](../ml/tests/test_pipeline.py) | 12 Python tests |
-| Tests | [scripts/scenarios.test.mjs](../scripts/scenarios.test.mjs) | 18 tests for loading and the "where to go" advice |
+| Tests | [ml/tests/test_pipeline.py](../ml/tests/test_pipeline.py) | 21 Python tests, including the calibration checks |
+| Tests | [scripts/scenarios.test.mjs](../scripts/scenarios.test.mjs) | 32 tests for loading (v1 and v2 files), the reliability checks and the "where to go" advice |
 | Tests | [scripts/qa.mjs](../scripts/qa.mjs) | Data checks, including caveat, trust fields and banned words in the scenario file |
 
 Flow: `ml/` (Python) writes `data/ml/scenarios.json` → `scripts/copy-data.mjs` copies it into the web app
@@ -85,9 +85,22 @@ In words:
   how much rain exceeded the drains. That input just tells the two storms apart.
   **Inside the heavy storm alone, its ranking of streets scores 0.51, which is chance.**
   Inside the light storm it scores 0.84, but that rests on only 24 flooded streets, so it is shaky.
-- **Calibration**: when the model says "80 to 100% chance", those streets actually flooded 48% of the time.
-  The high percentages are overconfident. Treat the model's number as a ranking ("riskier than other
-  streets"), not as a real percentage chance.
+- **Calibration**: the raw score was overconfident. When it said "80 to 100% chance", those streets actually
+  flooded 48% of the time. We now correct it with an isotonic map (a monotone step curve) fitted on the
+  neighbourhood-held-out scores, and test the fix honestly: for each of the 5 neighbourhood groups, the curve
+  is fitted on the other 4 and applied to the held-out one. Brier score (lower is better) goes from 0.144 to 0.132.
+  One rule: no step of the curve may rest on fewer than 30 streets, so it cannot say "100%" from a handful.
+
+  | The model says | Streets | Simulation flooded (raw score) | Simulation flooded (corrected) |
+  | --- | --- | --- | --- |
+  | 60 to 80% | 4 (raw: 668) | 48% | 75% |
+  | 80 to 100% | 0 (raw: 99) | 48% | none |
+
+  The middle of the range is now honest (40 to 60% says 49%, flooded 49%). Two warnings. First, correcting the
+  score cannot add skill: inside a heavy storm most streets land on about 50%, and only 4 streets get a
+  corrected score above 60%, so that row is rough. Second, the highest level the curve can now give is 71%, so
+  the model rarely says a high number. In the app, "medium" starts at 30% and "high" at 60%; alerts and
+  "where to go" advice use the 30% line.
 
 ### The honest scenario test: leave one storm out
 
@@ -127,8 +140,9 @@ The trust rules were written into `ml/config.py` **before** the results came in,
 ### How the scenario slider really behaves
 
 Because it learned from just two storms, the model learned one on/off step, not a smooth curve:
-- At 20 mm/h drains, everything from 25 to 100 mm looks like the light day (risk 0.1 of 10, 0.3% of streets).
-  143 mm looks like the heavy day (risk 4.9, 50% of streets).
+- At 20 mm/h drains, everything from 25 to 100 mm looks like the light day (risk 0.2 of 10, no street at or above 50%).
+  143 mm looks like the heavy day (risk 4.7 of 10). Its share of streets at or above 50% reads only 2%, because
+  most streets sit at 49.9% after correction, just under the cut. That cut is fragile: a 49% cut would read 61%.
 - The drain setting works only through a fixed formula (rain minus drains x 3 hours), not something learned.
   That is why every scenario with drains other than 20 mm/h is marked **Extrapolated** in the intro.
 - The alert lists skip the 40 streets dropped from training as edge ponding (water piling against the
@@ -156,8 +170,8 @@ Because it learned from just two storms, the model learned one on/off step, not 
 
 | Check | Command | Result today |
 | --- | --- | --- |
-| ML pipeline (no leakage between train and test, label threshold, extrapolation flags, matrix adds up, trust rules, no edge artefacts in alert lists) | `ml/.venv/Scripts/python -m pytest ml/tests -q` | 13 passed |
-| App unit tests, incl. scenario loading and "where to go" | `node --test scripts/*.test.mjs` | 53 passed |
+| ML pipeline (no leakage between train and test, label threshold, extrapolation flags, matrix adds up, trust rules, no edge artefacts in alert lists) | `ml/.venv/Scripts/python -m pytest ml/tests -q` | 21 passed |
+| App unit tests, incl. scenario loading and "where to go" | `node --test scripts/*.test.mjs` | 61 passed |
 | Data QA, incl. caveat, trust, banned words | `npm run qa` | passed |
 | Community signals | `npm run signals:check` | 17 passed |
 | City actions smoke test | `npm run test:city-actions` | passed |
@@ -188,8 +202,14 @@ and on 10 real reported places the model never saw. The trust rules were fixed i
 Because it mostly measures "can it tell a light storm from a heavy one", which is easy. Inside one storm,
 ranking streets is at 0.51, which is chance.
 
+**What does "70%" mean?**
+It means: of the streets the model scores like this one, about 70% flooded in our physics simulation for that rain.
+Measured on streets the correction never saw, "about 68%" turned out to be 75% (4 streets), which is a very small sample, so
+treat it as rough. It is not a 70% chance of a real flood, because we have not checked it against real floods yet.
+
 **Is "80%" on a street an 80% chance?**
-No. When the model says 80 to 100%, those streets flooded in the simulation about half the time. Use it as a ranking.
+Not exactly. After correction the model almost never goes that high: the highest level is 71%, and in the test no street
+reached 80%. Treat anything above 60% as "high", not as a precise figure.
 
 **Where do the labels come from?**
 From our own physics simulation, not from real floods. So the ML is a fast copy of the physics model,
@@ -200,7 +220,7 @@ A scenario outside what the model learned from: drain levels other than 20 mm/h,
 Read those with extra care.
 
 **What is the 0 to 10 risk score?**
-10 times the average flood probability over all 2,224 streets in that scenario.
+10 times the average corrected score over all 2,224 streets in that scenario.
 
 **How does "where to go" work?**
 For each risky area it looks for the nearest street within 600 m (straight line) that is higher, lower risk,

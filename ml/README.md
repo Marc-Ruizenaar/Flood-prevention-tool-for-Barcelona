@@ -75,13 +75,58 @@ The count is stored in `model.excluded_rows`.
   Note: the spatial AUC rule for medium passes today (0.83), but only because the model tells the two
   storms apart, not because it ranks streets well. The rule was fixed before the results, so it stays
   as written. Trust is still low because the other rules fail.
-- **risk_score** (0 to 10, one decimal) = 10 x the average probability over all segments.
-- **share_flooded** = share of segments with probability at least 0.5.
-- **p is a ranking score, not a calibrated probability.** In the 80 to 100% calibration bin, only 48%
-  of streets actually flood in the simulation. Read p as "higher than other streets", not as a percentage chance.
-- **top** = the 10 highest-p segments at least 200 m apart. The 40 edge-ponding segments excluded
+- **p is calibrated** (see "Calibration" below). It is rounded to 3 decimals first. Everything below is
+  computed from the rounded p, so the file agrees with itself.
+- **risk_score** (0 to 10, one decimal) = 10 x the average p over all segments.
+- **share_flooded** = share of segments with p at least 0.5. Fragile: the big plateau sits at 0.499.
+- **expected_share** = mean p over all segments, 4 decimals. The UI should prefer this to `share_flooded`.
+- **top** = the 10 highest-p segments at least 200 m apart. Calibrated p has many ties, so ties are
+  broken by the raw model score. The 40 edge-ponding segments excluded
   from training are still scored, but never picked for the top list.
 - **extrapolated** = rain outside the trained range (15.5 to 143.4 mm) or drainage different from 20 mm/h.
+
+## Calibration
+
+The raw model score ranks streets but is not a probability: in the raw 80 to 100% bin only 48% of streets
+flooded in the simulation. The app shows p as "72% chance", so p must be calibrated.
+
+- **Fit:** `IsotonicRegression(out_of_bounds="clip", y_min=0, y_max=1)` on the spatial out-of-fold
+  scores against the labels, then **pooled**: no step may rest on fewer than 30 out-of-fold rows
+  (`MIN_STEP_ROWS`). The smallest under-sized step is merged into the neighbour with the closer observed
+  rate (weighted mean) until all steps have 30 rows or more. The result has 10 steps, listed in
+  `model.calibration.steps`. The same pooled map is used in the nested measurement. Saved as `ml/out/calibrator.joblib` (git-ignored, rebuilt by `train.py`).
+  `predict_scenarios.py` applies it to every scenario and sets `version: 2`.
+- **Meaning:** "70%" = about 70% of comparable streets flooded in the physics simulation for that rain.
+  Not a chance of real flooding (that is not checked yet). Stored in `model.calibration.note`.
+- **Honest measurement (nested spatial CV):** for each of the 5 spatial folds, fit on the other 4 folds'
+  out-of-fold scores, apply to the held-out fold, pool. Written to `metrics.reliability`
+  (`bins`, `bins_raw`, `brier_before`, `brier_after`, `at_70`, `sentence`) and
+  `metrics.calibrated_confusion`. A little second-order leakage remains: the other folds' scores came
+  from models that trained on the held-out fold's rows.
+- **Result (current run), nested:**
+
+| p bin | Raw: said / flooded / n | Calibrated: said / flooded / n |
+| --- | --- | --- |
+| 0 to 20% | 2% / 3% / 2,290 | 1% / 1% / 2,197 |
+| 20 to 40% | 31% / 44% / 532 | 33% / 32% / 195 |
+| 40 to 60% | 50% / 52% / 819 | 49% / 49% / 2,012 |
+| 60 to 80% | 69% / 48% / 668 | 68% / 75% / 4 |
+| 80 to 100% | 83% / 48% / 99 | none / none / 0 |
+
+  Brier score 0.144 before, 0.132 after. The middle bins are now well calibrated.
+- **What calibration cannot fix.** The model separates the light storm from the heavy one, and little else
+  (AUC 0.51 inside the heavy storm). So calibration does not create high-confidence streets. It moves
+  almost every street in a heavy scenario onto a plateau of about 50% (1,312 of 2,224 streets sit at 0.499).
+  With the 30-row rule the highest level the map can output is 0.706 (34 rows), so there is no more
+  "100%" from a handful of streets. The nested 60 to 80% bin holds only 4 streets and the 80 to 100% bin
+  none, so the model almost never says a high number. `improvements` says so.
+- **Threshold 0.5 after calibration.** It still defines the confusion matrix, but it is fragile: the big
+  plateau is at 0.499, just under it. At 0.5 the calibrated matrix has recall 0.27 (raw: 0.55) and
+  `share_flooded` in the heavy scenario is 1.7% (`expected_share` is 0.467). A cut of 0.49 would give 61%. The headline metrics were not
+  changed. See `metrics.calibrated_confusion` for the matrix at 0.5 on calibrated p.
+- **Risk bands.** `model.calibration.bands = {medium: 0.3, high: 0.6}`, the same cuts as `riskWord` in the
+  app. When present, `areasAtRisk` counts top areas with p at least 0.3 and `whereToGo` only suggests
+  streets under 0.3. Without bands both use the 0.5 threshold, as before.
 
 ## Results (current run)
 

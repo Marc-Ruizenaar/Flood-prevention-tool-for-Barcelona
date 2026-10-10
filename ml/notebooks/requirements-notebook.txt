@@ -1,0 +1,10 @@
+# Extra packages for flood_model_colab.ipynb, on top of ml/requirements.txt (numpy, pandas, scipy, scikit-learn, joblib).
+# Colab already has plotly, ipywidgets and matplotlib, so there you install nothing.
+plotly==7.1.0
+ipywidgets==8.1.9
+matplotlib==3.11.2
+# Only needed to run the notebook locally or headless:
+ipykernel==7.4.0
+jupyter_client==8.10.0
+nbformat==5.11.1
+nbclient==0.11.0
