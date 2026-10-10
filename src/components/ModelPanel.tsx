@@ -1,8 +1,9 @@
-import { t } from "../lib/i18n";
+import { locale, t } from "../lib/i18n";
 import {
   dayKey,
   dayLabels,
   formatQuantity,
+  formatValueWithUnit,
   MODEL_DAYS,
   runId,
   type DailySummary,
@@ -33,6 +34,28 @@ const DAILY_FIELDS: { key: keyof DailySummary; label: string }[] = [
   { key: "data_completeness", label: "Data completeness" },
 ];
 
+/** Backend scenario keys such as `drain_plus_10mm_h`, read as a sentence. */
+function scenarioLabel(key: string): string {
+  const drain = /^drain_plus_(\d+)mm_h$/.exec(key);
+  if (drain) return t("Drains take {n} mm/h more", { n: drain[1] });
+  return key.replaceAll("_", " ");
+}
+
+/** Backend warnings quote raw SI rates ("5.5e-06 m/s"); show them as mm/h. */
+function humaniseWarning(warning: string): string {
+  // The backend writes two fixed warnings; anything else passes through with rates converted.
+  const capacity = warning.match(/^ASSUMPTION drainage scenario: capacity (\S+) m\/s$/);
+  if (capacity) return t("Assumed drain capacity: {rate}. Nobody measured it.", { rate: formatValueWithUnit(Number(capacity[1]), "m/s") });
+  if (warning.startsWith("PROVISIONAL: data_completeness")) return t("Data completeness is a placeholder until the rainfall quality checks land.");
+  return warning.replace(/(-?\d+(?:\.\d+)?(?:e[-+]?\d+)?) m\/s/g, (_, n: string) => formatValueWithUnit(Number(n), "m/s"));
+}
+
+// Street lengths come in metres; whole kilometres with one decimal read better in a table.
+function km(q: { value: number | null } | null | undefined): string {
+  if (q?.value == null) return "—";
+  return `${(q.value / 1000).toLocaleString(locale, { maximumFractionDigits: 1, minimumFractionDigits: 1 })} km`;
+}
+
 export function ModelPanel({ day, onDay, streets, hotspots, daily, mitigation }: ModelPanelProps) {
   const available = daily.status === "ready" ? daily.data.map((row) => dayKey(row.date_local)) : null;
   const notes = [
@@ -46,7 +69,7 @@ export function ModelPanel({ day, onDay, streets, hotspots, daily, mitigation }:
 
   return (
     <aside className="model-panel" data-testid="model-panel">
-      <p className="kicker">Flood model · {runId()}</p>
+      <p className="kicker">{t("Flood model")} · {runId()}</p>
       <h2>{dayLabels(day).long}</h2>
       <div className="model-days" role="group" aria-label={t("Model day")}>
         {MODEL_DAYS.map((iso) => {
@@ -79,7 +102,7 @@ export function ModelPanel({ day, onDay, streets, hotspots, daily, mitigation }:
               if (!value || typeof value !== "object" || !("unit" in value)) return null;
               return (
                 <div key={field.key}>
-                  <dt>{field.label}</dt>
+                  <dt>{t(field.label)}</dt>
                   <dd>{formatQuantity(value)}</dd>
                 </div>
               );
@@ -88,7 +111,7 @@ export function ModelPanel({ day, onDay, streets, hotspots, daily, mitigation }:
           {row.warnings.length > 0 ? (
             <ul className="model-warnings">
               {row.warnings.map((warning) => (
-                <li key={warning}>{warning}</li>
+                <li key={warning}>{humaniseWarning(warning)}</li>
               ))}
             </ul>
           ) : null}
@@ -98,27 +121,33 @@ export function ModelPanel({ day, onDay, streets, hotspots, daily, mitigation }:
       {mitigation.status === "error" ? <p className="model-notice">{mitigation.message}</p> : null}
       {mitigation.status === "ready" ? (
         <>
-          <p className="model-notice">{mitigation.data.disclaimer}</p>
+          <p className="model-notice">{t(mitigation.data.disclaimer)}</p>
           {reportDay ? (
             <table className="model-compare">
+              <thead>
+                <tr>
+                  <th scope="col">{t("Scenario")}</th>
+                  <th scope="col">{t("Flooded streets")}</th>
+                  <th scope="col">{t("Peak depth")}</th>
+                </tr>
+              </thead>
               <tbody>
                 <tr>
-                  <th>{t("Baseline")}</th>
-                  <td>{formatQuantity(reportDay.baseline.flooded_street_length, false)}</td>
+                  <th scope="row">{t("Baseline")}</th>
+                  <td>{km(reportDay.baseline.flooded_street_length)}</td>
                   <td>{formatQuantity(reportDay.baseline.peak_depth, false)}</td>
                 </tr>
                 {Object.entries(reportDay.scenarios).map(([name, scenario]) => (
                   <tr key={name}>
-                    <th>
-                      <code>{name}</code>
-                    </th>
-                    <td>{formatQuantity(scenario.delta_flooded_street_length, false)}</td>
+                    <th scope="row">{scenarioLabel(name)}</th>
+                    <td>{km(scenario.delta_flooded_street_length)}</td>
                     <td>{formatQuantity(scenario.delta_peak_depth, false)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           ) : null}
+          {reportDay ? <p className="model-notice">{t("Scenario rows show the change against the baseline.")}</p> : null}
         </>
       ) : null}
     </aside>

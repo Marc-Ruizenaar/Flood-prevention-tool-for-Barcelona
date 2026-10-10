@@ -1,4 +1,4 @@
-import { locale } from "./i18n";
+import { locale, t } from "./i18n";
 import type { FeatureCollection, LineString, Point } from "geojson";
 import { dailyAsset, hotspotsAsset, indexAsset, mitigationAsset, streetsAsset } from "./fixtures";
 import { chunksFor, mergeRanked, type Bbox, type RunIndex } from "./chunks";
@@ -173,14 +173,38 @@ export function formatNumber(value: number): string {
   if (abs !== 0 && (abs < 0.001 || abs >= 1_000_000)) return value.toExponential(2);
   // Model output is not millimetre-accurate, so big numbers lose decimals they cannot back up.
   const digits = abs >= 1000 ? 0 : abs >= 1 ? 1 : 3;
-  return value.toLocaleString("en-GB", { maximumFractionDigits: digits });
+  return value.toLocaleString(locale, { maximumFractionDigits: digits });
+}
+
+function fixed(value: number, digits: number): string {
+  return value.toLocaleString(locale, { maximumFractionDigits: digits, minimumFractionDigits: digits });
+}
+
+/** Human readout of a backend unit: m3 → m³, m/s → mm/h, "1" (dimensionless) → percentage. */
+export function formatValueWithUnit(value: number, unit: string): string {
+  switch (unit) {
+    case "m3":
+      return `${value.toLocaleString(locale, { maximumFractionDigits: 0 })} m³`;
+    case "m/s":
+      return `${fixed(value * 3.6e6, 1)} mm/h`;
+    case "1": {
+      const pct = value * 100;
+      if (pct !== 0 && Math.abs(pct) < 0.01) return `${pct < 0 ? "> -" : "< "}0.01 %`;
+      return `${pct.toLocaleString(locale, { maximumFractionDigits: 2 })} %`;
+    }
+    case "m":
+      return `${fixed(value, 2)} m`;
+    default:
+      return `${formatNumber(value)} ${unit}`;
+  }
 }
 
 export function formatQuantity(q: Quantity | null | undefined, withKind = true): string {
   if (!q) return "—";
-  if (q.value == null) return `— ${q.unit}`;
-  const body = `${formatNumber(q.value)} ${q.unit}`;
-  return withKind ? `${body} (${q.kind})` : body;
+  const kind = ` ${t(`(${q.kind})`)}`;
+  if (q.value == null) return withKind ? `—${kind}` : "—";
+  const body = formatValueWithUnit(q.value, q.unit);
+  return withKind ? `${body}${kind}` : body;
 }
 
 export function formatDepth(value: number | null | undefined): string {

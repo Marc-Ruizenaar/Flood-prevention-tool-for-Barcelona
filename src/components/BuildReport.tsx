@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { locale, t } from "../lib/i18n";
 import { formatNumber } from "../lib/sim";
 
 type Stat = { min: number; max: number; mean: number; nan: number };
@@ -44,12 +45,12 @@ const STAT_LABEL: Record<string, string> = {
 };
 
 function count(value: number): string {
-  return value.toLocaleString("en-GB");
+  return value.toLocaleString(locale);
 }
 
 function statLine(stat: Stat): string {
   const nan = stat.nan ? `, ${count(stat.nan)} NaN` : "";
-  return `${formatNumber(stat.min)} – ${formatNumber(stat.max)}, mean ${formatNumber(stat.mean)}${nan}`;
+  return `${formatNumber(stat.min)} – ${formatNumber(stat.max)}, ${t("mean")} ${formatNumber(stat.mean)}${nan}`;
 }
 
 export function BuildReport() {
@@ -67,7 +68,7 @@ export function BuildReport() {
         if (!cancelled) setReport(data);
       })
       .catch(() => {
-        if (!cancelled) setError("No build report on this machine. The backend writes it to backend/outputs/.");
+        if (!cancelled) setError(t("No build report on this machine. The backend writes it to backend/outputs/."));
       });
     return () => {
       cancelled = true;
@@ -79,33 +80,37 @@ export function BuildReport() {
   const gapM3 = rain?.gap_fill.reduce((sum, row) => sum + row.fill_volume_m3, 0) ?? 0;
 
   return (
-    <aside className="build-panel" data-testid="build-panel" aria-label="bcn_30m build report">
-      <p className="kicker">Test inputs · bcn_30m.pkl</p>
-      <h2>Build report</h2>
+    <aside className="build-panel" data-testid="build-panel" aria-label={t("Build report")}>
+      <p className="kicker">{t("Test inputs")} · bcn_30m.pkl</p>
+      <h2>{t("Build report")}</h2>
       {error ? <p className="model-notice">{error}</p> : null}
       {report && rain ? (
         <>
           <dl className="model-facts">
             <div>
-              <dt>Grid</dt>
+              <dt>{t("Grid")}</dt>
               <dd>
                 {formatNumber(report.dx_m)} m · {count(report.shape[0])} × {count(report.shape[1])}
               </dd>
             </div>
             <div>
-              <dt>Active cells</dt>
+              <dt>{t("Active cells")}</dt>
               <dd>{count(report.active_cells)}</dd>
             </div>
             <div>
-              <dt>Buildings</dt>
+              <dt>{t("Buildings")}</dt>
               <dd>
-                {count(report.building_cells)} cells at or above {formatNumber(report.building_threshold * 100)}% roof
-                · mean fraction {formatNumber(report.building_fraction_mean_active)} · {count(report.buildings)}{" "}
-                polygons · {count(report.roof_5m_cells)} roof cells at 5 m
+                {t("{cells} cells at or above {pct}% roof · mean fraction {mean} · {polygons} polygons · {roof} roof cells at 5 m", {
+                  cells: count(report.building_cells),
+                  pct: formatNumber(report.building_threshold * 100),
+                  mean: formatNumber(report.building_fraction_mean_active),
+                  polygons: count(report.buildings),
+                  roof: count(report.roof_5m_cells),
+                })}
               </dd>
             </div>
             <div>
-              <dt>Pervious cells</dt>
+              <dt>{t("Pervious cells")}</dt>
               <dd>{count(report.pervious_cells)}</dd>
             </div>
             {Object.entries(STAT_LABEL).map(([key, label]) => {
@@ -113,13 +118,13 @@ export function BuildReport() {
               if (!stat) return null;
               return (
                 <div key={key}>
-                  <dt>{label}</dt>
+                  <dt>{t(label)}</dt>
                   <dd>{statLine(stat)}</dd>
                 </div>
               );
             })}
             <div>
-              <dt>Rain, mm</dt>
+              <dt>{t("Rain, mm")}</dt>
               <dd>
                 {rain.stations
                   .map((station) => `${station} ${formatNumber(rain.total_mm_per_station[station] ?? 0)}`)
@@ -127,7 +132,7 @@ export function BuildReport() {
               </dd>
             </div>
             <div>
-              <dt>Thiessen cells</dt>
+              <dt>{t("Thiessen cells")}</dt>
               <dd>
                 {rain.stations
                   .map((station) => `${station} ${count(rain.thiessen_cells[station] ?? 0)}`)
@@ -135,30 +140,39 @@ export function BuildReport() {
               </dd>
             </div>
             <div>
-              <dt>D5 gap fill</dt>
+              <dt>{t("D5 gap fill")}</dt>
               <dd>
-                {rain.label}. {formatNumber(gapMm)} mm, {formatNumber(gapM3)} m³ over{" "}
-                {count(rain.sensitivity_d5_area.d5_cells)} cells.
+                {rain.label}.{" "}
+                {t("{mm} mm, {m3} m³ over {cells} cells.", {
+                  mm: formatNumber(gapMm),
+                  m3: formatNumber(gapM3),
+                  cells: count(rain.sensitivity_d5_area.d5_cells),
+                })}
               </dd>
             </div>
             <div>
-              <dt>D5 sensitivity</dt>
+              <dt>{t("D5 sensitivity")}</dt>
               <dd>
-                IDW {formatNumber(rain.sensitivity_d5_area.idw_mm)} mm (
-                {formatNumber(rain.sensitivity_d5_area.idw_m3)} m³) against an X8 copy of{" "}
-                {formatNumber(rain.sensitivity_d5_area.copy_x8_mm)} mm (
-                {formatNumber(rain.sensitivity_d5_area.copy_x8_m3)} m³).
+                {t("IDW {idwMm} mm ({idwM3} m³) against an X8 copy of {x8Mm} mm ({x8M3} m³).", {
+                  idwMm: formatNumber(rain.sensitivity_d5_area.idw_mm),
+                  idwM3: formatNumber(rain.sensitivity_d5_area.idw_m3),
+                  x8Mm: formatNumber(rain.sensitivity_d5_area.copy_x8_mm),
+                  x8M3: formatNumber(rain.sensitivity_d5_area.copy_x8_m3),
+                })}
               </dd>
             </div>
             <div>
-              <dt>Status</dt>
+              <dt>{t("Status")}</dt>
               <dd>{rain.status}</dd>
             </div>
             <div>
-              <dt>Labels</dt>
+              <dt>{t("Labels")}</dt>
               <dd>
-                Surface {report.labels.surface}. Aggregation {report.labels.aggregation}. Rain gap{" "}
-                {report.labels.rain_gap_fill}.
+                {t("Surface {surface}. Aggregation {aggregation}. Rain gap {gap}.", {
+                  surface: report.labels.surface,
+                  aggregation: report.labels.aggregation,
+                  gap: report.labels.rain_gap_fill,
+                })}
               </dd>
             </div>
           </dl>

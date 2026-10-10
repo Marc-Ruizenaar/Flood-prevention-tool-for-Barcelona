@@ -1,6 +1,14 @@
 import { t } from "./i18n";
 import { explainHotspotProblem } from "./hotspotStory";
-import { formatDepth, formatMinutes, type HotspotProps, type HotspotsCollection, type StreetsCollection } from "./sim";
+import { FLOOD_LABELS } from "./modelStyle";
+import {
+  formatDepth,
+  formatMinutes,
+  type FloodClass,
+  type HotspotProps,
+  type HotspotsCollection,
+  type StreetsCollection,
+} from "./sim";
 
 export type ActionCategory = "traffic" | "drainage" | "structure" | "preposition";
 
@@ -126,7 +134,7 @@ function hotspotActions(features: HotspotProps[], geometryByCell: Map<string, [n
         priority: 120 + depression * 40 + (peak ?? 0) * 20,
         category: "structure",
         title: t("Inspect low point / underpass drainage near {street}", { street }),
-        detail: `Terrain dips about ${depression.toFixed(1)} m in the model — water can pool before it drains away.`,
+        detail: t("Terrain dips about {m} m in the model, so water can pool before it drains away.", { m: depression.toFixed(1) }),
         locationLabel: street,
         coordinates: coords,
         cellId: props.cell_id,
@@ -144,7 +152,7 @@ function hotspotActions(features: HotspotProps[], geometryByCell: Map<string, [n
         priority: 95 + (totalIn - drainage) / 40 + (peak ?? 0) * 15,
         category: "drainage",
         title: t("Pre-clear gullies / plan pumping near {street}", { street }),
-        detail: `Modeled drainage removes less than 20% of incoming water at this cell for this scenario.`,
+        detail: t("Modelled drainage removes less than 20% of incoming water at this cell for this scenario."),
         locationLabel: street,
         coordinates: coords,
         cellId: props.cell_id,
@@ -169,8 +177,8 @@ function hotspotActions(features: HotspotProps[], geometryByCell: Map<string, [n
           ? t("Pre-position barriers upstream of {street}", { street })
           : t("Pre-position barriers upgradient of {street}", { street }),
         detail: upstream
-          ? `Most simulated inflow arrives from the ${props.main_inflow_direction}; upgradient streets include ${upstream}.`
-          : `Most simulated inflow arrives from the ${props.main_inflow_direction}.`,
+          ? t("Most simulated inflow arrives from the {dir}; upgradient streets include {streets}.", { dir: props.main_inflow_direction, streets: upstream })
+          : t("Most simulated inflow arrives from the {dir}.", { dir: props.main_inflow_direction }),
         locationLabel: street,
         coordinates: coords,
         cellId: props.cell_id,
@@ -244,15 +252,15 @@ function streetActions(
       category: "traffic",
       title: major
         ? t("Priority arterial flooding on {street}", { street: row.name })
-        : `Consider closing or diverting ${row.name}`,
-      detail: `Simulated peak depth ${formatDepth(row.max_depth_m)} on this corridor; water above 30 cm for about ${formatMinutes(row.min30)}.`,
+        : t("Consider closing or diverting {street}", { street: row.name }),
+      detail: t("Simulated peak depth {depth} on this corridor; water above 30 cm for about {time}.", { depth: formatDepth(row.max_depth_m), time: formatMinutes(row.min30) }),
       locationLabel: row.name,
       coordinates: row.coords,
       segmentId: row.segment_id,
       evidence: [
         { label: t("Peak depth"), value: formatDepth(row.max_depth_m) },
         { label: t("Above 30 cm"), value: durationHours(row.min30) },
-        { label: t("Flood class"), value: row.flood_class },
+        { label: t("Flood class"), value: FLOOD_LABELS[row.flood_class as FloodClass] ?? row.flood_class },
       ],
     });
   }
