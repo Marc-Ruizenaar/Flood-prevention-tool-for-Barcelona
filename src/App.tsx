@@ -66,6 +66,8 @@ export function App() {
   const [modelMitigation, setModelMitigation] = useState<Loaded<MitigationReport>>({ status: "loading" });
   const [weatherOpen, setWeatherOpen] = useState(false);
   const [day, setDay] = useState<string>(DEFAULT_DAY);
+  const [panelOpen, setPanelOpen] = useState(false);
+  const dragRef = useRef<{ y: number; swiped: boolean }>({ y: 0, swiped: false });
   const mapRef = useRef<MapHandle>(null);
 
   useEffect(() => {
@@ -185,6 +187,7 @@ export function App() {
   }
 
   function focusCityAction(action: CityAction) {
+    setPanelOpen(false);
     mapRef.current?.focusSimulation(action.coordinates, action.cellId ?? null);
   }
 
@@ -204,56 +207,136 @@ export function App() {
   const zone = selectedId && data.zones ? data.zones[selectedId] : undefined;
 
   return (
-    <div className={`app${zone ? " sheet-open" : ""}`}>
-      <header className="topbar">
-        <div className="brand">
-          <span className="mark" aria-hidden="true" />
-          <div>
-            <p className="kicker">2–3 October</p>
-            <h1>{formatDay(day)}</h1>
-            <p className="rain-now">{rainCaption(gauges[day], rainLive)}</p>
+    <div className={`app${zone ? " sheet-open" : ""}${panelOpen ? " panel-open" : ""}`}>
+      <div className="rail">
+        <header className="topbar">
+          <div className="brand">
+            <span className="mark" aria-hidden="true" />
+            <div className="brand-copy">
+              <p className="kicker">Next rain · Barcelona</p>
+              <h1>{formatDay(day)}</h1>
+              <p className="rain-now">{rainCaption(gauges[day], rainLive)}</p>
+            </div>
+            <div className="when" role="group" aria-label="Which day">
+              {APP_DAYS.map((date) => (
+                <button
+                  key={date}
+                  type="button"
+                  aria-pressed={day === date}
+                  onClick={() => selectDay(date)}
+                >
+                  {shortDay(date)}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="topbar-break" aria-hidden="true" />
-        <div className="when" role="group" aria-label="Which day">
-          {APP_DAYS.map((date) => (
-            <button
-              key={date}
-              type="button"
-              aria-pressed={day === date}
-              onClick={() => selectDay(date)}
-            >
-              {shortDay(date)}
-            </button>
-          ))}
-        </div>
-        <div className="top-actions">
-          <button type="button" className="pill" onClick={() => mapRef.current?.reset()}>
-            City
-          </button>
+        </header>
+
+        <section className={`panel${panelOpen ? " is-open" : ""}`} aria-label="Layers and priorities">
           <button
             type="button"
-            className="pill"
-            aria-pressed={weatherOpen}
+            className="panel-handle"
+            aria-expanded={panelOpen}
+            onPointerDown={(event) => {
+              dragRef.current = { y: event.clientY, swiped: false };
+              event.currentTarget.setPointerCapture(event.pointerId);
+            }}
+            onPointerUp={(event) => {
+              const dy = event.clientY - dragRef.current.y;
+              if (Math.abs(dy) < 24) return;
+              dragRef.current.swiped = true;
+              setPanelOpen(dy < 0);
+            }}
             onClick={() => {
-              setAboutOpen(false);
-              setWeatherOpen(true);
+              if (dragRef.current.swiped) dragRef.current.swiped = false;
+              else setPanelOpen((open) => !open);
             }}
           >
-            Weather
+            <span className="handle" aria-hidden="true" />
+            <span className="panel-title">Where to act first</span>
+            <span className="panel-hint">{panelOpen ? "Show map" : "See list"}</span>
           </button>
-          <button
-            type="button"
-            className="pill"
-            onClick={() => {
-              setWeatherOpen(false);
-              setAboutOpen(true);
+
+          <LayerDock
+            visibility={visibility}
+            failed={data.failed}
+            dayLabel={formatDay(day)}
+            mm={peakOf(gauges[day])?.mm ?? null}
+            hasReports={hasReportsOn(day, data.collections.signals)}
+            proofLegend={dayByDate(day).proofLegend}
+            onToggle={(id: GroupId) => {
+              if (
+                id === "proof" &&
+                !hasReportsOn(day, data.collections.signals) &&
+                atlasLocked(peakOf(gauges[day])?.mm ?? null)
+              ) {
+                return;
+              }
+              setVisibility((current) => ({ ...current, [id]: !current[id] }));
             }}
-          >
-            About
-          </button>
-        </div>
-      </header>
+          />
+          {modelStreets.status === "ready" ? <FloodLegend /> : null}
+
+          <div className="panel-body">
+            <CityFocusPanel streets={modelStreets} hotspots={modelHotspots} onFocus={focusCityAction} />
+            <details className="panel-more">
+              <summary>How the model ran</summary>
+              <ModelPanel
+                day={day}
+                onDay={selectDay}
+                streets={modelStreets}
+                hotspots={modelHotspots}
+                daily={modelDaily}
+                mitigation={modelMitigation}
+              />
+              <BuildReport />
+            </details>
+          </div>
+        </section>
+      </div>
+
+      <div className="map-buttons">
+        <button
+          type="button"
+          className="round"
+          aria-label="Weather for the storm week"
+          aria-pressed={weatherOpen}
+          onClick={() => {
+            setAboutOpen(false);
+            setWeatherOpen(true);
+          }}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 15a4 4 0 1 1 1.2-7.8A5 5 0 0 1 17.6 9 3 3 0 0 1 17 15Z" />
+            <path d="M9 18l-1 2M13 18l-1 2M17 18l-1 2" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          className="round"
+          aria-label="About and sources"
+          onClick={() => {
+            setWeatherOpen(false);
+            setAboutOpen(true);
+          }}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 11v6M12 7.5v.5" />
+          </svg>
+        </button>
+      </div>
+      <button
+        type="button"
+        className="round recenter"
+        aria-label="Show the whole city"
+        onClick={() => mapRef.current?.reset()}
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="6" />
+          <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
+        </svg>
+      </button>
 
       {data.fatal ? (
         <div className="banner banner-bad" role="alert">
@@ -266,8 +349,6 @@ export function App() {
         </div>
       ) : null}
       {!data.ready && !data.fatal ? <div className="banner">Loading published layers…</div> : null}
-
-      {modelStreets.status === "ready" ? <FloodLegend /> : null}
 
       {data.ready && data.zones ? (
         <MapCanvas
@@ -285,42 +366,6 @@ export function App() {
       ) : (
         <div className="map map-pending" />
       )}
-
-      <div className="side-panels">
-        <CityFocusPanel
-          streets={modelStreets}
-          hotspots={modelHotspots}
-          onFocus={focusCityAction}
-        />
-        <ModelPanel
-          day={day}
-          onDay={selectDay}
-          streets={modelStreets}
-          hotspots={modelHotspots}
-          daily={modelDaily}
-          mitigation={modelMitigation}
-        />
-        <BuildReport />
-      </div>
-
-      <LayerDock
-        visibility={visibility}
-        failed={data.failed}
-        dayLabel={formatDay(day)}
-        mm={peakOf(gauges[day])?.mm ?? null}
-        hasReports={hasReportsOn(day, data.collections.signals)}
-        proofLegend={dayByDate(day).proofLegend}
-        onToggle={(id: GroupId) => {
-          if (
-            id === "proof" &&
-            !hasReportsOn(day, data.collections.signals) &&
-            atlasLocked(peakOf(gauges[day])?.mm ?? null)
-          ) {
-            return;
-          }
-          setVisibility((current) => ({ ...current, [id]: !current[id] }));
-        }}
-      />
 
       {zone && data.zones ? (
         <FactSheet

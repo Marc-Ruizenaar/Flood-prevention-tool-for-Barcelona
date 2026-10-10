@@ -38,13 +38,24 @@ export function LayerDock({
           const missing = files.filter((file) => failed.includes(file));
           const unavailable = files.length > 0 && missing.length === files.length;
           const locked = group.id === "proof" && !hasReports && atlasLocked(mm);
+          const legend = unavailable
+            ? "This layer did not load."
+            : locked
+              ? mm == null
+                ? `Off on ${dayLabel}. No daily total published yet.`
+                : `Off on ${dayLabel}. ${formatMm(mm)} mm is under 10, so this stays hidden.`
+              : group.id === "proof"
+                ? (proofLegend ?? `Reports dated ${dayLabel} only.`)
+                : group.legend;
+          // ponytail: legend moves to hover and screen readers so the chips fit one row on a phone
           return (
             <button
               key={group.id}
               type="button"
-              className={`layer-toggle${group.id === "relief" ? " layer-wide" : ""}${visibility[group.id] ? " is-on" : ""}`}
+              className={`layer-toggle${visibility[group.id] ? " is-on" : ""}`}
               aria-pressed={visibility[group.id]}
               disabled={unavailable || locked}
+              title={legend}
               onClick={() => onToggle(group.id)}
             >
               <span className="swatches">
@@ -52,20 +63,10 @@ export function LayerDock({
                   <Swatch key={swatch.color} {...swatch} />
                 ))}
               </span>
-              <span className="layer-copy">
-                <span className="layer-name">{group.label}</span>
-                <span className="layer-legend">
-                  {unavailable
-                    ? "This layer did not load."
-                    : locked
-                      ? mm == null
-                        ? `Off on ${dayLabel}. No daily total published yet.`
-                        : `Off on ${dayLabel}. ${formatMm(mm)} mm is under 10, so this stays hidden.`
-                      : group.id === "proof"
-                        ? (proofLegend ?? `Reports dated ${dayLabel} only.`)
-                        : group.legend}
-                  {missing.length > 0 && !unavailable ? " Part of this layer did not load." : ""}
-                </span>
+              <span className="layer-name">{group.label}</span>
+              <span className="sr-only">
+                {legend}
+                {missing.length > 0 && !unavailable ? " Part of this layer did not load." : ""}
               </span>
             </button>
           );

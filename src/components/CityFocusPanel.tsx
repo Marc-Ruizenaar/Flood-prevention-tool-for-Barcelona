@@ -29,11 +29,7 @@ export function CityFocusPanel({ streets, hotspots, onFocus }: CityFocusPanelPro
 
   return (
     <aside className="model-panel city-focus-panel" data-testid="city-focus-panel">
-      <p className="kicker">City focus</p>
-      <h2>Ops checklist</h2>
-      <p className="model-notice">
-        Suggested priorities from the simulated flood run — not live orders. Tap a row to fly the map.
-      </p>
+      <p className="model-note">From the simulated run, not live orders. Tap a row to see it on the map.</p>
       {loading ? <p className="model-notice">Building checklist from model layers…</p> : null}
       {error ? <p className="model-notice">{error}</p> : null}
       {actions && actions.length === 0 ? (
@@ -52,7 +48,6 @@ export function CityFocusPanel({ streets, hotspots, onFocus }: CityFocusPanelPro
                     {actionCategoryLabel(action.category)}
                   </span>
                   <span className="city-action-title">{action.title}</span>
-                  <span className="city-action-detail">{action.detail}</span>
                   <span className="city-action-evidence">
                     {action.evidence.slice(0, 3).map((item) => (
                       <span key={`${item.label}-${item.value}`}>
