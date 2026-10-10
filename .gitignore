@@ -34,3 +34,6 @@ backend/outputs/
 
 # Local Netlify folder
 .netlify
+
+# agent session checkouts, each with its own .git
+.claude/worktrees/
