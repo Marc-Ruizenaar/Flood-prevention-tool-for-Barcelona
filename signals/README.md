@@ -31,6 +31,8 @@ Every allowlisted item is written, including ones the keyword regex misses (`"re
 
 `inbox.jsonl` is retired and left empty: nothing reads or writes it. Generated and gitignored: `data/geojson/signals.geojson`, `data/signals-cards.json`.
 
+Publish window: the build keeps approved rows published in the 7 days before "now", and "now" is `SIGNALS_NOW` if set, else the clock at build time. For the demo, set `SIGNALS_NOW` to the demo time (for example `SIGNALS_NOW=2026-10-10T16:00Z npm run build`) so the map shows what it showed in rehearsal. Any later rebuild without it drops rows older than 7 days, so the dots disappear on their own.
+
 Rules: only allowlisted organisations become rows; individuals' posts are never read in this slice (Reddit, Instagram, TikTok, X, Telegram and YouTube RSS are ruled out). Health or injury items are dropped before any write. Places come from the gazetteer, never a model. Jev (TypeSafe) is off: it runs only when `"sendTextToJev": true` in `config.json` and `TYPESAFE_API_KEY` is set, because it sends Ajuntament and Betevé titles and excerpts to a third party and the legal question is still open. With it on, Jev may pick a mechanism or one of the gazetteer's candidate places; it never writes text, coordinates or priority. Priority orders review and refresh only; it is not a risk score.
 
 Twice an hour (optional): `7,37 * * * * cd <repo> && npm run signals -- --scheduled`. Calm weather reads the feeds every 4th tick.

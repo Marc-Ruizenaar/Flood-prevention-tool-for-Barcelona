@@ -221,3 +221,14 @@ test("Jev gate: with sendTextToJev false, a key alone sends nothing", () => {
   assert.ok(ingest(dir, key).some((u) => u.includes("typesafe")), "flag and key together do call it (the stub answers)");
   assert.deepEqual(ingest(sandbox([]), { TYPESAFE_API_KEY: "" }).filter((u) => u.includes("typesafe")), []);
 });
+
+test("publish window: SIGNALS_NOW decides what a build keeps; README says so", () => {
+  const dir = sandbox([row({})]); // published 2026-10-04
+  const build = (now) => {
+    assert.equal(spawnSync(process.execPath, ["scripts/signals-build.mjs"], { cwd: dir, env: { ...process.env, SIGNALS_NOW: now } }).status, 0);
+    return JSON.parse(readFileSync(join(dir, "data/geojson/signals.geojson"), "utf8")).features.length;
+  };
+  assert.equal(build("2026-10-08T12:00:00Z"), 1, "demo time inside the window");
+  assert.equal(build("2026-10-12T12:00:00Z"), 0, "a rebuild more than 7 days later drops the row");
+  assert.match(readFileSync("signals/README.md", "utf8"), /SIGNALS_NOW[^\n]*demo/);
+});
