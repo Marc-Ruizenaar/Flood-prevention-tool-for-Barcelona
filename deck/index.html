@@ -1,0 +1,460 @@
+<!doctype html>
+<!--
+  Next rain pitch deck. One file, no build. Open it in any browser.
+  Keys: arrows / space to move, N for speaker notes, Home / End. Print to PDF: one slide per page.
+  Media: drop recordings into deck/media/ with the file names shown on each placeholder.
+  A slot shows the file when it exists and the placeholder when it doesn't.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Next rain: pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #142028;
+    --ink-soft: rgba(20, 32, 40, 0.72);
+    --paper: #f6f1e7;
+    --paper-2: #ebe4d6;
+    --line: rgba(20, 32, 40, 0.14);
+    --vermilion: #c2410c;
+    --sewers: #e07a2f;
+    --streams: #0f5f73;
+    --tanks: #0f766e;
+    --slopes: #6d28d9;
+    --reports: #1c1917;
+    --s: 1;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--ink);
+    color: var(--ink);
+    font: 400 28px/1.35 "Outfit", "Avenir Next", "Segoe UI", sans-serif;
+    overflow: hidden;
+  }
+  .slide {
+    width: 1600px;
+    height: 900px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(var(--s));
+    background: var(--paper);
+    padding: 80px 96px;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+  .slide[hidden] { display: none; }
+  .slide.dark { background: var(--ink); color: var(--paper); }
+  h1, h2 { font-family: "Fraunces", Georgia, serif; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  h1 { font-size: 150px; line-height: 0.95; }
+  h2 { font-size: 64px; line-height: 1.12; max-width: 1300px; }
+  h3 { font-size: 30px; margin: 0 0 8px; font-weight: 600; }
+  p { margin: 0; }
+  .kicker { font-size: 22px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--vermilion); font-weight: 600; }
+  .dark .kicker { color: var(--sewers); }
+  .lede { font-size: 36px; max-width: 1150px; color: var(--ink-soft); }
+  .dark .lede { color: rgba(246, 241, 231, 0.8); }
+  .small { font-size: 22px; color: var(--ink-soft); }
+  .dark .small { color: rgba(246, 241, 231, 0.82); }
+  .grow { flex: 1; min-height: 0; }
+  .row { display: flex; gap: 48px; min-height: 0; }
+  .cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; min-height: 0; }
+  .cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; min-height: 0; }
+  .cols-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+  .placeholder-text { background: #fff3c4; color: var(--ink); padding: 0 6px; }
+
+  /* Media slot: shows the file if present, otherwise the placeholder */
+  .media { position: relative; background: var(--paper-2); border: 3px dashed rgba(20, 32, 40, 0.3); overflow: hidden; min-height: 0; }
+  .dark .media { background: rgba(246, 241, 231, 0.06); border-color: rgba(246, 241, 231, 0.3); }
+  .media video, .media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .media .ph { display: none; position: absolute; inset: 0; padding: 28px; flex-direction: column; justify-content: center; gap: 10px; font-size: 22px; }
+  .media.missing .ph { display: flex; }
+  .media.missing video, .media.missing img { display: none; }
+  .media:not(.missing) { border: 0; }
+  .ph b { font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase; color: #9a3412; }
+  .dark .ph b { color: var(--sewers); }
+  .ph code { font-size: 18px; }
+  .phone { width: 380px; height: 100%; border: 14px solid #0b1217; border-radius: 44px; flex: none; }
+  .phone.media { border-style: solid; border-color: #0b1217; }
+
+  .chip { display: inline-flex; align-items: center; gap: 14px; font-size: 26px; }
+  .chip i { width: 22px; height: 22px; flex: none; }
+  .layer-list { display: flex; flex-direction: column; gap: 22px; }
+
+  /* Fact card mock, same fields the app shows */
+  .card { background: #fff; box-shadow: 0 16px 40px rgba(20, 32, 40, 0.18); padding: 36px 40px; display: flex; flex-direction: column; gap: 16px; font-size: 24px; }
+  .card .name { font-family: "Fraunces", Georgia, serif; font-size: 36px; font-weight: 600; }
+  .card .tag { font-size: 18px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sewers); font-weight: 600; }
+  .card .label { font-size: 16px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); font-weight: 600; }
+  .card a { color: var(--streams); }
+
+  /* Flow diagram */
+  .flow { display: flex; align-items: stretch; gap: 0; }
+  .flow .step { flex: 1; border: 2px solid var(--line); background: #fff; padding: 24px; font-size: 24px; }
+  .flow .step b { display: block; font-size: 26px; margin-bottom: 6px; }
+  .flow .arrow { align-self: center; padding: 0 14px; font-size: 40px; color: var(--vermilion); }
+  .flow .step.gate { border-color: var(--vermilion); border-width: 3px; }
+
+  /* Bars */
+  .bars { display: flex; flex-direction: column; gap: 18px; }
+  .bar { display: grid; grid-template-columns: 420px 1fr 150px; align-items: center; gap: 20px; font-size: 24px; }
+  .bar .track { height: 34px; background: var(--paper-2); position: relative; }
+  .bar .fill { position: absolute; inset: 0 auto 0 0; background: var(--streams); }
+  .bar.coin .fill { background: rgba(20, 32, 40, 0.35); }
+  .bar.ours .fill { background: var(--vermilion); }
+  .bar .val { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .scale { display: grid; grid-template-columns: 420px 1fr 150px; gap: 20px; font-size: 18px; color: var(--ink-soft); }
+  .scale div:nth-child(2) { display: flex; justify-content: space-between; }
+
+  .big { font-family: "Fraunces", Georgia, serif; font-size: 120px; font-weight: 600; line-height: 1; }
+  .rule { border-top: 3px solid var(--vermilion); padding-top: 22px; font-size: 30px; }
+  .dark .rule { border-color: var(--sewers); }
+  .atlas { border: 2px solid var(--line); background: #fff; padding: 22px; font-size: 22px; }
+  .atlas b { display: block; font-size: 24px; }
+  .atlas i { display: block; width: 100%; height: 10px; margin-bottom: 14px; }
+  pre { margin: 0; background: #0b1217; color: #e8e2d4; padding: 28px 32px; font: 20px/1.45 ui-monospace, "SF Mono", Menlo, monospace; white-space: pre-wrap; }
+  pre .k { color: #f0a868; }
+  pre .s { color: #9fd7c7; }
+  .timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 4px solid var(--ink); }
+  .timeline > div { padding: 26px 28px 0 0; position: relative; font-size: 23px; }
+  .timeline > div::before { content: ""; position: absolute; top: -14px; left: 0; width: 24px; height: 24px; background: var(--paper); border: 4px solid var(--ink); }
+  .timeline > div.now::before { background: var(--vermilion); border-color: var(--vermilion); }
+  .timeline h3 { font-size: 28px; }
+  .timeline ul { margin: 8px 0 0; padding-left: 22px; }
+  .timeline li { margin-bottom: 6px; }
+  ul.plain { margin: 0; padding-left: 28px; }
+  ul.plain li { margin-bottom: 12px; }
+  .person { display: flex; flex-direction: column; gap: 16px; }
+  .person .media { aspect-ratio: 1; }
+  .person h3 { margin: 0; }
+
+  .notes { display: none; }
+  body.show-notes .notes {
+    display: block; position: absolute; left: 0; right: 0; bottom: 0; transform: translateY(100%);
+    background: #fff3c4; color: var(--ink); font-size: 22px; padding: 18px 96px; border-top: 3px solid var(--vermilion);
+  }
+  body.show-notes .slide { transform: translate(-50%, -62%) scale(calc(var(--s) * 0.75)); }
+  .counter { position: fixed; right: 18px; bottom: 12px; color: rgba(246, 241, 231, 0.75); font-size: 14px; }
+
+  @media print {
+    @page { size: 1600px 900px; margin: 0; }
+    body { display: block; overflow: visible; background: none; }
+    .slide, .slide[hidden] { display: flex !important; position: relative; left: 0; top: 0; transform: none !important; page-break-after: always; break-after: page; }
+    .notes, .counter { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 1. Title -->
+<section class="slide dark">
+  <p class="kicker">Barcelona AI Hackathon · 10 October 2026 · Tool track</p>
+  <div class="row grow">
+    <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:36px;">
+      <h1>Next rain</h1>
+      <p class="lede">Where the next heavy rain will hurt Barcelona, using maps the city already publishes.</p>
+      <p class="small">Team <span class="placeholder-text">[team name]</span> · live demo: <span class="placeholder-text">[demo URL]</span></p>
+    </div>
+    <figure class="media phone" style="margin:0">
+      <video src="media/01-hero.mp4" autoplay muted loop playsinline></video>
+      <div class="ph"><b>Motion</b>10 s loop: the map opens on a phone and the flood layers fade in over Barcelona.<code>media/01-hero.mp4</code></div>
+    </figure>
+  </div>
+  <aside class="notes">Open on the phone loop. One sentence only: what it is and who it's for (city staff).</aside>
+</section>
+
+<!-- 2. Who we are -->
+<section class="slide">
+  <p class="kicker">Who we are</p>
+  <h2>A small team that builds maps, models and data pipelines.</h2>
+  <div class="cols-4 grow">
+    <div class="person">
+      <figure class="media" style="margin:0"><img src="media/team-marc.jpg" alt="Marc Ruizenaar"><div class="ph"><b>Photo</b><code>media/team-marc.jpg</code></div></figure>
+      <h3>Marc Ruizenaar</h3>
+      <p class="small"><span class="placeholder-text">Map app and flood physics engine [confirm role]</span></p>
+    </div>
+    <div class="person">
+      <figure class="media" style="margin:0"><img src="media/team-andres.jpg" alt="Andrés Sepúlveda Morales"><div class="ph"><b>Photo</b><code>media/team-andres.jpg</code></div></figure>
+      <h3>Andrés Sepúlveda Morales</h3>
+      <p class="small"><span class="placeholder-text">Reported-impacts pipeline and backtest [confirm role]</span></p>
+    </div>
+    <div class="person">
+      <figure class="media" style="margin:0"><img src="media/team-3.jpg" alt=""><div class="ph"><b>Photo</b><code>media/team-3.jpg</code></div></figure>
+      <h3><span class="placeholder-text">[Name]</span></h3>
+      <p class="small"><span class="placeholder-text">[Role]</span></p>
+    </div>
+    <div class="person">
+      <figure class="media" style="margin:0"><img src="media/team-4.jpg" alt=""><div class="ph"><b>Photo</b><code>media/team-4.jpg</code></div></figure>
+      <h3><span class="placeholder-text">[Name]</span></h3>
+      <p class="small"><span class="placeholder-text">[Role] (delete this card if we're three)</span></p>
+    </div>
+  </div>
+  <aside class="notes">Ten seconds. Names and what each person built this week.</aside>
+</section>
+
+<!-- 3. What happened -->
+<section class="slide">
+  <p class="kicker">What happened</p>
+  <div class="cols-2 grow">
+    <div style="display:flex; flex-direction:column; gap:36px; justify-content:center;">
+      <div>
+        <div class="big">234–281 mm</div>
+        <p class="small" style="margin-top:12px">Rain at four Barcelona gauges, 3 to 7 October 2026 (Meteocat XEMA, provisional).</p>
+      </div>
+      <ul class="plain">
+        <li>Basements flooded across the city.</li>
+        <li>Transformer rooms flooded. Power cuts in Les Corts, Sant Andreu and Gràcia.</li>
+        <li>Crews cleaned mud off the slopes of Torre Baró on 7 October.</li>
+      </ul>
+    </div>
+    <figure class="media" style="margin:0">
+      <img src="media/03-storm.jpg" alt="Flooded street in Barcelona, October 2026">
+      <div class="ph"><b>Image</b>One press photo from the storm, with photographer credit on the slide. Or a still of the Reported impacts layer.<code>media/03-storm.jpg</code></div>
+    </figure>
+  </div>
+  <aside class="notes">Let the number land. Then: most of these places were already on someone's map.</aside>
+</section>
+
+<!-- 4. The problem -->
+<section class="slide">
+  <p class="kicker">The problem</p>
+  <h2>Barcelona already knows where water fails. That knowledge sits in four separate atlases.</h2>
+  <div class="cols-4">
+    <div class="atlas"><i style="background:var(--sewers)"></i><b>Sewer overflow</b>Streets where drains overflow on a 10-year storm. BCASA / Resilience Atlas.</div>
+    <div class="atlas"><i style="background:#b42318"></i><b>14 flood hotspots</b>Named problem spots from the city's drainage plan. RESCCUE / PDISBA.</div>
+    <div class="atlas"><i style="background:var(--streams)"></i><b>Buried streams and tanks</b>Old streams under the avenues, and the tanks built to hold them.</div>
+    <div class="atlas"><i style="background:var(--slopes)"></i><b>Slopes and torrents</b>Water running off Collserola into hillside neighbourhoods. ICGC / INUNCAT.</div>
+  </div>
+  <p class="rule">Nobody looks at all four at once. After each storm, crews find the same gaps again.</p>
+  <aside class="notes">Point at each tile. The punchline: no single view, so slope risk falls between the cracks.</aside>
+</section>
+
+<!-- 5. What we built -->
+<section class="slide dark">
+  <p class="kicker">What we built</p>
+  <div class="row grow">
+    <figure class="media phone" style="margin:0">
+      <video src="media/05-demo.mp4" autoplay muted loop playsinline></video>
+      <div class="ph"><b>Motion</b>Screen recording on a phone: open the map, toggle each layer, tap one place.<code>media/05-demo.mp4</code></div>
+    </figure>
+    <div style="flex:1; display:flex; flex-direction:column; gap:40px; justify-content:center;">
+      <h2>One phone map. Four layers. Tap any place.</h2>
+      <div class="layer-list">
+        <span class="chip"><i style="background:var(--sewers)"></i>Next rain: sewers</span>
+        <span class="chip"><i style="background:var(--streams)"></i>Buried streams and tanks</span>
+        <span class="chip"><i style="background:var(--slopes)"></i>Slopes and torrents</span>
+        <span class="chip"><i style="background:#f6f1e7"></i>Reported impacts (off until you ask)</span>
+      </div>
+      <p class="lede">Each place says what could fail, one thing to do before the next storm, and links to the source. Works offline after one load. No accounts.</p>
+    </div>
+  </div>
+  <aside class="notes">If the live demo is next, keep this to one breath.</aside>
+</section>
+
+<!-- 6. Show a card -->
+<section class="slide">
+  <p class="kicker">Tap a place</p>
+  <div class="cols-2 grow">
+    <figure class="media" style="margin:0">
+      <video src="media/06-tap-diagonal.mp4" autoplay muted loop playsinline></video>
+      <div class="ph"><b>Motion</b>Close-up GIF: pan to Diagonal, tap the orange corridor, the card slides up.<code>media/06-tap-diagonal.mp4</code></div>
+    </figure>
+    <div class="card" style="align-self:center">
+      <span class="tag">T10 sewer overflow</span>
+      <span class="name">Diagonal (Balmes – Via Laietana)</span>
+      <span class="label">What could fail</span>
+      <p>On a 10-year design storm the sewer here cannot carry the flow, so water leaves the drains onto the street.</p>
+      <span class="label">Before the next rain</span>
+      <p>Inspect and clear gullies and sumps along the axis.</p>
+      <span class="label">Source</span>
+      <a href="https://coneixement-eu.bcn.cat/widget/atles-resiliencia/en_index_inundabilitat.html">Resilience Atlas / BCASA (PICBA’06 T10)</a>
+    </div>
+  </div>
+  <aside class="notes">This card is real data from zones.json. Every one of the 33 cards has a source link.</aside>
+</section>
+
+<!-- 7. Blind spot -->
+<section class="slide">
+  <p class="kicker">The blind spot</p>
+  <h2>Torre Baró flooded. The sewer map didn't see it coming.</h2>
+  <div class="cols-3 grow">
+    <div style="display:flex; flex-direction:column; gap:16px; min-height:0">
+      <figure class="media grow" style="margin:0"><img src="media/07a-sewers-only.png" alt="Sewer layer around Torre Baró"><div class="ph"><b>Screenshot</b>Sewers on, zoomed to Torre Baró. Nothing there.<code>media/07a-sewers-only.png</code></div></figure>
+      <p><b>1.</b> Sewer layer: nothing at Torre Baró.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:16px; min-height:0">
+      <figure class="media grow" style="margin:0"><img src="media/07b-slopes.png" alt="Slope layer over Torre Baró"><div class="ph"><b>Screenshot</b>Slopes and torrents on. Purple area over Torre Baró.<code>media/07b-slopes.png</code></div></figure>
+      <p><b>2.</b> Slope layer: the risk was on the geologic map.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:16px; min-height:0">
+      <figure class="media grow" style="margin:0"><img src="media/07c-reported.png" alt="Reported impact at Torre Baró"><div class="ph"><b>Screenshot</b>Reported impacts on. The 7 October cleanup dot.<code>media/07c-reported.png</code></div></figure>
+      <p><b>3.</b> Reported impact: cleanup on 7 October.</p>
+    </div>
+  </div>
+  <p class="rule">If slope isn't on the "next rain" map, the map is incomplete. The <b>Blind spot</b> button does these three steps in one tap.</p>
+  <aside class="notes">Check before presenting: the Torrent de Tapioles hotspot point sits in Poble-sec, but the Atlas places it in Vallbona / Torre Baró (signals/DESIGN.md, decision D6). If the Atlas is right, step 1 needs rewording.</aside>
+</section>
+
+<!-- 8. Methodology -->
+<section class="slide">
+  <p class="kicker">Methodology</p>
+  <h2>Three ways of knowing, one rule.</h2>
+  <div class="cols-3">
+    <div class="atlas"><i style="background:var(--sewers)"></i><h3>Published maps</h3><p>What the city already knows. We turned the atlases into 33 places, each with a fact card and a source link.</p></div>
+    <div class="atlas"><i style="background:var(--reports)"></i><h3>Reviewed reports</h3><p>What actually happened. City press releases and Betevé news, read by a person before anything reaches the map.</p></div>
+    <div class="atlas"><i style="background:var(--streams)"></i><h3>Physics model</h3><p>Why water goes where it goes. A water-flow simulation on a 30 m terrain grid, fed by real rain gauges. It reads no reports.</p></div>
+  </div>
+  <p class="rule">Every claim ends in a source link. We never forecast millimetres, depths or damage.</p>
+  <aside class="notes">Three independent legs. The model and the reports don't see each other, so when they agree it means something.</aside>
+</section>
+
+<!-- 9. How a report reaches the map -->
+<section class="slide">
+  <p class="kicker">How a report reaches the map</p>
+  <h2>Software finds it. A person approves it.</h2>
+  <div class="flow">
+    <div class="step"><b>Read</b>City press and Betevé feeds, twice an hour.</div>
+    <div class="arrow">→</div>
+    <div class="step"><b>Queue</b>Items with flood words go to a review list, busiest neighbourhood first.</div>
+    <div class="arrow">→</div>
+    <div class="step gate"><b>A person checks</b>Opens the link, confirms the date and place, picks what failed.</div>
+    <div class="arrow">→</div>
+    <div class="step"><b>Map</b>One dot per neighbourhood, for 7 days, with the link.</div>
+  </div>
+  <div class="cols-2">
+    <ul class="plain small">
+      <li>Places come from a list of Barcelona's 73 neighbourhoods. Never from AI.</li>
+      <li>Posts by private people are never read or stored.</li>
+    </ul>
+    <figure class="media" style="margin:0; height:220px">
+      <video src="media/09-review.mp4" autoplay muted loop playsinline></video>
+      <div class="ph"><b>Motion</b>Terminal recording: list the queue, approve one item, then the dot appears on the map.<code>media/09-review.mp4</code></div>
+    </figure>
+  </div>
+  <aside class="notes">Why manual review: the feeds don't say where, and a wrong dot on a flood map is worse than no dot.</aside>
+</section>
+
+<!-- 10. We tested ourselves -->
+<section class="slide">
+  <p class="kicker">We tested ourselves</p>
+  <h2>Can the maps alone pick which neighbourhoods will report flooding?</h2>
+  <div class="bars">
+    <div class="scale"><div></div><div><span>0.5 coin flip</span><span>1.0 perfect</span></div><div></div></div>
+    <div class="bar coin"><span>Coin flip</span><div class="track"><div class="fill" style="width:0%"></div></div><span class="val">0.50</span></div>
+    <div class="bar ours"><span>A first priority score we tried</span><div class="track"><div class="fill" style="width:8%"></div></div><span class="val">0.51–0.57</span></div>
+    <div class="bar"><span>City flood atlas</span><div class="track"><div class="fill" style="width:20%"></div></div><span class="val">0.58–0.60</span></div>
+    <div class="bar"><span>Where people live</span><div class="track"><div class="fill" style="width:26%"></div></div><span class="val">0.61–0.65</span></div>
+  </div>
+  <p class="small">Blind test on 2024 and 2025 storms, 73 neighbourhoods, each year predicted only from earlier data. Score is AUC: bar length shows the distance above a coin flip.</p>
+  <p class="rule">Maps alone barely beat a coin flip, so we call the map a briefing, not a prediction. Online chatter knows <b>when</b> it rains (79% of storm days, 18% of dry days) but not <b>where</b>.</p>
+  <aside class="notes">This is the slide that earns trust. We measured, it was humbling, and it shaped the product: cite, don't predict.</aside>
+</section>
+
+<!-- 11. Strategy -->
+<section class="slide dark">
+  <p class="kicker">Strategy</p>
+  <h2>Join what's published. Cite everything. Keep a person in the loop.</h2>
+  <div class="cols-3 grow">
+    <div><h3>Join, don't predict</h3><p class="small">The data exists and the city paid for it. The gap is one view, built for crews.</p></div>
+    <div><h3>Trust before reach</h3><p class="small">A source link on every card and a person on every report. Wrong dots cost more than missing ones.</p></div>
+    <div><h3>Cheap to keep alive</h3><p class="small">A static site with no server, open data, and a review step that takes minutes a day.</p></div>
+  </div>
+  <p class="rule">October 2026 is our test, not our training data.</p>
+  <aside class="notes">Who it's for: municipal staff and district crews preparing before rain, not residents during it.</aside>
+</section>
+
+<!-- 12. Extensibility -->
+<section class="slide">
+  <p class="kicker">Extensibility</p>
+  <h2>A new layer is one map file and one card per place.</h2>
+  <div class="cols-2 grow">
+    <pre><span class="s">"slope-torre-baro"</span>: {
+  <span class="k">"layerIds"</span>: [<span class="s">"slopes-torrents"</span>],
+  <span class="k">"mechanisms"</span>: [<span class="s">"slope_runoff"</span>],
+  <span class="k">"whatCouldFail"</span>: <span class="s">"…"</span>,
+  <span class="k">"preventiveAction"</span>: <span class="s">"…"</span>,
+  <span class="k">"sourceLabel"</span>: <span class="s">"ICGC / INUNCAT"</span>,
+  <span class="k">"sourceUrl"</span>: <span class="s">"https://…"</span>
+}</pre>
+    <div style="display:flex; flex-direction:column; gap:28px; justify-content:center">
+      <div><h3>More places</h3><p class="small">Neighbouring towns in the metropolitan area share the same regional atlases.</p></div>
+      <div><h3>More hazards</h3><p class="small">Same pattern for heat or coastal flooding: published layer in, cited card out.</p></div>
+      <div><h3>More evidence</h3><p class="small">The physics model plugs in as a layer. A script already compares its hotspots with reported places against a random baseline.</p></div>
+    </div>
+  </div>
+  <aside class="notes">The data contract is the product. Anyone can add a layer without touching the app code.</aside>
+</section>
+
+<!-- 13. Roadmap -->
+<section class="slide">
+  <p class="kicker">Roadmap</p>
+  <h2>What's next.</h2>
+  <div class="timeline">
+    <div class="now"><h3>Today</h3><ul><li>Four layers, 33 cited places</li><li>Reviewed reports layer</li><li>Blind spot mode, share links</li><li>Works offline</li></ul></div>
+    <div><h3>Next weeks</h3><ul><li>Catalan and English</li><li>Filter by what fails: street, basement, transformer, slope</li><li>Fix misplaced hotspot points</li></ul></div>
+    <div><h3>v1</h3><ul><li>Run the model on the real 2–7 October storm</li><li>Twice-hourly report refresh</li><li>Planned works layer, blind-spot register</li></ul></div>
+    <div><h3>v2</h3><ul><li>Rain-warning banner</li><li>Watchlists per district</li><li>Legal review with a data protection officer before city use</li></ul></div>
+  </div>
+  <figure class="media grow" style="margin:0">
+    <img src="media/13-model.png" alt="Simulated flood depth on Barcelona streets">
+    <div class="ph"><b>Image</b>Physics model output: streets coloured by simulated depth, or the hotspot "why" popup. Label it SIMULATED.<code>media/13-model.png</code></div>
+  </figure>
+  <aside class="notes">The real-storm model run is waiting on sign-off for the rain and drainage inputs. Say so plainly if asked.</aside>
+</section>
+
+<!-- 14. Close -->
+<section class="slide dark">
+  <p class="kicker">Next rain</p>
+  <div class="row grow" style="align-items:center">
+    <h2 style="flex:1; font-size:80px">Support these places before the next storm, using data Barcelona already publishes.</h2>
+    <figure class="media" style="margin:0; width:320px; height:320px; flex:none">
+      <img src="media/14-qr.png" alt="QR code to the live demo">
+      <div class="ph"><b>QR</b>QR code to the live demo URL.<code>media/14-qr.png</code></div>
+    </figure>
+  </div>
+  <p class="small">Live: <span class="placeholder-text">[demo URL]</span> · Code: github.com/Marc-Ruizenaar/hackathon-barcelona · Team <span class="placeholder-text">[team name]</span></p>
+  <aside class="notes">End on the ask. Stop talking.</aside>
+</section>
+
+<div class="counter" aria-live="polite"></div>
+<script>
+  const slides = [...document.querySelectorAll(".slide")];
+  const counter = document.querySelector(".counter");
+  let i = 0;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => (s.hidden = k !== i));
+    counter.textContent = `${i + 1} / ${slides.length}`;
+    history.replaceState(null, "", `#${i + 1}`);
+  }
+  function fit() {
+    document.documentElement.style.setProperty("--s", Math.min(innerWidth / 1600, innerHeight / 900));
+  }
+  addEventListener("resize", fit);
+  addEventListener("keydown", (e) => {
+    if (["ArrowRight", "ArrowDown", "PageDown", " "].includes(e.key)) show(i + 1);
+    else if (["ArrowLeft", "ArrowUp", "PageUp"].includes(e.key)) show(i - 1);
+    else if (e.key === "Home") show(0);
+    else if (e.key === "End") show(slides.length - 1);
+    else if (e.key === "n" || e.key === "N") document.body.classList.toggle("show-notes");
+    else return;
+    e.preventDefault();
+  });
+  addEventListener("click", (e) => { if (!e.target.closest("a")) show(i + (e.clientX > innerWidth / 3 ? 1 : -1)); });
+  // Show the placeholder for any media file that isn't in deck/media/ yet.
+  document.querySelectorAll(".media video, .media img").forEach((m) => {
+    const miss = () => m.closest(".media").classList.add("missing");
+    m.addEventListener("error", miss);
+    if (m.error || (m.tagName === "IMG" && m.complete && !m.naturalWidth)) miss();
+  });
+  fit();
+  show((parseInt(location.hash.slice(1), 10) || 1) - 1);
+</script>
+</body>
+</html>
