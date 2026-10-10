@@ -12,6 +12,7 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173",
     "sync:flood": "node scripts/sync-flood-fixtures.mjs",
+    "test:city-actions": "node scripts/test-city-actions.mjs",
     "qa": "node scripts/qa.mjs",
     "qa:urls": "node scripts/qa.mjs --urls",
     "dev:flood": "npm run dev --prefix web",

@@ -11,10 +11,13 @@ import type { FloodClass, HotspotsCollection, Loaded, StreetProps, StreetsCollec
 import { HotspotCard } from "./HotspotCard";
 import "leaflet/dist/leaflet.css";
 
+type MapFocus = { lat: number; lon: number; nonce: number };
+
 type FloodMapProps = {
   day: string;
   streets: Loaded<StreetsCollection>;
   hotspots: Loaded<HotspotsCollection>;
+  mapFocus?: MapFocus | null;
 };
 
 function streetStyle(feature?: Feature): PathOptions {
@@ -61,6 +64,15 @@ function FitStreets({ streets }: { streets: StreetsCollection }) {
   return null;
 }
 
+function FlyToFocus({ focus }: { focus: MapFocus | null | undefined }) {
+  const map = useMap();
+  useEffect(() => {
+    if (!focus) return;
+    map.flyTo([focus.lat, focus.lon], Math.max(map.getZoom(), 15), { duration: 0.65 });
+  }, [focus, map]);
+  return null;
+}
+
 function ZoomButtons() {
   const map = useMap();
   useEffect(() => {
@@ -74,7 +86,7 @@ function ZoomButtons() {
   return null;
 }
 
-export function FloodMap({ day, streets, hotspots }: FloodMapProps) {
+export function FloodMap({ day, streets, hotspots, mapFocus }: FloodMapProps) {
   const streetData = streets.status === "ready" ? streets.data : null;
   const hotspotData = hotspots.status === "ready" ? hotspots.data : null;
   const streetKey = `${day}-${streets.status === "ready" ? streets.source : "pending"}-${streetData?.features.length ?? 0}`;
@@ -93,6 +105,7 @@ export function FloodMap({ day, streets, hotspots }: FloodMapProps) {
         subdomains="abcd"
       />
       <ZoomButtons />
+      <FlyToFocus focus={mapFocus} />
       {streetData ? <FitStreets streets={streetData} /> : null}
       {streetData && streetData.features.length > 0 ? (
         <GeoJSON

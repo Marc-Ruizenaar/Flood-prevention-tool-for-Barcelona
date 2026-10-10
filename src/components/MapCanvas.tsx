@@ -12,6 +12,7 @@ import type { GroupId, ReliefFile } from "../types";
 export type MapHandle = {
   focus: (id: string) => void;
   reset: () => void;
+  focusSimulation: (coordinates: [number, number], cellId?: string | null) => void;
 };
 
 type Props = {
@@ -111,6 +112,7 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
   const modelHotspotsRef = useRef(modelHotspots);
   modelHotspotsRef.current = modelHotspots;
   const applyModelDataRef = useRef<() => void>(() => {});
+  const openHotspotPopupRef = useRef<(feature: Feature) => void>(() => {});
 
   useImperativeHandle(ref, () => ({
     focus(id: string) {
@@ -141,6 +143,20 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
     },
     reset() {
       mapRef.current?.fitBounds(CITY_BOUNDS, { padding: pad(), duration: 500 });
+    },
+    focusSimulation(coordinates, cellId) {
+      const map = mapRef.current;
+      if (!map) return;
+      map.flyTo({
+        center: coordinates,
+        zoom: Math.max(map.getZoom(), 15.2),
+        duration: 650,
+      });
+      if (!cellId) return;
+      const feature = modelHotspotsRef.current?.features.find(
+        (item) => item.properties.cell_id === cellId,
+      );
+      if (feature) openHotspotPopupRef.current(feature);
     },
   }));
 
@@ -321,26 +337,32 @@ export const MapCanvas = forwardRef<MapHandle, Props>(function MapCanvas(
 
       let activePopup: maplibregl.Popup | null = null;
       let activeRoot: Root | null = null;
+      const openHotspotPopup = (feature: Feature) => {
+        if (feature.geometry.type !== "Point") return;
+        const [lon, lat] = feature.geometry.coordinates;
+        const node = document.createElement("div");
+        activePopup?.remove();
+        activeRoot?.unmount();
+        activeRoot = createRoot(node);
+        activeRoot.render(<HotspotCard properties={feature.properties as HotspotProps} />);
+        activePopup = new maplibregl.Popup({ maxWidth: "340px", className: "model-popup" })
+          .setLngLat([lon, lat])
+          .setDOMContent(node)
+          .addTo(map);
+        activePopup.on("close", () => {
+          activeRoot?.unmount();
+          activeRoot = null;
+        });
+      };
+      openHotspotPopupRef.current = openHotspotPopup;
+
       map.on("click", (event) => {
         if (map.getLayer("model-hotspot")) {
           const modelHits = map.queryRenderedFeatures(event.point, { layers: ["model-hotspot"] });
           const cellId = modelHits[0]?.properties?.cell_id;
           const feature = modelHotspotsRef.current?.features.find((item) => item.properties.cell_id === cellId);
           if (feature && feature.geometry.type === "Point") {
-            const [lon, lat] = feature.geometry.coordinates;
-            const node = document.createElement("div");
-            activePopup?.remove();
-            activeRoot?.unmount();
-            activeRoot = createRoot(node);
-            activeRoot.render(<HotspotCard properties={feature.properties as HotspotProps} />);
-            activePopup = new maplibregl.Popup({ maxWidth: "340px", className: "model-popup" })
-              .setLngLat([lon, lat])
-              .setDOMContent(node)
-              .addTo(map);
-            activePopup.on("close", () => {
-              activeRoot?.unmount();
-              activeRoot = null;
-            });
+            openHotspotPopup(feature);
             return;
           }
         }

@@ -5,7 +5,9 @@ import { FactSheet } from "./components/FactSheet";
 import { LayerDock } from "./components/LayerDock";
 import { MapCanvas, type MapHandle } from "./components/MapCanvas";
 import { BuildReport } from "./components/BuildReport";
+import { CityFocusPanel } from "./components/CityFocusPanel";
 import { ModelPanel } from "./components/ModelPanel";
+import type { CityAction } from "./lib/cityActions";
 import { WeatherPanel } from "./components/WeatherPanel";
 import { useFloodData } from "./lib/data";
 import {
@@ -175,6 +177,10 @@ export function App() {
     setVisibility((current) => visibilityFor(date, current));
   }
 
+  function focusCityAction(action: CityAction) {
+    mapRef.current?.focusSimulation(action.coordinates, action.cellId ?? null);
+  }
+
   function selectDay(date: string) {
     applyDay(date);
     if (!selectedId || !data.zones?.[selectedId]) return;
@@ -274,6 +280,11 @@ export function App() {
       )}
 
       <div className="side-panels">
+        <CityFocusPanel
+          streets={modelStreets}
+          hotspots={modelHotspots}
+          onFocus={focusCityAction}
+        />
         <ModelPanel
           day={day}
           onDay={selectDay}

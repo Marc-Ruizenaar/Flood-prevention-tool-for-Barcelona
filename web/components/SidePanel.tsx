@@ -2,6 +2,8 @@ import { dayKey, dayLabels, formatQuantity } from "@/lib/format";
 import { FLOOD_COLORS, FLOOD_LABELS } from "@/lib/style";
 import type { DailySummary, FloodClass, HotspotsCollection, Loaded, MitigationReport, StreetsCollection } from "@/lib/types";
 import { apiBase, runId } from "@/lib/api";
+import { CityFocusPanel } from "./CityFocusPanel";
+import type { CityAction } from "@/lib/cityActions";
 
 type SidePanelProps = {
   day: string;
@@ -9,6 +11,7 @@ type SidePanelProps = {
   hotspots: Loaded<HotspotsCollection>;
   daily: Loaded<DailySummary[]>;
   mitigation: Loaded<MitigationReport>;
+  onFocusAction?: (action: CityAction) => void;
 };
 
 type DailyQuantityKey = {
@@ -145,7 +148,7 @@ function MitigationBlock({
   );
 }
 
-export function SidePanel({ day, streets, hotspots, daily, mitigation }: SidePanelProps) {
+export function SidePanel({ day, streets, hotspots, daily, mitigation, onFocusAction }: SidePanelProps) {
   const labels = dayLabels(day);
   const notes = notesFor(streets, hotspots);
   const classes = Object.keys(FLOOD_COLORS) as FloodClass[];
@@ -169,6 +172,7 @@ export function SidePanel({ day, streets, hotspots, daily, mitigation }: SidePan
           {note}
         </p>
       ))}
+      <CityFocusPanel streets={streets} hotspots={hotspots} onFocus={onFocusAction} />
       <DailyBlock day={day} daily={daily} />
       <h2 className="section-title">Mitigation comparison</h2>
       <MitigationBlock day={day} mitigation={mitigation} fixtureHotspots={fixtureHotspots} />

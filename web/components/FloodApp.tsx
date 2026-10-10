@@ -8,6 +8,7 @@ import { readQuality } from "@/lib/quality";
 import { DaySelector } from "./DaySelector";
 import { FloodMap } from "./FloodMap";
 import { QualityBadge } from "./QualityBadge";
+import type { CityAction } from "@/lib/cityActions";
 import { SidePanel } from "./SidePanel";
 
 const loading = { status: "loading" } as const;
@@ -18,6 +19,12 @@ export default function FloodApp() {
   const [hotspots, setHotspots] = useState<Loaded<HotspotsCollection>>(loading);
   const [daily, setDaily] = useState<Loaded<DailySummary[]>>(loading);
   const [mitigation, setMitigation] = useState<Loaded<MitigationReport>>(loading);
+  const [mapFocus, setMapFocus] = useState<{ lat: number; lon: number; nonce: number } | null>(null);
+
+  function focusCityAction(action: CityAction) {
+    const [lon, lat] = action.coordinates;
+    setMapFocus({ lat, lon, nonce: Date.now() });
+  }
 
   useEffect(() => {
     const ctrl = new AbortController();
@@ -75,7 +82,7 @@ export default function FloodApp() {
 
   return (
     <div className="shell">
-      <FloodMap day={day} streets={streets} hotspots={hotspots} />
+      <FloodMap day={day} streets={streets} hotspots={hotspots} mapFocus={mapFocus} />
       <header className="hud">
         <div className="brand">
           <span className="mark" aria-hidden="true" />
@@ -90,7 +97,14 @@ export default function FloodApp() {
         {live ? <p className="source-chip">Live API</p> : null}
         {example && !live ? <p className="source-chip">Example fixture</p> : null}
       </header>
-      <SidePanel day={day} streets={streets} hotspots={hotspots} daily={daily} mitigation={mitigation} />
+      <SidePanel
+        day={day}
+        streets={streets}
+        hotspots={hotspots}
+        daily={daily}
+        mitigation={mitigation}
+        onFocusAction={focusCityAction}
+      />
     </div>
   );
 }

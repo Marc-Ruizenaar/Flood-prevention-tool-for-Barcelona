@@ -8,6 +8,8 @@ export type StreetProps = {
   segment_id: string;
   name: string | null;
   max_depth_m: number | null;
+  "minutes_above_0.10m"?: number | null;
+  "minutes_above_0.30m"?: number | null;
   flood_class: FloodClass;
   uncertainty_status: string;
   data_quality: string;
