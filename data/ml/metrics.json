@@ -1,0 +1,334 @@
+{
+  "model": {
+    "type": "HistGradientBoostingClassifier (scikit-learn)",
+    "features": [
+      "elevation_m",
+      "slope_pct",
+      "log_flow_acc",
+      "twi",
+      "depression_depth_m",
+      "dist_buried_stream_m",
+      "dist_sea_m",
+      "excess_rain_mm"
+    ],
+    "feature_importance": [
+      {
+        "feature": "excess_rain_mm",
+        "importance": 0.9605849672420824
+      },
+      {
+        "feature": "dist_sea_m",
+        "importance": 0.0174563643106295
+      },
+      {
+        "feature": "dist_buried_stream_m",
+        "importance": 0.013347178359638952
+      },
+      {
+        "feature": "slope_pct",
+        "importance": 0.004256526083629714
+      },
+      {
+        "feature": "depression_depth_m",
+        "importance": 0.0023180735752708456
+      },
+      {
+        "feature": "twi",
+        "importance": 0.0020368904287484915
+      },
+      {
+        "feature": "elevation_m",
+        "importance": 0.0
+      },
+      {
+        "feature": "log_flow_acc",
+        "importance": 0.0
+      }
+    ],
+    "label_definition": "simulated max depth >= 0.15 m (moderate or worse)",
+    "trained_storms": 2,
+    "trained_rain_mm": [
+      15.5,
+      143.4
+    ],
+    "secondary_labels": "not obtained: the Generalitat WMS/WFS (sig.gencat.cat) rejects non-browser clients with a UserAgentFilterError (HTTP 403), and the layer names are not published without GetCapabilities. Not worked around.",
+    "excluded_rows": "edge-ponded segments on 2026-10-03 (n=40)"
+  },
+  "metrics": {
+    "spatial_cv": {
+      "n": 4408,
+      "threshold": 0.5,
+      "confusion": {
+        "tp": 592,
+        "fp": 599,
+        "fn": 493,
+        "tn": 2724
+      },
+      "accuracy": 0.7522686025408348,
+      "baseline_accuracy": 0.7538566243194192,
+      "balanced_accuracy": 0.6826816587642891,
+      "precision": 0.49706129303106633,
+      "recall": 0.5456221198156682,
+      "f1": 0.5202108963093146,
+      "roc_auc": 0.826837944170708,
+      "brier": 0.14392046119648857,
+      "calibration": [
+        {
+          "bin": [
+            0.0,
+            0.2
+          ],
+          "mean_predicted": 0.015026715355583725,
+          "observed_rate": 0.027074235807860263,
+          "n": 2290
+        },
+        {
+          "bin": [
+            0.2,
+            0.4
+          ],
+          "mean_predicted": 0.3140748387220654,
+          "observed_rate": 0.43609022556390975,
+          "n": 532
+        },
+        {
+          "bin": [
+            0.4,
+            0.6
+          ],
+          "mean_predicted": 0.5036351107505278,
+          "observed_rate": 0.518925518925519,
+          "n": 819
+        },
+        {
+          "bin": [
+            0.6,
+            0.8
+          ],
+          "mean_predicted": 0.6859512272174372,
+          "observed_rate": 0.47604790419161674,
+          "n": 668
+        },
+        {
+          "bin": [
+            0.8,
+            1.0
+          ],
+          "mean_predicted": 0.8320816589058485,
+          "observed_rate": 0.48484848484848486,
+          "n": 99
+        }
+      ]
+    },
+    "leave_one_storm_out": {
+      "train_2026_10_02_test_2026_10_03": {
+        "n": 2184,
+        "threshold": 0.5,
+        "confusion": {
+          "tp": 16,
+          "fp": 0,
+          "fn": 1045,
+          "tn": 1123
+        },
+        "accuracy": 0.5215201465201466,
+        "baseline_accuracy": 0.5141941391941391,
+        "balanced_accuracy": 0.5075400565504241,
+        "precision": 1.0,
+        "recall": 0.015080113100848256,
+        "f1": 0.029712163416898793,
+        "roc_auc": 0.5072257476481385,
+        "brier": 0.47457785450591505,
+        "calibration": [
+          {
+            "bin": [
+              0.0,
+              0.2
+            ],
+            "mean_predicted": 0.003091628371858252,
+            "observed_rate": 0.4810536044362292,
+            "n": 2164
+          },
+          {
+            "bin": [
+              0.2,
+              0.4
+            ],
+            "mean_predicted": 0.34209475974755693,
+            "observed_rate": 1.0,
+            "n": 3
+          },
+          {
+            "bin": [
+              0.4,
+              0.6
+            ],
+            "mean_predicted": 0.4971622825873413,
+            "observed_rate": 1.0,
+            "n": 2
+          },
+          {
+            "bin": [
+              0.6,
+              0.8
+            ],
+            "mean_predicted": 0.7013664778253081,
+            "observed_rate": 1.0,
+            "n": 7
+          },
+          {
+            "bin": [
+              0.8,
+              1.0
+            ],
+            "mean_predicted": 0.8490226063658834,
+            "observed_rate": 1.0,
+            "n": 8
+          }
+        ]
+      },
+      "train_2026_10_03_test_2026_10_02": {
+        "n": 2224,
+        "threshold": 0.5,
+        "confusion": {
+          "tp": 22,
+          "fp": 1066,
+          "fn": 2,
+          "tn": 1134
+        },
+        "accuracy": 0.5197841726618705,
+        "baseline_accuracy": 0.9892086330935251,
+        "balanced_accuracy": 0.7160606060606061,
+        "precision": 0.02022058823529412,
+        "recall": 0.9166666666666666,
+        "f1": 0.039568345323741004,
+        "roc_auc": 0.7434280303030303,
+        "brier": 0.27020946212152647,
+        "calibration": [
+          {
+            "bin": [
+              0.0,
+              0.2
+            ],
+            "mean_predicted": 0.14447461806696682,
+            "observed_rate": 0.0,
+            "n": 198
+          },
+          {
+            "bin": [
+              0.2,
+              0.4
+            ],
+            "mean_predicted": 0.3113641606452164,
+            "observed_rate": 0.0019342359767891683,
+            "n": 517
+          },
+          {
+            "bin": [
+              0.4,
+              0.6
+            ],
+            "mean_predicted": 0.5010403112409658,
+            "observed_rate": 0.008187134502923977,
+            "n": 855
+          },
+          {
+            "bin": [
+              0.6,
+              0.8
+            ],
+            "mean_predicted": 0.68429426926582,
+            "observed_rate": 0.028933092224231464,
+            "n": 553
+          },
+          {
+            "bin": [
+              0.8,
+              1.0
+            ],
+            "mean_predicted": 0.8498877082225729,
+            "observed_rate": 0.0,
+            "n": 101
+          }
+        ]
+      }
+    },
+    "real_world": [
+      {
+        "n_points": 10,
+        "radius_m": 150,
+        "hits": 0,
+        "hit_rate": 0.0,
+        "random_rate": 0.067,
+        "lift": 0.0
+      },
+      {
+        "n_points": 10,
+        "radius_m": 300,
+        "hits": 3,
+        "hit_rate": 0.3,
+        "random_rate": 0.19366666666666665,
+        "lift": 1.549053356282272
+      }
+    ]
+  },
+  "trust": {
+    "level": "low",
+    "rules": [
+      {
+        "rule": "high: worst leave-one-storm-out AUC >= 0.80",
+        "passed": false,
+        "value": 0.5072257476481385
+      },
+      {
+        "rule": "high: real-world lift at 300 m > 1.5",
+        "passed": true,
+        "value": 1.549053356282272
+      },
+      {
+        "rule": "high: reported places in box >= 20",
+        "passed": false,
+        "value": 10
+      },
+      {
+        "rule": "high: trained storms >= 5",
+        "passed": false,
+        "value": 2
+      },
+      {
+        "rule": "medium: spatial CV AUC >= 0.75",
+        "passed": true,
+        "value": 0.826837944170708
+      },
+      {
+        "rule": "medium: worst leave-one-storm-out AUC >= 0.65",
+        "passed": false,
+        "value": 0.5072257476481385
+      },
+      {
+        "rule": "medium: trained storms >= 3",
+        "passed": false,
+        "value": 2
+      }
+    ],
+    "reasons": [
+      "Carry-over between storms is weak: the worst leave-one-storm-out AUC is 0.51, 0.80 needed for high trust.",
+      "Only 10 reported places fall inside the model box, 20 needed for high trust.",
+      "Only 2 training storms, 5 needed for high trust.",
+      "The worst leave-one-storm-out AUC is 0.51, 0.65 needed for medium trust.",
+      "Only 2 training storms, 3 needed for medium trust."
+    ]
+  },
+  "improvements": [
+    "Add more solver storms (at least 5, with different rain totals and open box edges so water can leave the domain). Two storms is the main limit on everything below.",
+    "Replace simulated labels with real incident labels: Bombers de Barcelona and Guardia Urbana callouts, or the 112 incident log, geocoded per street.",
+    "Use the BCASA pluvial flood map (vector data) as an independent label and a second check.",
+    "Add per-section sewer capacity so drainage varies by street instead of one uniform sink.",
+    "Use a finer terrain model (ICGC 2 m) instead of the 3.6 m resampled public tiles.",
+    "Simulate more than one drainage level, so the model can learn the drainage effect instead of using a fixed rain-minus-drainage formula.",
+    "The pooled spatial AUC (0.83) is mostly the model telling the two storms apart. Inside the heavy storm alone, ranking streets by terrain gives AUC 0.51. Judge the terrain skill by the second number.",
+    "Trained on the mild storm only, the model misses most of the flooded streets of the severe storm (recall 0.02). It needs a mid-size storm in the training set.",
+    "Trained on the severe storm only, the model over-flags the mild storm (precision 0.02). Storm size is not yet learned reliably.",
+    "40 segments next to the closed box edge were left out because the physics model piles water against a wall there. Re-run the box with open edges so they can be used.",
+    "Only 10 reported places fall inside the box, too few for a reliable real-world check. Extend the simulated area to the whole city."
+  ]
+}

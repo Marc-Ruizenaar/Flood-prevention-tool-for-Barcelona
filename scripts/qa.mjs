@@ -208,6 +208,48 @@ if (/open-meteo|api\.weather|weather\.com/i.test(app)) fail("live weather client
 
 if (bytes > 2 * 1024 * 1024) fail(`GeoJSON total ${(bytes / 1024 / 1024).toFixed(2)} MB exceeds 2 MB`);
 
+// ML scenario file (ml/predict_scenarios.py). The intro shows its caveat and trust level verbatim,
+// so both must exist and the copy must stay free of weather-prediction wording.
+const SCENARIOS = "data/ml/scenarios.json";
+if (!existsSync(SCENARIOS)) {
+  fail(`${SCENARIOS} missing (run the ml pipeline, see ml/README.md)`);
+} else {
+  const raw = readFileSync(SCENARIOS, "utf8");
+  let ml;
+  try {
+    ml = JSON.parse(raw);
+  } catch (error) {
+    fail(`${SCENARIOS} is not valid JSON (${error.message})`);
+  }
+  if (ml) {
+    if (ml.kind !== "ml_scenario") fail("scenarios.json kind is not ml_scenario");
+    if (typeof ml.caveat !== "string" || ml.caveat.length < 20) fail("scenarios.json caveat missing");
+    if (!["low", "medium", "high"].includes(ml.trust?.level)) fail("scenarios.json trust.level missing");
+    if (!Array.isArray(ml.trust?.reasons)) fail("scenarios.json trust.reasons missing");
+    if (!Array.isArray(ml.improvements) || ml.improvements.length === 0) fail("scenarios.json improvements empty");
+    if (!Array.isArray(ml.segments) || !Array.isArray(ml.scenarios)) fail("scenarios.json segments/scenarios missing");
+    for (const scenario of ml.scenarios ?? []) {
+      if (scenario.p?.length !== ml.segments?.length) fail(`scenario ${scenario.id} p length != segments`);
+      if (typeof scenario.extrapolated !== "boolean") fail(`scenario ${scenario.id} extrapolated flag missing`);
+    }
+    if (/\bNaN\b|Infinity/.test(raw)) fail("scenarios.json contains NaN or Infinity");
+    for (const pattern of FORBIDDEN) {
+      if (pattern.test(raw)) fail(`scenarios.json contains forbidden copy ${pattern}`);
+    }
+  }
+}
+
+// Source copy of the intro scan: same forbidden wording, and no em-dash (U+2014).
+const EM_DASH = String.fromCharCode(0x2014);
+for (const path of ["src/components/IntroScan.tsx", "src/lib/scenarios.ts", "src/intro.css"]) {
+  if (!existsSync(path)) continue;
+  const text = readFileSync(path, "utf8");
+  for (const pattern of FORBIDDEN) {
+    if (pattern.test(text)) fail(`${path} contains forbidden copy ${pattern}`);
+  }
+  if (text.includes(EM_DASH)) fail(`${path} contains an em-dash`);
+}
+
 if (process.argv.includes("--urls")) {
   const urls = new Set();
   for (const card of Object.values(zones)) {

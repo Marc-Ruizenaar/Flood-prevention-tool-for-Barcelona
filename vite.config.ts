@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
+  // The Python model in ml/ has its own venv; its files must not trigger page reloads.
+  server: { watch: { ignored: ["**/ml/**"] } },
   plugins: [
     react(),
     VitePWA({
