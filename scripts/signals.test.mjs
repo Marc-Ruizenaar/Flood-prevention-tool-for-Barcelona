@@ -147,13 +147,19 @@ test("qa passes with an empty inbox", () => {
 // Offline ingest: fetch is stubbed before signals.mjs loads. Fixture items are written for this test, never fetched.
 // Every URL the script asks for is logged, so a test can prove what would have left the machine.
 const FETCH_STUB = `import { appendFileSync } from "node:fs";
-globalThis.fetch = async (url) => {
+globalThis.fetch = async (url, init) => {
   url = String(url);
-  appendFileSync(process.env.FETCH_LOG, url + "\\n");
+  appendFileSync(process.env.FETCH_LOG, url + (init?.headers?.Authorization ? " AUTH" : "") + "\\n");
   if (url.startsWith("https://ajuntament.barcelona.cat/premsa/wp-json/")) return Response.json([{ id: 1, date_gmt: "2026-10-08T08:00:00",
     link: "https://ajuntament.barcelona.cat/premsa/fixture-written-for-the-test/",
     title: { rendered: "Fixture: carrers inundats a Sant Andreu" }, excerpt: { rendered: "<p>Fixture text written for this test.</p>" } }], { headers: { "x-wp-totalpages": "1" } });
   if (url.startsWith("https://beteve.cat/")) return new Response("<rss><channel></channel></rss>");
+  if (url.startsWith("https://api.apify.com/")) { const date = new Date().toISOString(); return Response.json([
+    { url: "https://beteve.cat/fixture-apify-one/", title: "Fixture: soterrani inundat", description: "Text written for this test.", date },
+    { link: "https://ajuntament.barcelona.cat/premsa/fixture-apify-two/", title: "Fixture two", meta: { when: date } },
+    { url: "https://x.com/someone/status/1", title: "Fixture: a person's post", date },
+    { url: "https://example.org/not-allowlisted/", title: "Fixture", date },
+  ]); }
   if (url.startsWith("https://api.typesafe.ai/")) return Response.json({ answers: { mechanism: { choice: "street_overflow", confidence: 0.5 } } });
   return new Response("", { status: 404 }); // rain and warning feeds: offline, the script falls back
 };
@@ -232,6 +238,23 @@ test("publish window: SIGNALS_NOW decides what a build keeps; README says so", (
   assert.equal(build("2026-10-08T12:00:00Z"), 1, "demo time inside the window");
   assert.equal(build("2026-10-12T12:00:00Z"), 0, "a rebuild more than 7 days later drops the row");
   assert.match(readFileSync("signals/README.md", "utf8"), /SIGNALS_NOW[^\n]*demo/);
+});
+
+test("Apify feed: a transport only, capped confidence, token in a header, social hosts blocked", () => {
+  const dir = sandbox([]);
+  const feed = { name: "apify-test", enabled: true, dataset: "fixture-dataset", maxConfidence: "low", fields: { date: ["date", "meta.when"] } };
+  writeFileSync(join(dir, "signals/feeds.json"), JSON.stringify({ apify: [feed] }));
+  const log = ingest(dir, { APIFY_TOKEN: "test-token-not-real" });
+  const call = log.find((u) => u.startsWith("https://api.apify.com/"));
+  assert.ok(call?.endsWith(" AUTH"), "the token goes in a header");
+  assert.ok(!log.some((u) => u.includes("test-token-not-real")), "never in a URL");
+  const rows = lines(dir, "signals/pending.local.jsonl");
+  const viaApify = rows.filter((r) => r.via === "apify-test");
+  assert.deepEqual(viaApify.map((r) => r.source_url).sort(), ["https://ajuntament.barcelona.cat/premsa/fixture-apify-two/", "https://beteve.cat/fixture-apify-one/"], "x.com and an unlisted host never become rows");
+  assert.ok(viaApify.every((r) => r.confidence === "low"), "the feed cap lowers even an official host");
+  assert.equal(rows.find((r) => r.via === "ajuntament")?.confidence, "high", "the source's own feed keeps the host level");
+  const noToken = ingest(sandbox([]), { APIFY_TOKEN: "" });
+  assert.ok(noToken.some((u) => u.startsWith("https://ajuntament.barcelona.cat/")), "built-in feeds still run when a feed is off");
 });
 
 test("social hosts are blocked even if someone allowlists them", () => {

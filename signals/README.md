@@ -28,10 +28,13 @@ Every allowlisted item is written, including ones the keyword regex misses (`"re
 | `gazetteer.json` | 73 barris (Open Data BCN, CC BY 4.0), Atlas aliases, districts, repo zone ids; rebuild with `scripts/signals-gazetteer.mjs` | yes |
 | `barri_priors.json` | per-barri exposure, population, nearest XEMA station, from the backtest | yes |
 | `config.json` | priority weights, window, expiry, User-Agent, `sendTextToJev`, `minPublishConfidence` | yes |
+| `feeds.json` | extra feeds (Apify tasks or datasets), each with a confidence cap; off by default | yes |
 
 `inbox.jsonl` is retired and left empty: nothing reads or writes it. Generated and gitignored: `data/geojson/signals.geojson`, `data/signals-cards.json`.
 
 Sources and confidence: every row carries `confidence` (`low`, `medium` or `high`) and `via` (the feed that delivered it). The host sets the level in `allowlist.json` (high for the body responsible, medium for press). A feed in `feeds.json` can only lower it with `maxConfidence`, never raise it. `--list` shows the level and sorts higher first; cards name it next to each source. `minPublishConfidence` in `config.json` (default `low`) keeps approved rows below it off the map.
+
+Adding a source: an organisation's own feed is a new entry in `ADAPTERS` (`scripts/signals.mjs`) plus its host in `allowlist.json`. An Apify task or dataset needs no code: add it to `feeds.json` with `enabled: true`, a `task` (`user~task-name`) or `dataset`, `maxConfidence`, and `fields` if its keys are unusual. Set `APIFY_TOKEN` in the environment (a vault Variable, through `reliquary run`); it goes in a request header only. Apify only changes how an item reaches us: hosts off the allowlist are dropped, and social platforms (`NEVER_HOSTS` in `signals-lib.mjs`) are blocked in code even if someone allowlists them.
 
 Publish window: the build keeps approved rows published in the 7 days before "now", and "now" is `SIGNALS_NOW` if set, else the clock at build time. For the demo, set `SIGNALS_NOW` to the demo time (for example `SIGNALS_NOW=2026-10-10T16:00Z npm run build`) so the map shows what it showed in rehearsal. Any later rebuild without it drops rows older than 7 days, so the dots disappear on their own.
 

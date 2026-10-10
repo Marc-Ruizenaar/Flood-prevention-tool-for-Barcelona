@@ -26,6 +26,8 @@ const allowlist = read("signals/allowlist.json");
 const gazText = readFileSync("signals/gazetteer.json", "utf8");
 const gaz = JSON.parse(gazText);
 const priors = read("signals/barri_priors.json").rows;
+let feeds;
+try { feeds = read("signals/feeds.json"); } catch { feeds = { apify: [] }; }
 const resolve = makeResolver(gaz);
 const UA = { "User-Agent": process.env.SIGNALS_UA || config.userAgent };
 const now = new Date();
@@ -61,10 +63,10 @@ const reviewer = () => opt("by") || process.env.SIGNALS_REVIEWER || fail("give a
 function fail(message) { console.error(message); process.exit(1); }
 
 // ---------- network ----------
-async function get(url, kind = "json", tries = 3) {
+async function get(url, kind = "json", tries = 3, headers = {}) {
   for (let i = 0; ; i++) {
     try {
-      const res = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20e3) });
+      const res = await fetch(url, { headers: { ...UA, ...headers }, signal: AbortSignal.timeout(20e3) });
       if ((res.status === 429 || res.status >= 500) && i < tries - 1) throw Object.assign(new Error(`${res.status}`), { retry: true });
       if (!res.ok) throw new Error(`${res.status} ${url}`);
       return { body: kind === "json" ? await res.json() : await res.text(), headers: res.headers };
@@ -96,6 +98,30 @@ const ADAPTERS = {
 };
 // Feed caps: the most confidence an item can carry when it reached us through this feed. Built-in feeds read the source itself.
 const FEED_CAP = {};
+
+// Apify feeds (signals/feeds.json): a transport only. It reads the last successful run of a task you set up on Apify,
+// or a dataset. Every item still has to pass the host allowlist (never an individual's account), the health filter and
+// a reviewer. APIFY_TOKEN goes in a header, never in a URL or a file.
+const pick = (item, paths) => paths.map((p) => p.split(".").reduce((o, k) => o?.[k], item)).find((v) => v != null && v !== "");
+async function apifyItems(feed, since) {
+  if (!process.env.APIFY_TOKEN) throw new Error("APIFY_TOKEN not set");
+  const path = feed.dataset ? `datasets/${feed.dataset}/items?clean=true` : `actor-tasks/${feed.task}/runs/last/dataset/items?clean=true&status=SUCCEEDED`;
+  const { body } = await get(`https://api.apify.com/v2/${path}`, "json", 3, { Authorization: `Bearer ${process.env.APIFY_TOKEN}` });
+  const f = { url: ["url", "link"], title: ["title"], text: ["text", "description", "excerpt"], date: ["date", "publishedAt", "published_at", "pubDate"], ...feed.fields };
+  const list = (k) => [f[k]].flat();
+  return body.flatMap((it) => {
+    const url = pick(it, list("url")), date = new Date(pick(it, list("date")));
+    if (!url || Number.isNaN(+date) || date <= since) return [];
+    return [{ platform: "press", post_id: url, url, published_at: date.toISOString(), text: `${stripHtml(String(pick(it, list("title")) ?? ""))}. ${stripHtml(String(pick(it, list("text")) ?? ""))}` }];
+  });
+}
+for (const feed of feeds.apify ?? []) {
+  if (!feed.enabled) continue;
+  if (ADAPTERS[feed.name] || !(feed.task || feed.dataset)) fail(`signals/feeds.json: feed ${feed.name} needs a unique name and a task or dataset`);
+  if (!CONFIDENCE.includes(feed.maxConfidence)) fail(`signals/feeds.json: feed ${feed.name} needs maxConfidence ${CONFIDENCE.join(", ")}`);
+  ADAPTERS[feed.name] = (since) => apifyItems(feed, since);
+  FEED_CAP[feed.name] = feed.maxConfidence;
+}
 
 async function rainNow() {
   const since = iso(now - 4 * 3600e3).slice(0, 16), until = iso(now).slice(0, 16);
