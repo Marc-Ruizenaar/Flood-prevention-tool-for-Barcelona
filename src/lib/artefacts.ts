@@ -1,6 +1,6 @@
 // Closed-box ponding: the bundled Urgell run has no outflow at its edges, so water piles up
 // against the downhill (east, south) sides of the box. A deep hotspot near an edge is an
-// upper bound from the box wall, not a street depth. See AUDIT-2026-10-10.md section 2.
+// upper bound from the box wall, not a street depth. See docs/AUDIT-2026-10-10.md section 2.
 
 export const EDGE_PONDING_MARGIN_M = 400;
 export const EDGE_PONDING_DEPTH_M = 1;

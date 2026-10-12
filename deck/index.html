@@ -242,6 +242,10 @@
   .ph code { font-size: 16px; color: var(--ink-faint); }
   .phone { height: 640px; width: auto; aspect-ratio: 9 / 16.5; align-self: flex-start; border: 12px solid #0b1512; border-radius: 48px; flex: none; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5); }
   .phone.media { border-style: solid; border-color: #0b1512; }
+  .phone.reel { height: 100%; max-height: 700px; aspect-ratio: 9 / 16; align-self: center; }
+  .pair { display: flex; gap: 36px; height: 100%; min-height: 0; align-items: stretch; flex: none; }
+  .clip { display: flex; flex-direction: column; align-items: center; gap: 12px; height: 100%; min-height: 0; }
+  .clip .phone.reel { height: calc(100% - 40px); max-height: none; width: auto; }
   .tool { flex: 1; width: 100%; min-height: 0; border: 0; border-radius: 28px; background: #101b22; }
 
   /* Phone screen fallback: shown on slide 3 while there is no recording. Lock screen with the alert popping up once. */
@@ -334,6 +338,10 @@
     .balance .op { font-size: 22px; }
     .ok { font-size: 16px; margin-left: 0; }
     .phone { width: min(260px, 72vw); height: auto; aspect-ratio: 9 / 19.5; align-self: center; border-width: 10px; border-radius: 32px; }
+    .phone.reel { height: auto; max-height: none; width: min(180px, 42vw); aspect-ratio: 9 / 16; }
+    .pair { width: 100%; height: auto; justify-content: center; gap: 16px; }
+    .clip { height: auto; }
+    .clip .phone.reel { height: auto; width: min(180px, 42vw); }
     .tool { flex: none; height: 72dvh; border-radius: 16px; }
     .media .ph { padding: 16px; font-size: 14px; }
     .ph code { font-size: 12px; word-break: break-all; }
@@ -376,7 +384,34 @@
   <aside class="notes">Hi everyone, we are Mas, and we built a flood prevention tool. Let's go straight in.</aside>
 </section>
 
-<!-- 2. What happened -->
+<!-- 2. The flood -->
+<section class="slide">
+  <div class="topbar">
+    <span class="brand"><span class="mark" aria-hidden="true"></span>Mas</span>
+  </div>
+  <div class="row grow stagger" style="align-items:center">
+    <div class="col center" style="flex:1; gap:20px">
+      <h2>Last weekend</h2>
+    </div>
+    <div class="pair">
+      <div class="clip">
+        <figure class="media phone reel" style="margin:0">
+          <video src="media/flood-barcelona.mp4" muted loop playsinline></video>
+        </figure>
+        <p class="small">The street.</p>
+      </div>
+      <div class="clip">
+        <figure class="media phone reel" style="margin:0">
+          <video src="media/walked-home.mp4" muted loop playsinline></video>
+        </figure>
+        <p class="small">The way home.</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">This is Barcelona, the 4th of October. On the left, the storm on the street: cars under water, a bus stranded. On the right, it followed someone home. Shoes still full of floodwater.</aside>
+</section>
+
+<!-- 3. What happened -->
 <section class="slide">
   <div class="topbar">
     <span class="brand"><span class="mark" aria-hidden="true"></span>Mas</span>
@@ -399,7 +434,7 @@
   <aside class="notes">Last Saturday, the 3rd of October, a weather station in Barcelona recorded more than 190 millimetres of rain in a single day. That's about a third of a normal year's rain. Water like that is dangerous. Within minutes, streets became rivers, cars were swept away, and some people were trapped. A storm like this can take lives.</aside>
 </section>
 
-<!-- 3. Our goal -->
+<!-- 4. Our goal -->
 <section class="slide">
   <div class="topbar">
     <span class="brand"><span class="mark" aria-hidden="true"></span>Mas</span>
@@ -436,7 +471,7 @@
   <aside class="notes">Our goal is simple. When the city sends its emergency flood alert, it includes a link to our tool. One tap, and you see which streets around you are flooding, and how to get away from the water. (Start the demo in the background and talk over it.)</aside>
 </section>
 
-<!-- 4. The tool -->
+<!-- 5. The tool -->
 <section class="slide">
   <div class="topbar">
     <span class="brand"><span class="mark" aria-hidden="true"></span>Mas</span>
@@ -445,7 +480,7 @@
   <aside class="notes">This is the live tool. One tap from the alert, and you see which streets are flooding.</aside>
 </section>
 
-<!-- 5. How we built it -->
+<!-- 6. How we built it -->
 <section class="slide">
   <div class="topbar">
     <span class="brand"><span class="mark" aria-hidden="true"></span>Mas</span>
@@ -461,7 +496,7 @@
   <aside class="notes">How did we build this? After doing a lot of research on flood papers and including it into the AI, we were able to create a team of five AI agents, each with one job. One found and checked all the data. One wrote the physics. One was an independent auditor that tested the maths and could stop us if something was wrong. One built the backend, one tested the map data.</aside>
 </section>
 
-<!-- 6. Not AI guessing -->
+<!-- 7. Not AI guessing -->
 <section class="slide">
   <div class="topbar">
     <span class="brand"><span class="mark" aria-hidden="true"></span>Mas</span>
@@ -470,7 +505,7 @@
   <div class="flow stagger" style="margin:auto 0">
     <div class="glass step"><b>Physics model</b><p>Simulates the flood, square by square across Barcelona.</p></div>
     <div class="arrow">→</div>
-    <div class="glass step"><b>XGBoost check</b><p>A machine-learning model trained on our own dataset gives the margin of error.</p></div>
+    <div class="glass step"><b>Gradient boosting classifier</b><p>A machine-learning model trained on our own dataset gives the margin of error.</p></div>
     <div class="arrow">→</div>
     <div class="glass step hl"><b>Validated?</b><p>Only results within the margin pass. If the number is too low, nothing ships.</p></div>
     <div class="arrow">→</div>
@@ -480,7 +515,7 @@
   <aside class="notes">But the flood map itself is not AI guessing. It's physics. We also built a machine learning model with XGBoost on a custom dataset; this tells us the margin of error. Based on this we know our ideas are validated. After the validation is done we allow the data to show up in the app.</aside>
 </section>
 
-<!-- 7. The grid -->
+<!-- 8. The grid -->
 <section class="slide">
   <div class="topbar">
     <span class="brand"><span class="mark" aria-hidden="true"></span>Mas</span>
@@ -498,21 +533,6 @@
   </div>
   <p class="rule">Depth and speed together tell us whether a street is <b>safe or dangerous</b>.</p>
   <aside class="notes">We put a grid over Barcelona, like a chessboard with thousands of small squares. For every square, the computer calculates five things: how deep the water gets, how fast it moves, which direction it flows, when it arrives, and how long it stays. Because depth and speed together tell us if a street is safe or dangerous.</aside>
-</section>
-
-<!-- 8. Four things change the water -->
-<section class="slide">
-  <div class="topbar">
-    <span class="brand"><span class="mark" aria-hidden="true"></span>Mas</span>
-  </div>
-  <h2>Four things change the water.</h2>
-  <div class="cols-4 grow stagger tall">
-    <div class="glass"><span class="num">01</span><h3>Rain</h3><p>From real weather stations, as it falls.</p></div>
-    <div class="glass"><span class="num">02</span><h3>Flow in and out</h3><p>Water always goes down. We know the height of the whole city from a laser map.</p></div>
-    <div class="glass"><span class="num">03</span><h3>Into the ground</h3><p>Parks take a lot. Asphalt takes almost nothing.</p></div>
-    <div class="glass"><span class="num">04</span><h3>The drains</h3><p>No public data exists, so we test three options and show the range.</p></div>
-  </div>
-  <aside class="notes">Four things change the water. One: the rain, from real weather stations. Two: water flowing in and out, because water always goes down. We know the height of the whole city from a laser map. Three: water going into the ground. Parks take a lot, asphalt takes almost nothing. Four: the drains. Sadly there's no public data on them, so we test three options.</aside>
 </section>
 
 <!-- 9. The physics -->
@@ -604,7 +624,15 @@
 
   function show(n) {
     i = Math.max(0, Math.min(slides.length - 1, n));
-    slides.forEach((s, k) => (s.hidden = k !== i));
+    slides.forEach((s, k) => {
+      s.hidden = k !== i;
+      s.querySelectorAll("video").forEach((v) => {
+        if (k === i) {
+          v.currentTime = 0;
+          v.play().catch(() => {});
+        } else v.pause();
+      });
+    });
     counter.textContent = `${i + 1} / ${slides.length}`;
     progress.style.width = `${((i + 1) / slides.length) * 100}%`;
     history.replaceState(null, "", `#${i + 1}`);
